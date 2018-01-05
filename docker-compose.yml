@@ -1,0 +1,117 @@
+version: '2.1'
+
+services:
+ web:
+  build: ./frontend-react/
+  ports:
+    - "3000"
+  links:
+    - redis
+  expose:
+    - "3000"  
+    
+ event-manager:
+  restart: always
+  build: ./event-manager/
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+    - redis:redis
+  env_file: env
+  working_dir: /data/event-manager/mydjango
+  volumes:
+    - ./event-manager:/data/event-manager
+  #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  depends_on:
+   - redis
+   - postgres
+  
+ nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "8099:80"
+    - "8098:8001"
+  volumes_from:
+    - event-manager
+  links:
+    - event-manager:event-manager
+    - web:web
+
+ postgres:
+  restart: always
+  image: postgres:latest
+  volumes:
+    - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    - ./backups/postgresql:/backup
+  env_file:
+    - env
+  expose:
+    - "5432"
+
+ php-redis-admin:
+  image: faktiva/php-redis-admin
+  container_name: pra
+  environment:
+   - PHPREDMIN_DATABASE_REDIS_0_HOST=redis
+  ports:
+   - "8093:80"
+  depends_on:
+   - redis
+    
+ redis:
+  restart: always
+  image: redis:latest
+  expose:
+    - "6379"
+  ports:
+    - "6379:6379"
+  volumes:
+   - ./redis:/data
+ 
+
+ logreader-tel:
+  container_name: logreader-tel
+  build: ./logreader
+  volumes:
+   - './logreader:/usr/src/app'
+   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
+  environment:
+   - LOGFILE=TelephonyServer_ccrcsl02.000
+  depends_on:
+   - redis
+
+ logreader-agent:
+  container_name: logreader-agent
+  build: ./logreader
+  volumes:
+   - './logreader:/usr/src/app'
+   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
+  environment:
+   - LOGFILE=PresenceServer_ccrcsl02.000
+  depends_on:
+   - redis
+   
+ ot-ws:
+  container_name: ot-ws
+  build: ./ot_ws
+  volumes:
+   - './ot_ws:/usr/src/app'
+  environment:
+   - OT_WS_URL=http://otrcsl01.rcsl.lu/otws/v1.asmx
+   - APP_SETTINGS=ot_ws.config.DevelopmentConfig
+  ports:
+   - 5001:5000 # expose ports - HOST:CONTAINER
+      
+ swagger:
+  container_name: swagger
+  build: ./swagger
+  ports:
+   - '5100:8080' # expose ports - HOST:CONTAINER
+  environment:
+   - API_URL=http://148.110.107.15:5001/api/ot/events/schema
+  depends_on:
+   ot-ws:
+    condition: service_started

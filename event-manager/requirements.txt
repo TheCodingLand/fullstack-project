@@ -1,0 +1,16 @@
+Django
+redis
+django-redis
+asgi_redis
+gunicorn
+psycopg2
+django-filter
+graphene
+graphene-django
+djangorestframework
+Pillow
+requests
+graphene-django-subscriptions
+graphene-django-extras
+channels
+channels_api

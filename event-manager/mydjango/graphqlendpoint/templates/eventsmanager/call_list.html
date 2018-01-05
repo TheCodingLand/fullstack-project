@@ -1,0 +1,40 @@
+{% extends 'eventsmanager/_base.html' %}
+
+{% block content %}
+  <a href="{% url 'eventsmanager:log_out' %}">Log out</a>
+  <br>
+  <ul>
+     <li id='data'></li>
+    {% for call in calls %}
+      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
+      <li data-call="{{ call.ucid|escape }}">
+        {{ call.ucid|escape }}: {{ call.state|default:'Offline' }}
+      </li>
+     
+    {% endfor %}
+  </ul>
+{% endblock content %}
+
+{% block script %}
+  <script>
+    var socket = new WebSocket('ws://' + window.location.host + '/calls/');
+
+    socket.onopen = function open() {
+      console.log('WebSockets connection created.');
+    };
+
+    socket.onmessage = function message(event) {
+      var data = JSON.parse(event.data);
+      // NOTE: We escape JavaScript to prevent XSS attacks.
+      var ucid = encodeURI(data['ucid']);
+      var user = $('#call');
+
+
+      
+      user.html(ucid + ': Online');
+     }
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+  </script>
+{% endblock script %}
