@@ -345,8 +345,8 @@ class ObjectFilter(Resource):
             results = []
             for result in items:
                 d = {}
-                d.update('id': result.id)
-                d.update{'data': result.res}
+                d.update({'id': result.id})
+                d.update({'data': result.res})
                 results.append(d)
 
             event = result.res
