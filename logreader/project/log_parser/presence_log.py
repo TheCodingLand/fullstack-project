@@ -17,9 +17,10 @@ class PresenceLog(LogLine):
 
     def check_agent_ext(self):
         if self.getExtension() != False:
-            if len(self.getExtension() == 3) and len(self.getUserId() == 3):
-                AgentEvent(self.getUserId(), self.date).update_agent_ext(
-                    self.getExtension())
+            if self.getExtension != False:
+                if len(self.getExtension() == 3) and len(self.getUserId() == 3):
+                    AgentEvent(self.getUserId(), self.date).update_agent_ext(
+                        self.getExtension())
 
     def login(self):
         if self.isLoginIn():
