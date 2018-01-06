@@ -13,8 +13,9 @@ url = 'http://ot-ws:5000/api/ot/objects'
 payload = {
     "objectclass": "Agent",
     "filter": "",
-    "variables":
-    []}
+    "variables": [],
+    "requiredfields": []
+}
 
 req = requests.post(url, payload)
 
