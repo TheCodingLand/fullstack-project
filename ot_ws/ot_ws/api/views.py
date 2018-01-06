@@ -368,7 +368,7 @@ class ObjectFilter(Resource):
                 'message': 'Invalid payload.'
             }
 
-                r = query_ot()
+            r = query_ot()
             # print (ticket_model)
             # print(fields)
             objectlist = r.getObjectList(post_data.get(
