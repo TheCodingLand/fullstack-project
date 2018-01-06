@@ -2,13 +2,15 @@ import requests
 import os
 import platform
 import random
-ENABLED=False
-if os.getenv("OMNITRACKER_API_ENABLED")=="True":
+
+from ot_ws.ot.ot_models import *
+ENABLED = False
+if os.getenv("OMNITRACKER_API_ENABLED") == "True":
     ENABLED = True
 if os.getenv("OMNITRACKER_API_URL"):
     url = os.getenv("OMNITRACKER_API_URL")
 else:
-    url="http://otrcsl01.rcsl.lu/otws/v1.asmx"
+    url = "http://otrcsl01.rcsl.lu/otws/v1.asmx"
 
 import xml.etree.ElementTree as ET
 if platform.system() == "Windows":
@@ -16,28 +18,28 @@ if platform.system() == "Windows":
 else:
     Encoding = "utf-8"
 
+
 class query_ot():
-    
+
     def __init__(self):
-        self.body=""
-        self.command =""
+        self.body = ""
+        self.command = ""
         self.headers = ""
         self.xml = ""
         self.xml_result = ""
         self.result = ""
-        self.id= ""
-        
+        self.id = ""
+
     def get(self, id):
         self.id = id
         """Takes ID returns a formatted object"""
-        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/></Get>' % (id)
-        self.command="GetObjectList"
+        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/></Get>' % (
+            id)
+        self.command = "GetObjectList"
         if ENABLED:
             self.send()
         else:
             self.xml_result = self.dummydata()
-
-    
 
     def add(self, model, fields):
         self.command = "AddObject"
@@ -49,7 +51,7 @@ class query_ot():
         self.body = r'%s<Object folderPath="%s">' % (self.body, model.folder) + \
             r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
-        #print(self.body)
+        # print(self.body)
         self.send()
         tree = ET.fromstring(self.xml_result)
         root = tree \
@@ -64,34 +66,32 @@ class query_ot():
 
     def getField(self, id, field):
         """Takes ID and a specific ot_field to query"""
-        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/><RequiredFields>%s</RequiredFields></Get>' % (id, field.name)
-        self.command="GetObjectList"
-        
-    #def update(self, id, fields):
+        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/><RequiredFields>%s</RequiredFields></Get>' % (
+            id, field.name)
+        self.command = "GetObjectList"
+
+    # def update(self, id, fields):
 
     def send(self):
         self.initQuery()
-        data = self.xml.replace(r'\r\n', r'&#x000d;&#x000a;').encode("ascii", "xmlcharrefreplace")
-        #print(self.headers)
-        #print(data)
-        #print(url)
+        data = self.xml.replace(r'\r\n', r'&#x000d;&#x000a;').encode(
+            "ascii", "xmlcharrefreplace")
+        # print(self.headers)
+        # print(data)
+        # print(url)
         result = requests.post(url, data=data, headers=self.headers)
-        ##print(self.body)
-        
-        #print(result.content)
+        # print(self.body)
+
+        # print(result.content)
         self.xml_result = result.content
-        
-                    
+
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""
         self.headers = {'Content-Type': 'text/xml', 'charset': 'iso-8859-1',
                         'SOAPAction': '"http://www.omninet.de/OtWebSvc/v1/%s"'
                         % (self.command)}
         self.query = self.build()
-        
-        
-        
-        
+
     def build(self):
         """puts together hearders and command definition for the query"""
         self.xml = r'<?xml version="1.0" encoding="utf-8"?><soap:Envelope ' + \
@@ -101,31 +101,65 @@ class query_ot():
                    r'<%s xmlns="http://www.omninet.de/OtWebSvc/v1">' % (self.command) + \
                    r'%s</%s></soap:Body></soap:Envelope>' \
                    % (self.body, self.command)
-                   
-                   
+
     def GetEventByUCID(self, UCID):
         """hardcoded UCID query filter, temporary to avoid clashing with old api version"""
         self.body = ""
-        
+
         self.command = "GetObjectList"
         self.body = r'%s<Get folderPath="01. ITSM - Service Operation\01. Event Management" recursive="true">' \
-        % (self.body)
+            % (self.body)
 
-        
         self.body = r'%s<Filter>%s' % (self.body, 'EventUCID')
 
-        filterVars =  r'<%s name="%s">%s</%s>' % ('StringVal', 'UCID', UCID, 'StringVal')
+        filterVars = r'<%s name="%s">%s</%s>' % (
+            'StringVal', 'UCID', UCID, 'StringVal')
         self.body = r'%s%s</Filter></Get>' % (self.body, filterVars)
         self.send()
 
+    def getObjectList(self, objectClassName, filter, variables):
+        """requests info from the api based on defined a filter and an arraw of variables [[variable1,Value1],[variable2,Value2]]"""
 
+        self.body = ""
+        if objectClassName in globals():
+            id = "1234asdf"
+            constructor = globals()[objectClassName]
+            item = constructor()
+        else:
+            raise "error, impossible to create an instance of %s, check your input / class definitions" % (
+                objectClassName)
 
+        self.command = "GetObjectList"
+        self.body = r'%s<Get folderPath="%s" recursive="true">' \
+            % (self.body, item.folder)
+        if filter != "":
 
+            self.body = '%s<Filter>%s' % (self.body, filter)
+            filterVars = ''
+            for variable in variables:
+                filterVars = '%s<%s name="%s">%s</%s>' % (
+                    filterVars, 'StringVal', variable.get('name'), variable.get('value'), 'StringVal')
+            self.body = '%s%s</Filter>' % (self.body, filterVars)
+
+    def GetUserByExt(self, UCID):
+        """hardcoded UCID query filter, temporary to avoid clashing with old api version"""
+        self.body = ""
+
+        self.command = "GetObjectList"
+        self.body = r'%s<Get folderPath="01. ITSM - Service Operation\01. Event Management" recursive="true">' \
+            % (self.body)
+
+        self.body = r'%s<Filter>%s' % (self.body, 'EventUCID')
+
+        filterVars = r'<%s name="%s">%s</%s>' % (
+            'StringVal', 'UCID', UCID, 'StringVal')
+        self.body = r'%s%s</Filter></Get>' % (self.body, filterVars)
+        self.send()
 
     def dummydata(self):
-        id =random.randint(1000000, 5000000)
-        
-        data="""<?xml version="1.0" encoding="utf-8"?>
+        id = random.randint(1000000, 5000000)
+
+        data = """<?xml version="1.0" encoding="utf-8"?>
             <soap:Envelope
                 xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

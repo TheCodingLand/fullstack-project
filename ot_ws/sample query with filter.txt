@@ -1,0 +1,10 @@
+{
+"objectclass" : "Event",
+"filter" : "UCID :",
+"variables" : [
+{
+"name" : "UCID",
+"value" : "TESTVALUE"
+}
+]
+}

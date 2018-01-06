@@ -1,6 +1,6 @@
 import pytz
 
-from eventmanager.dispatch_services import django_calls_services, django_agents_services
+from eventmanager.dispatch_services import dispatch
 from datetime import datetime
 
 paris = pytz.timezone('Europe/Paris')
@@ -29,33 +29,33 @@ class Services(object):
 
         # CALLS
         if self.action == "create":
-            self.done = django_calls_services().create_call(self.id, self.timestamp)
+            self.done = dispatch().create_call(self.id, self.timestamp)
         if self.action == "centrale":
-            self.done = django_calls_services().centrale(self.id, self.timestamp)
+            self.done = dispatch().centrale(self.id, self.timestamp)
         if self.action == "transfer":
-            self.done = django_calls_services().transfer_call(
+            self.done = dispatch().transfer_call(
                 self.id, self.timestamp, self.data)
         if self.action == "setdetails":
-            self.done = django_calls_services().update_details(
+            self.done = dispatch().update_details(
                 self.id, self.timestamp, self.data)
         if self.action == "setcaller":
-            self.done = django_calls_services().set_caller(
+            self.done = dispatch().set_caller(
                 self.id, self.timestamp, self.data)
         if self.action == "remove":
-            self.done = django_calls_services().end(self.id, self.timestamp)
+            self.done = dispatch().end(self.id, self.timestamp)
 
         # AGENTS
         if self.action == "login":
-            self.done = django_agents_services().login(self.id, self.data)
+            self.done = dispatch().login(self.id, self.data)
 
         if self.action == "changeACDstate":
-            self.done = django_agents_services().changeACDstate(self.id, self.data)
+            self.done = dispatch().changeACDstate(self.id, self.data)
         if self.action == "linkcall":
-            self.done = django_agents_services().linkcall(self.id, self.data)
+            self.done = dispatch().linkcall(self.id, self.data)
         if self.action == "changeDeviceState":
-            self.done = django_agents_services().changeDeviceState(self.id, self.data)
+            self.done = dispatch().changeDeviceState(self.id, self.data)
         if self.action == "logoff":
-            self.done = django = django_agents_services().logoff(self.id, self.data)
+            self.done = django = dispatch().logoff(self.id, self.data)
         if self.done == False:
             print("KEY kept in queue : %s : %s, %s" %
                   (self.id, self.action, self.data))

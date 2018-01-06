@@ -9,19 +9,34 @@ from graphqlendpoint.models import Agent, Event, Call, Transfer
 import requests
 from django.db import connection
 from eventmanager.redis import Redis
+from ot_api import ot_api
 
 
-class django_calls_services(object):
+class dispatch(object):
+
     def __init__(self):
         # there are exceptions where databasae connexion is closed when idle for a long time.
         connection.close()
 
+    # calls
+
     def centrale(self, id, timestamp, ext):
+
+        call = Call.objects.get_or_create(ucid=id)[0]
+        call.start = timestamp
+        call.destination = ext
+        call.save()
+
         centrale = Agents.objects.get_or_create(ext=ext)
         centrale.isQueueLine = True
         centrale.firstname = "Centrale IVR"
         centrale.ot_userloginname = "Centrale"
+        centrale.current_call = None
         centrale.save()
+        centrale.call = call
+        centrale.save()
+
+        ot_api().update('event', call)
 
     def create_call(self, id, timestamp):
         redis = Redis().update('agent', id, "createcall")
@@ -46,44 +61,6 @@ class django_calls_services(object):
 
         return True
 
-    def ot_create_event(self, call):
-
-        if "OMNITRACKER_API_URL_ENABLED" in os.environ:
-            if os.environ[OMNITRACKER_API_URL_ENABLED] == "TRUE":
-                url = 'http://ot-ws:5000/api/ot/events/events/ucid/%s' % call.ucid
-                if call.event:
-                    if call.event.ot_id:
-                        url = 'http://ot-ws:5000/api/ot/events/events/%s' % call.event.ot_id
-
-                resp = requests.get(url=url)
-                ot = json.loads(resp.text)
-                #print (ot)
-
-                if resp.status_code == 404:
-                    #print ("create event in ot as is doesnt exist")
-                    event = Event(creationdate=call.start)
-                    event.call = call
-                    event.save()
-
-                print("getting id")
-                ot = json.loads(resp.text)
-                print(ot.get('id'))
-
-                if hasattr(call, 'event'):
-                    call.event.ot_id = ot.get('id')
-                    call.save()
-
-                elif resp.status_code == 200:
-                    if ot['id'] != 0:
-                        #print (ot['id'])
-                        event = Event.objects.get_or_create(ot_id=ot['id'])[0]
-                        event.save()
-                        call.event = event
-
-                        if hasattr(call, 'event'):
-                            call.event.ot_id = ot['id']
-                            call.save()
-
     def transfer_call(self, id, timestamp, destination):
         #print("managing a transfer")
         redis = Redis().update('agent', id, destination)
@@ -93,7 +70,7 @@ class django_calls_services(object):
         if agent.isQueueLine:
             call.isContactCenterCall = True
             call.save()
-            self.ot_create_event(call)
+            ot_api().create('event', call)
             # we probably missed this extension as a queue line
 
         transfers = call.getTransfers().filter(
@@ -124,6 +101,7 @@ class django_calls_services(object):
             call.destination = destination
             call.save()
             agent.save()
+            ot_api().update('event', call)
         return True
 
     def end(self, id, timestamp):
@@ -140,19 +118,14 @@ class django_calls_services(object):
                 agent.save()
 
         call.save()
-
+        ot_api().update('event', call)
         return True
 
     def update_agent(self):
 
         return True
 
-
-class django_agents_services(object):
-
-    def __init__(self):
-        connection.close()
-
+    # agents
     def login(self, id, data):
         redis = Redis().update('agent', id, data)
         self.agent = Agent.objects.get_or_create(phone_login=id)[0]

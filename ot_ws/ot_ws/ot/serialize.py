@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 from ot_ws.ot.ot_field import *
 import re
 
-testxml="""<?xml version="1.0" encoding="utf-8"?>
+testxml = """<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope
     xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,50 +67,61 @@ testxml="""<?xml version="1.0" encoding="utf-8"?>
     </soap:Body>
 </soap:Envelope>"""
 
-class serialize(object):
-    
-    def __init__(self,xml):
-        
-        self.res={ }
-        self.metadata = { }
-        self.id =0
-        self.parse(xml)
-        
 
-    def getFields(self,xml):
-        
+class Result(object):
+    def __init__(self):
+        self.id = 0
+        self.res = {}
+        self.metadata = {}
+
+
+class serialize(object):
+
+    def __init__(self, xml):
+
+        self.res = {}
+        self.metadata = {}
+        self.id = 0
+        self.results = []
+        self.parse(xml)
+
+    def getFields(self, xml):
+        result = Result()
         #self.res.update({ 'id' : id})
-        
+        result.id = xml.attrib['id']
         for field in xml:
-           
             k = globals()[field.tag]
             name = field.attrib['name']
-            f= k(name)
-            self.metadata.update( { '%s' % name : field.tag } )
-            self.res.update({ '%s' % name : f.getValueFromXML(field)})
-    
+            f = k(name)
+
+            result.metadata.update({'%s' % name: field.tag})
+            result.res.update({'%s' % name: f.getValueFromXML(field)})
+            self.results.append(result)
+
     def parse(self, xml):
-            xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
-            tree = ET.fromstring(xml)
-            root = tree \
-                .find('*//GetObjectListResult')
-            if root.attrib['success'] == "true":
-                nbresults=1
-                try:
-                    nbresults=int(root.attrib['totalNumberResults'])
-                except:
-                    nbresults=1                    
-                if nbresults==1:
-                    result = True
-                    root = root[0]
-                    self.id = root.attrib['id']
-                    self.getFields(root)
-                    
-                    
-                else:
-                    self.res = False
+        xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
+        tree = ET.fromstring(xml)
+        root = tree \
+            .find('*//GetObjectListResult')
+        if root.attrib['success'] == "true":
+            nbresults = 1
+            try:
+                nbresults = int(root.attrib['totalNumberResults'])
+            except:
+                nbresults = 1
+            if nbresults == 1:
+                result = True
+                self.getFields(root[0])
+
+            elif nbresults > 1:
+                for item in root:
+                    self.getFields(item)
+
+            else:
+                self.res = False
+
 
 def test():
-    data=testxml
+    data = testxml
     builder = serialize(testxml)
     return(builder.res)
