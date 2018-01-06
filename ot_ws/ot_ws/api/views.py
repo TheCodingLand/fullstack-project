@@ -357,7 +357,8 @@ class ObjectFilter(Resource):
             logging.error(post_data)
 
             objectlist = r.getObjectList(post_data.get(
-                'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data('requiredfields'))
+                'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
+
             items = serialize(r.xml_result.decode("utf-8")).results
             results = []
             for result in items:
