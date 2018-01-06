@@ -11,7 +11,7 @@ from eventmanager import services
 
 
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
-if r.
+
 log.info("Connected to Redis, Database 2, port 6379")
 
 

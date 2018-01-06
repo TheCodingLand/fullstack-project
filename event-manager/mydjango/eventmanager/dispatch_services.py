@@ -9,7 +9,7 @@ from graphqlendpoint.models import Agent, Event, Call, Transfer
 import requests
 from django.db import connection
 from eventmanager.redis import Redis
-from eventmanager.ot_api import ot_api
+from eventmanager.ot_api import ot_api_event
 import logging
 log = logging.Logger()
 log.setLevel(INFO)
@@ -39,7 +39,7 @@ class dispatch(object):
         centrale.call = call
         centrale.save()
 
-        ot_api().update('event', call)
+        ot_api_event().create(call)
 
     def create_call(self, id, timestamp):
         redis = Redis().update('agent', id, "createcall")
@@ -73,8 +73,7 @@ class dispatch(object):
         if agent.isQueueLine:
             call.isContactCenterCall = True
             call.save()
-            ot_api().create('event', call)
-            # we probably missed this extension as a queue line
+            self.centrale(id, timestamp, destination)
 
         transfers = call.getTransfers().filter(
             ttimestamp=timestamp, tdestination=destination)
@@ -121,7 +120,7 @@ class dispatch(object):
                 agent.save()
 
         call.save()
-        ot_api().update('event', call)
+        ot_api_event().updateEndDate(call)
         return True
 
     def update_agent(self):
