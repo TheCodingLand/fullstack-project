@@ -1,5 +1,9 @@
 import os
 import requests
+from graphqlendpoint.models import Agent, Event, Call, Transfer
+import logging
+log = logging.Logger("EventToOTService")
+log.setLevel(logging.INFO)
 
 
 class ot_api_event(object):

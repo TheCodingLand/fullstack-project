@@ -103,7 +103,7 @@ class dispatch(object):
             call.destination = destination
             call.save()
             agent.save()
-            ot_api_event().transfer(call)
+            # ot_api_event().transfer(call)
         return True
 
     def end(self, id, timestamp):
@@ -120,7 +120,7 @@ class dispatch(object):
                 agent.save()
 
         call.save()
-        ot_api_event().updateEndDate(call)
+        # ot_api_event().updateEndDate(call)
         return True
 
     def update_agent(self):

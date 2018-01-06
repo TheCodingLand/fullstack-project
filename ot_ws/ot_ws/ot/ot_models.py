@@ -164,7 +164,7 @@ class Ticket(object):
 
 class Agent(object):
     def __init__(self):
-        self.folder = r'01. ITSM - Service Operation\02. Incident Management'
+        self.folder = r'00. MasterData\05. People\05.1 Persons\User Accounts'
         self.requiredfields = ["FirstName",
                                "LastName", "Login Name", "displayname"]
         self.fields = {
