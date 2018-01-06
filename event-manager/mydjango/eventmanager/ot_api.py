@@ -10,7 +10,7 @@ class ot_api_event(object):
         event = Events.object.get(call=call)
         return event.ot_id
 
-    def get_ot_id_from_ucid(self, ucid)
+    def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
         payload = {
             "objectclass": "Event",
