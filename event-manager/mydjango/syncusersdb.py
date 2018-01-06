@@ -14,11 +14,11 @@ payload = '{"objectclass": "Agent", "filter": "", "variables": [], "requiredfiel
 
 req = requests.post(url, payload, headers={"Content-Type": "application/json"})
 
-print(req.json())
+data = req.json()
 
 agents = Agent.objects.all()
-print(req['status'])
-for agent in req['Agent']:
+print(data['status'])
+for agent in data['Agent']:
     print(agent['id'])
     print(agent['data']['FirstName'])
     print(agent['data']['LastName'])
