@@ -25,9 +25,8 @@ for agent in data['Agent']:
     phone = agent['data']['Phone']
     login = agent['data']['Login Name']
     displayname = agent['data']['Title']
-print("%s - %s - %s - %s - %s - %s" % (id, firstname, lastname, phone[1:], login, displayname)
-
-
+print("%s - %s - %s - %s - %s - %s" %
+      (id, firstname, lastname, phone[1:], login, displayname))
 
 
 # sid=response.json()['Object']['login']['sessionId']
