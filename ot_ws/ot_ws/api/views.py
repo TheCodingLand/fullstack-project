@@ -28,7 +28,7 @@ class Swagger(Resource):
 @ns.route('/ping')
 class SanityCheck(Resource):
     def get(self):
-        log.info(json.dumps(api.__schema__))
+        # log.info(json.dumps(api.__schema__))
         return {
             'status': 'success',
             'message': 'pong!'
@@ -50,7 +50,7 @@ class ObjectsMetadata(Resource):
             e.get(object_id)
 
             result = serialize(e.xml_result.decode("utf-8"))
-            log.info(result)
+            # log.info(result)
 
             ot_object = result.results[0].res
             if not ot_object:
@@ -80,7 +80,7 @@ class ObjectsMetadata(Resource):
             e.get(object_id)
 
             result = serialize(e.xml_result.decode("utf-8"))
-            log.info(result)
+            # log.info(result)
             ot_object = result.results[0].metadata
             if not ot_object:
                 return response_object, 404
@@ -294,7 +294,7 @@ class TicketAdd(Resource):
 
         post_data = request.get_json()
 
-        log.info(post_data)
+        # log.info(post_data)
 
         if not post_data:
             response_object = {
@@ -346,10 +346,10 @@ class ObjectFilter(Resource):
     def post(self):
         time.sleep(1)
         post_data = request.get_json()
-        log.info(request.get_json())
+        # log.info(request.get_json())
         try:
             r = query_ot()
-            log.info(post_data)
+            # log.info(post_data)
 
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
@@ -391,7 +391,7 @@ class EventMod(Resource):
     def put(self):
 
         post_data = request.get_json()
-        log.info(post_data)
+        # log.info(post_data)
         if not post_data:
             response_object = {
                 'status': 'fail',
@@ -425,7 +425,7 @@ class TicketMod(Resource):
     def put(self):
 
         post_data = request.get_json()
-        log.info(post_data)
+        # log.info(post_data)
         if not post_data:
             response_object = {
                 'status': 'fail',

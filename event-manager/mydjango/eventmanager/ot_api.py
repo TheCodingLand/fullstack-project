@@ -20,7 +20,8 @@ class ot_api_event(object):
         url = "%s/objects" % self.url
         req = requests.post(url, payload)
         try:
-            id = req.get('id')
+            data = req.json()
+            id = data.get('id')
         except KeyError:
             log.error("Could not get Event with payload %s" % payload)
             return False
