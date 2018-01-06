@@ -22,7 +22,7 @@ class PresenceLog(LogLine):
             logging.error(self.getExtension())
             if self.getUserId() != False:
                 logging.error(self.getUserId())
-                if len(self.getExtension() == 3)
+                if len(self.getExtension() == 3):
                     if len(self.getUserId() == 3):
                         AgentEvent(self.getUserId(), self.date).update_agent_ext(
                             self.getExtension())
