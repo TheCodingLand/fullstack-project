@@ -295,7 +295,17 @@ class TicketAdd(Resource):
                 'message': 'Invalid payload.'
             }
             return response_object, 400
-
+            r = query_ot()
+            # print (ticket_model)
+            # print(fields)
+            result = r.add(ticket_model, post_data)
+            if result:
+                response_object = {
+                    'status': 'success',
+                    'message': 'ticket was added!',
+                    'object': result
+                }
+                return response_object, 201
         try:
             r = query_ot()
             # print (ticket_model)
