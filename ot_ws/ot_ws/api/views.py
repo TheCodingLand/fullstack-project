@@ -366,7 +366,7 @@ class ObjectFilter(Resource):
                 response_object = {
                     'status': 'success',
                     'message': 'object list :',
-                    'events': results
+                    '%s' % post_data.get('objectclass'): results
                 }
                 return response_object, 201
             else:
