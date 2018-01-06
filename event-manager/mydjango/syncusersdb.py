@@ -14,7 +14,7 @@ payload = '{"objectclass": "Agent", "filter": "", "variables": [], "requiredfiel
 
 req = requests.post(url, payload, headers={"Content-Type": "application/json"})
 
-print(req)
+print(req.json())
 
 agents = Agent.objects.all()
 
