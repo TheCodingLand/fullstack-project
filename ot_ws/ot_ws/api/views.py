@@ -300,12 +300,12 @@ class TicketAdd(Resource):
             r = query_ot()
             # print (ticket_model)
             # print(fields)
-            event = r.add(ticket_model, post_data)
-            if event:
+            result = r.add(ticket_model, post_data)
+            if result:
                 response_object = {
                     'status': 'success',
                     'message': 'ticket was added!',
-                    'ticket': ticket
+                    'object': result
                 }
                 return response_object, 201
             else:
@@ -317,9 +317,9 @@ class TicketAdd(Resource):
         except:
             response_object = {
                 'status': 'fail',
-                'message': 'Invalid payload.'
+                'message': 'Internal server error.'
             }
-            return response_object, 400
+            return response_object, 500
 
 
 @api.response(400, 'failed.')
