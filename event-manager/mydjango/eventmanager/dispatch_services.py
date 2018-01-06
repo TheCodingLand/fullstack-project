@@ -11,7 +11,7 @@ from django.db import connection
 from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api_event
 import logging
-log = logging.Logger()
+log = logging.Logger("dispatcher")
 log.setLevel(logging.INFO)
 
 
@@ -103,7 +103,7 @@ class dispatch(object):
             call.destination = destination
             call.save()
             agent.save()
-            ot_api().update('event', call)
+            ot_api_event().transfer(call)
         return True
 
     def end(self, id, timestamp):
