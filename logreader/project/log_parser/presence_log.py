@@ -18,11 +18,10 @@ class PresenceLog(LogLine):
 
     def check_agent_ext(self):
         if self.getExtension() != False:
-            logging.error(self.getExtension())
             if self.getUserId() != False:
-                logging.error(self.getUserId())
                 if len(self.getExtension()) == 3:
                     if len(self.getUserId()) == 3:
+                        logging.error(self.getUserId(), self.getExtension())
                         AgentEvent(self.getUserId(), self.date).update_agent_ext(
                             self.getExtension())
 

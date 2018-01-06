@@ -152,7 +152,7 @@ class dispatch(object):
                         agent_old[0].phone_state = False
                         agent_old[0].save()
 
-                agent.agent.ext = data
+                agent.ext = data
         agent.save()
 
         return True
