@@ -104,12 +104,14 @@ class serialize(object):
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
         tree = ET.fromstring(xml)
+        print(tree)
         root = tree \
             .find('*//GetObjectListResult')
         if root.attrib['success'] == "true":
             nbresults = 1
             try:
                 nbresults = int(root.attrib['totalNumberResults'])
+
             except:
                 nbresults = 1
             if nbresults == 1:
@@ -122,6 +124,8 @@ class serialize(object):
 
             else:
                 self.res = False
+
+        print("RESULTS %s" % nbresults)
 
 
 def test():
