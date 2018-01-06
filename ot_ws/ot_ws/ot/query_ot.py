@@ -52,10 +52,10 @@ class query_ot():
         self.id = id
         self.command = "ModifyObject"
         fieldxml = ""
-        logging.info(fields)
+        # logging.info(fields)
         for field in fields:
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
-        logging.info(fieldxml)
+        # logging.info(fieldxml)
         self.body = r'%s<Object objectId="%s">' % (
             self.id, self.body) + r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
@@ -74,10 +74,10 @@ class query_ot():
     def add(self, model, fields):
         self.command = "AddObject"
         fieldxml = ""
-        logging.info(fields)
+        # logging.info(fields)
         for field in fields:
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
-        logging.info(fieldxml)
+        # logging.info(fieldxml)
         self.body = r'%s<Object folderPath="%s">' % (self.body, model.folder) + \
             r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
@@ -112,8 +112,8 @@ class query_ot():
         result = requests.post(url, data=data, headers=self.headers)
 
         self.xml_result = result.content
-        logging.info(self.xml)
-        logging.info(self.xml_result)
+        # logging.info(self.xml)
+        # logging.info(self.xml_result)
 
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""

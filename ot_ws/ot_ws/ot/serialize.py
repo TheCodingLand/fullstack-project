@@ -86,7 +86,7 @@ class serialize(object):
         result = Result()
         #self.res.update({ 'id' : id})
         result.id = xml.attrib['id']
-        print(result.id)
+        # print(result.id)
 
         for field in xml:
             k = globals()[field.tag]
