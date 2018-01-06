@@ -69,6 +69,7 @@ class Agent(models.Model):
     ext = models.CharField(max_length=3, null=True, unique=True)
     phone_state = models.CharField(
         max_length=30, default="available", blank=True)
+    email = models.CharField(max_length=35, null=True)
     avatar = models.ImageField(upload_to='userimage', blank=True)
     current_call = models.ForeignKey(
         Call, null=True, on_delete=models.SET_NULL, related_name='current_agent', blank=True)
