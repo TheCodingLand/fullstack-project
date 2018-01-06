@@ -140,6 +140,8 @@ class query_ot():
                 filterVars = '%s<%s name="%s">%s</%s>' % (
                     filterVars, 'StringVal', variable.get('name'), variable.get('value'), 'StringVal')
             self.body = '%s%s</Filter>' % (self.body, filterVars)
+        self.body = r'%s</Get>' % (self.body)
+        self.send()
 
     def GetUserByExt(self, UCID):
         """hardcoded UCID query filter, temporary to avoid clashing with old api version"""

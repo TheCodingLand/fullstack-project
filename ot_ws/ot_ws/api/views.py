@@ -377,7 +377,7 @@ class ObjectFilter(Resource):
             # print(fields)
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'))
-            items = serialize(e.xml_result.decode("utf-8")).results
+            items = serialize(r.xml_result.decode("utf-8")).results
             results = []
             for result in items:
                 d = {}
