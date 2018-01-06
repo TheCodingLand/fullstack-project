@@ -23,7 +23,7 @@ class dispatch(object):
 
     # calls
 
-    def centrale(self, id, timestamp, ext): e
+    def centrale(self, id, timestamp, ext):
         log.info("Call in IVR,%s" % ext)
         call = Call.objects.get_or_create(ucid=id)[0]
         call.start = timestamp
