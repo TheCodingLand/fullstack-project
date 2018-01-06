@@ -12,11 +12,10 @@ users = []
 url = 'http://ot-ws:5000/api/ot/objects'
 payload = '{"objectclass": "Agent", "filter": "", "variables": [], "requiredfields": [] }'
 
-req = requests.post(url, payload)
+req = requests.post(url, payload, headers={"Content-Type": "application/json"})
 
 print(requests)
 
 agents = Agent.objects.all()
 
-for item in req:
-    print("%s" % item)
+# sid=response.json()['Object']['login']['sessionId']
