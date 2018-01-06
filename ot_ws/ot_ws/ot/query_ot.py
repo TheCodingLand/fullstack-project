@@ -63,12 +63,16 @@ class query_ot():
         tree = ET.fromstring(self.xml_result)
         root = tree \
             .find('*//{http://www.omninet.de/OtWebSvc/v1}AddObjectResult')
+
         if root.attrib['success'] == "true":
             id = root.attrib['objectId']
-
+        else:
+            logging.ERROR(self)
+            logging.ERROR(self.xml_result)
             #print("couldn't add item in %s with fields %s" % (model.folder, fields))
             #print("request : %s" % self.xml)
             #print("response : %s" % self.xml_result)
+
         return id
 
     def getField(self, id, field):
