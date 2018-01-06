@@ -134,7 +134,6 @@ class query_ot():
 
         self.body = ""
         if objectClassName in globals():
-            id = "1234asdf"
             constructor = globals()[objectClassName]
             item = constructor()
         else:
@@ -153,21 +152,7 @@ class query_ot():
                     filterVars, 'StringVal', variable.get('name'), variable.get('value'), 'StringVal')
             self.body = '%s%s</Filter>' % (self.body, filterVars)
         self.body = r'%s</Get>' % (self.body)
-        self.send()
-
-    def GetUserByExt(self, UCID):
-        """hardcoded UCID query filter, temporary to avoid clashing with old api version"""
-        self.body = ""
-
-        self.command = "GetObjectList"
-        self.body = r'%s<Get folderPath="01. ITSM - Service Operation\01. Event Management" recursive="true">' \
-            % (self.body)
-
-        self.body = r'%s<Filter>%s' % (self.body, 'EventUCID')
-
-        filterVars = r'<%s name="%s">%s</%s>' % (
-            'StringVal', 'UCID', UCID, 'StringVal')
-        self.body = r'%s%s</Filter></Get>' % (self.body, filterVars)
+        logging.error(self.body)
         self.send()
 
     def dummydata(self):

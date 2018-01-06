@@ -235,7 +235,7 @@ class Agent(object):
 
 class Category(object):
     def __init__(self):
-        self.folder = r"01.ITSM - Categories"
+        self.folder = r'01.ITSM - Categories'
         self.requiredfields = ["Title", "Predecessor", "SearchCode"]
         self.fields = {
             "ActivitiesIncident": "ReferenceListVal",
