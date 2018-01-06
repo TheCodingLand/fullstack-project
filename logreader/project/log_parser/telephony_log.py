@@ -37,8 +37,7 @@ class TelephonyLog(LogLine):
             ev.end()
 
     def isCentrale(self):
-        if "DivertDestination" in self.line and Reason:
-            "DIVERT_IVR_DISTRIBUTION" in self.line:
+        if "DivertDestination" in self.line and "DIVERT_IVR_DISTRIBUTION" in self.line:
             ev = CallEvent(self.getUcid(), self.date)
             ev.newCentraleCall(self.getCentaleNumber())
 
