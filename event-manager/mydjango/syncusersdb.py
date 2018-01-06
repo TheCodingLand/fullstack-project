@@ -17,6 +17,8 @@ req = requests.post(url, payload, headers={"Content-Type": "application/json"})
 data = req.json()
 
 agents = Agent.objects.all()
+
+
 print(data['status'])
 for agent in data['Agent']:
     id = agent['id']
@@ -25,8 +27,18 @@ for agent in data['Agent']:
     phone = agent['data']['Phone']
     login = agent['data']['Login Name']
     displayname = agent['data']['Title']
-print("%s - %s - %s - %s - %s - %s" %
-      (id, firstname, lastname, phone[1:], login, displayname))
+    email = agent['data']['Email Address']
+    for a in agents:
+        if a.ext == phone[1:]
+            a.firstname = firstname
+            a.lastname = lastname
+            a.ot_id = id
+            a.email = email
+            a.ot_userdisplayname = displayname
+            a.ot_userloginname = login
+            a.save()
+            print("%s - %s - %s - %s - %s - %s - %s" %
+                  (id, firstname, lastname, phone[1:], login, displayname, email))
 
 
 # sid=response.json()['Object']['login']['sessionId']
