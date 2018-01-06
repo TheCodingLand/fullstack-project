@@ -45,6 +45,7 @@ class ObjectsMetadata(Resource):
             'message': 'Event does not exist'
         }
         try:
+
             e = query_ot()
             e.get(object_id)
 
@@ -345,10 +346,10 @@ class ObjectFilter(Resource):
     def post(self):
         time.sleep(1)
         post_data = request.get_json()
-        print(request.get_json())
+        log.error(request.get_json())
         try:
             r = query_ot()
-            log.info(post_data)
+            log.error(post_data)
 
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
