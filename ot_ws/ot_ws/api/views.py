@@ -354,6 +354,7 @@ class ObjectFilter(Resource):
             r = query_ot()
             # print (ticket_model)
             # print(fields)
+            logging.error(post_data)
 
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data('requiredfields'))
