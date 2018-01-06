@@ -10,7 +10,7 @@ from ot_ws import create_app
 import logging
 log = logging.getLogger(__name__)
 
-log.setLevel(logging.ERROR)
+log.setLevel(logging.INFO)
 
 app = create_app()
 manager = Manager(app)
