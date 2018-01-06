@@ -69,7 +69,7 @@ class dispatch(object):
         redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
-        agent = Agents.objects.get(ext=destination)
+        agent = Agent.objects.get(ext=destination)
         if agent.isQueueLine:
             call.isContactCenterCall = True
             call.save()
