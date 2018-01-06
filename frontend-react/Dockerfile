@@ -17,5 +17,4 @@ RUN npm install --force react-scripts
 
 # expose container port
 EXPOSE 3000
-
-CMD npm start
+EXPOSE 3001

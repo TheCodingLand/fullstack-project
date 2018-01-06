@@ -5,10 +5,14 @@ services:
   build: ./frontend-react/
   ports:
     - "3000"
+    - "3001"
   links:
     - redis
+  WORKDIR : /usr/src/app
+  command: sh -c 'npm start && node run redis.jsx'
   expose:
     - "3000"  
+    - "3001"
     
  event-manager:
   restart: always
