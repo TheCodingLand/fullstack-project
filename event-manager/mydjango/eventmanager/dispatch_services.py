@@ -9,7 +9,7 @@ from graphqlendpoint.models import Agent, Event, Call, Transfer
 import requests
 from django.db import connection
 from eventmanager.redis import Redis
-from ot_api import ot_api
+from eventmanager.ot_api import ot_api
 
 
 class dispatch(object):
