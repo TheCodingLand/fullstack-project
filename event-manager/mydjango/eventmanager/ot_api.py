@@ -66,7 +66,7 @@ class ot_api_event(object):
 
     def updateResponsible(self, call, agent):
         payload = '{"Responsible": "%s"}' % agent.ot_userdisplayname
-        url = "%s/events/%s" % (self.url, objecttype, id)
+        url = "%s/events/%s" % (self.url, id)
         req = requests.post(url, payload)
         if req.status_code == 404:
             return False
@@ -87,7 +87,7 @@ class ot_api_event(object):
 
     def updateEventPhoneNumber(self, call):
         payload = '{"Phone Number": "%s"}' % call.origin
-        url = "%s/events/%s" % (self.url, objecttype, id)
+        url = "%s/events/%s" % (self.url, id)
         req = requests.post(url, payload)
         if req.status_code == 404:
             return False
