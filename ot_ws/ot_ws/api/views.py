@@ -3,7 +3,7 @@ from flask_restplus import Namespace, Resource, fields
 from ot_ws.api.models.apimodels import event, ticket, genericfilter
 import logging
 log = logging.getLogger(__name__)
-log.setLevel(logging.WARNING)
+log.setLevel(logging.DEBUG)
 
 from flask import request
 
