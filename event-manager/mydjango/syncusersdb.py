@@ -24,12 +24,14 @@ for agent in data['Agent']:
     id = agent['id']
     firstname = agent['data']['FirstName']
     lastname = agent['data']['LastName']
-    phone = agent['data']['Phone']
+    phone = '%s' % agent['data']['Phone']
     login = agent['data']['Login Name']
     displayname = agent['data']['Title']
     email = agent['data']['Email Address']
+    phone = phone[1:]
+    print(phone)
     for a in agents:
-        if a.ext == phone[1:]:
+        if a.ext == phone:
             a.firstname = firstname
             a.lastname = lastname
             a.ot_id = id
