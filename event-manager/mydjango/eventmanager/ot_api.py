@@ -17,7 +17,7 @@ class ot_api(object):
             event = Event(
                 call=call, creationdate=call.start, ucid=call.ucid)
             event.call = call
-            avent.applicant =
+
             event.save()
 
         print("getting id")

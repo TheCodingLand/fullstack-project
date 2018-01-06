@@ -3,8 +3,10 @@ from flask_restplus import Namespace, Resource, fields
 from ot_ws.api.models.apimodels import event, ticket, genericfilter
 import logging
 log = logging.getLogger(__name__)
+import logging
+logging.warning('Watch out!')
 from flask import request
-log.setLevel(logging.ERROR)
+
 from ot_ws.api.restplus import api
 from ot_ws.ot.query_ot import query_ot
 from ot_ws.ot.ot_models import Event, Ticket, Category
@@ -104,7 +106,7 @@ def getFields(object_model, data):
             f.value = data[key]
             fields.append(f)
         else:
-            print("field not in globals")
+            logging.error("field not in globals")
             raise ValueError('field not in globals')
     return fields
 
@@ -290,13 +292,15 @@ class TicketAdd(Resource):
     def put(self):
         time.sleep(1)
         post_data = request.get_json()
-        print(post_data)
+
+        logging.warning(post_data)
 
         if not post_data:
             response_object = {
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
+
             fields = getFields(ticket_model, post_data)
             return response_object, 400
             r = query_ot()
