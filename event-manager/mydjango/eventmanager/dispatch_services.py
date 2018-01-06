@@ -28,6 +28,7 @@ class dispatch(object):
         call = Call.objects.get_or_create(ucid=id)[0]
         call.start = timestamp
         call.destination = ext
+        call.isContactCenterCall = True
         call.save()
 
         centrale = Agents.objects.get_or_create(ext=ext)
@@ -72,9 +73,8 @@ class dispatch(object):
         agents = Agent.objects.filter(ext=destination)
         if len(agents) > 0:
             if agent[0].isQueueLine:
-                call.isContactCenterCall = True
-                call.save()
-                self.centrale(id, timestamp, destination)
+                if call.isContactCenterCall == False:
+                    self.centrale(id, timestamp, destination)
 
         transfers = call.getTransfers().filter(
             ttimestamp=timestamp, tdestination=destination)
