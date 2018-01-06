@@ -17,7 +17,7 @@ class ot_api_event(object):
     def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
         payload = '{ "objectclass": "Event", "filter": "EventUCID", "variables": [{ "name": "UCID", "value": "%s"}]}' % ucid
-
+        url = "%s/objects" % self.url
         req = requests.post(url, payload)
         try:
             id = req.get('id')

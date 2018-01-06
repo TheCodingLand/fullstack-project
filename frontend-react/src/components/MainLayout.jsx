@@ -23,8 +23,8 @@ export default class Layout extends React.Component {
                 <Cell width={3}>
                     <CSSTransitionGroup
                         transitionName="example"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}>
+                        transitionEnterTimeout={2500}
+                        transitionLeaveTimeout={2500}>
                         {this.props.users && this.props.users.map((user) => (
                             <MainAgentPanelLayout key={user.id} user={user}></MainAgentPanelLayout>
                         ))}
