@@ -43,7 +43,7 @@ class AgentEvent(object):
                 'id': self.id, 'data': '%s' % (state)}
         conn.hmset(hash, data)
 
-     def update_agent_ext(self, state):
+    def update_agent_ext(self, state):
         hash = "%s-%s-%s-%s" % (self.timestamp,
                                 'update_agent_ext', self.id, state)
         data = {'action': 'update_agent_ext', 'timestamp': "%s" % self.timestamp,
