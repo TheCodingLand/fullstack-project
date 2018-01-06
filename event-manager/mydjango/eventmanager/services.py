@@ -38,9 +38,9 @@ class Services(object):
             self.done =  django_calls_services().update_details(self.id, self.timestamp, self.data)
         if self.action == "setcaller":
             self.done = django_calls_services().set_caller(self.id, self.timestamp, self.data)
-       
         if self.action == "remove":
             self.done = django_calls_services().end(self.id, self.timestamp)
+            
         #AGENTS  
         if self.action == "login":
             self.done = django_agents_services().login(self.id, self.data)
