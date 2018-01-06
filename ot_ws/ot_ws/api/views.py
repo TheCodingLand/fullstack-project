@@ -409,12 +409,11 @@ class EventMod(Resource):
                 }
                 return response_object, 201
 
-        except:
-            response_object = {
-                'status': 'fail',
-                'message': 'Internal server error.'
-            }
-            return response_object, 500
+        response_object = {
+            'status': 'fail',
+            'message': 'Internal server error.'
+        }
+        return response_object, 500
 
 
 @api.response(400, 'failed.')
