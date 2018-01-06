@@ -1,5 +1,7 @@
 from project.models.agent_event import AgentEvent
 from project.log_parser.log_line import LogLine
+import logging
+logging.error()
 
 
 class PresenceLog(LogLine):
@@ -17,7 +19,9 @@ class PresenceLog(LogLine):
 
     def check_agent_ext(self):
         if self.getExtension() != False:
+            logging.error(self.getExtension())
             if self.getUserId() != False:
+                logging.error(self.getUserId())
                 if len(self.getExtension() == 3)
                     if len(self.getUserId() == 3):
                         AgentEvent(self.getUserId(), self.date).update_agent_ext(

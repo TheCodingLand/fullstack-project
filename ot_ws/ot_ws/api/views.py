@@ -3,7 +3,7 @@ from flask_restplus import Namespace, Resource, fields
 from ot_ws.api.models.apimodels import event, ticket, genericfilter
 import logging
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.WARNING)
 
 from flask import request
 
@@ -346,10 +346,10 @@ class ObjectFilter(Resource):
     def post(self):
         time.sleep(1)
         post_data = request.get_json()
-        log.error(request.get_json())
+        log.info(request.get_json())
         try:
             r = query_ot()
-            log.error(post_data)
+            log.info(post_data)
 
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
