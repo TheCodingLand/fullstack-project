@@ -18,7 +18,13 @@ print(req.json())
 
 agents = Agent.objects.all()
 print(req['status'])
-for event in
+for agent in req['Agent']:
+    print agent['id']
+    print agent['data']['FirstName']
+    print agent['data']['LastName']
+    print agent['data']['Phone']
+
+
 # sid=response.json()['Object']['login']['sessionId']
 # docker exec -it  project_event-manager_1  python syncusersdb.py
 {
