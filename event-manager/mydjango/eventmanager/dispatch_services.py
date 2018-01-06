@@ -10,6 +10,7 @@ import requests
 from django.db import connection
 from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api_event
+import Transition from 'react-transition-group/Transition'
 import logging
 log = logging.Logger("dispatcher")
 log.setLevel(logging.WARNING)
@@ -31,7 +32,7 @@ class dispatch(object):
         call.isContactCenterCall = True
         call.save()
 
-        centrale = Agents.objects.get_or_create(ext=ext)
+        centrale = Agent.objects.get_or_create(ext=ext)
         centrale.isQueueLine = True
         centrale.firstname = "Centrale IVR"
         centrale.ot_userloginname = "Centrale"

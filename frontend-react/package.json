@@ -13,6 +13,7 @@
         "react-dom": "^16.2.0",
         "react-scripts": "1.0.17",
         "react-simple-maps": "^0.10.1",
+        "react-transition-group": "^1.2.1",
         "react-websocket": "^2.0.0",
         "redis": "^2.8.0",
         "socketio": "^1.0.0",
