@@ -287,10 +287,10 @@ ticket_model = Ticket()
 @api.response(400, 'failed.')
 @ns.route('/tickets')
 class TicketAdd(Resource):
-    @api.response(201, 'Event successfully created.')
+    @api.response(201, 'Ticket successfully created.')
     @api.expect(ticket)
     def put(self):
-        time.sleep(1)
+
         post_data = request.get_json()
 
         logging.warning(post_data)
@@ -300,6 +300,7 @@ class TicketAdd(Resource):
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
+        else:
 
             fields = getFields(ticket_model, post_data)
             return response_object, 400
