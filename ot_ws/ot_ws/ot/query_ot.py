@@ -4,9 +4,8 @@ import platform
 import random
 import logging
 
-logging.warning('Watch out!')  # will print a message to the console
-logging.info('I told you so')
-
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 from ot_ws.ot.ot_models import *
 ENABLED = False
 if os.getenv("OMNITRACKER_API_ENABLED") == "True":
@@ -17,10 +16,7 @@ else:
     url = "http://otrcsl01.rcsl.lu/otws/v1.asmx"
 
 import xml.etree.ElementTree as ET
-if platform.system() == "Windows":
-    Encoding = "cp437"
-else:
-    Encoding = "utf-8"
+Encoding = "utf-8"
 
 
 class query_ot():
@@ -48,17 +44,14 @@ class query_ot():
     def add(self, model, fields):
         self.command = "AddObject"
         fieldxml = ""
-        logging.error(fields)
+        logging.info(fields)
         for field in fields:
-            #print("looking for field xml string : of field %s, with value %s, class %s"%(field.name, field.value, field.fieldtype))
-            #print (field.fieldXMLString())
-
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
-        logging.warning(fieldxml)
+        logging.info(fieldxml)
         self.body = r'%s<Object folderPath="%s">' % (self.body, model.folder) + \
             r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
-        # print(self.body)
+
         self.send()
         tree = ET.fromstring(self.xml_result)
         root = tree \
@@ -67,13 +60,10 @@ class query_ot():
         if root.attrib['success'] == "true":
             id = root.attrib['objectId']
         else:
-            logging.error(self.xml)
-            logging.error(self.xml_result)
+            logging.error("could not complete request %s" % self.xml)
+            logging.error("server response : %s" % logging.error(
+                "could not complete request %s" % self.xml_result))
             id = 0
-            #print("couldn't add item in %s with fields %s" % (model.folder, fields))
-            #print("request : %s" % self.xml)
-            #print("response : %s" % self.xml_result)
-
         return id
 
     def getField(self, id, field):
@@ -88,16 +78,12 @@ class query_ot():
         self.initQuery()
         data = self.xml.replace(r'\r\n', r'&#x000d;&#x000a;').encode(
             "ascii", "xmlcharrefreplace")
-        # print(self.headers)
-        # print(data)
-        # print(url)
-        result = requests.post(url, data=data, headers=self.headers)
-        # print(self.body)
 
-        # print(result.content)
+        result = requests.post(url, data=data, headers=self.headers)
+
         self.xml_result = result.content
-        logging.error(self.xml)
-        logging.error(self.xml_result)
+        logging.info(self.xml)
+        logging.info(self.xml_result)
 
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""
@@ -161,7 +147,7 @@ class query_ot():
             self.body = '%s%s' % (self.body, required)
 
         self.body = r'%s</Get>' % (self.body)
-        logging.error(self.body)
+
         self.send()
 
     def dummydata(self):

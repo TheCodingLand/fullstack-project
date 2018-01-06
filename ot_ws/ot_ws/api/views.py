@@ -3,8 +3,8 @@ from flask_restplus import Namespace, Resource, fields
 from ot_ws.api.models.apimodels import event, ticket, genericfilter
 import logging
 log = logging.getLogger(__name__)
-import logging
-logging.warning('Watch out!')
+log.setLevel(logging.INFO)
+
 from flask import request
 
 from ot_ws.api.restplus import api
@@ -28,7 +28,7 @@ class Swagger(Resource):
 @ns.route('/ping')
 class SanityCheck(Resource):
     def get(self):
-        print(json.dumps(api.__schema__))
+        log.info(json.dumps(api.__schema__))
         return {
             'status': 'success',
             'message': 'pong!'
@@ -47,9 +47,9 @@ class ObjectsMetadata(Resource):
         try:
             e = query_ot()
             e.get(object_id)
-            # print ("%s" % e.xml_result)
+
             result = serialize(e.xml_result.decode("utf-8"))
-            print(result)
+            log.info(result)
 
             ot_object = result.results[0].res
             if not ot_object:
@@ -77,9 +77,9 @@ class ObjectsMetadata(Resource):
         try:
             e = query_ot()
             e.get(object_id)
-            # print ("%s" % e.xml_result)
+
             result = serialize(e.xml_result.decode("utf-8"))
-            print(result)
+            log.info(result)
             ot_object = result.results[0].metadata
             if not ot_object:
                 return response_object, 404
@@ -100,13 +100,13 @@ def getFields(object_model, data):
     fields = []
     for key in data.keys():
         if key in object_model.fields.keys():
-            # print(key)
+
             cls = globals()[object_model.fields[key]]
             f = cls(key)
             f.value = data[key]
             fields.append(f)
         else:
-            logging.error("field not in globals")
+            log.error("field not in globals")
             raise ValueError('field not in globals')
     return fields
 
@@ -132,8 +132,7 @@ class EventAdd(Resource):
             return response_object, 400
         try:
             r = query_ot()
-            # print (event_model)
-            # print(fields)
+
             event = r.add(event_model, fields)
             if event:
                 response_object = {
@@ -149,6 +148,7 @@ class EventAdd(Resource):
                 }
                 return response_object, 400
         except:
+            log.error("faild to createevent with data %s" % post_data)
             response_object = {
                 'status': 'fail',
                 'message': 'Invalid payload.'
@@ -293,7 +293,7 @@ class TicketAdd(Resource):
 
         post_data = request.get_json()
 
-        logging.warning(post_data)
+        log.info(post_data)
 
         if not post_data:
             response_object = {
@@ -305,8 +305,6 @@ class TicketAdd(Resource):
             fields = getFields(ticket_model, post_data)
 
             r = query_ot()
-            # print (ticket_model)
-            # print(fields)
             result = r.add(ticket_model, fields)
             if result:
                 response_object = {
@@ -317,8 +315,6 @@ class TicketAdd(Resource):
                 return response_object, 201
         try:
             r = query_ot()
-            # print (ticket_model)
-            # print(fields)
             result = r.add(ticket_model, post_data)
             if result:
                 response_object = {
@@ -352,9 +348,7 @@ class ObjectFilter(Resource):
         print(request.get_json())
         try:
             r = query_ot()
-            # print (ticket_model)
-            # print(fields)
-            logging.error(post_data)
+            log.info(post_data)
 
             objectlist = r.getObjectList(post_data.get(
                 'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))

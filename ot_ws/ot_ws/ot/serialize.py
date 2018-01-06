@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 from ot_ws.ot.ot_field import *
 import re
-
+import logging
 testxml = """<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope
     xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
@@ -78,9 +78,6 @@ class Result(object):
 class serialize(object):
 
     def __init__(self, xml):
-
-        self.res = {}
-        self.metadata = {}
         self.id = 0
         self.results = []
         self.parse(xml)
@@ -99,7 +96,6 @@ class serialize(object):
             result.metadata.update({'%s' % name: field.tag})
             result.res.update({'%s' % name: f.getValueFromXML(field)})
         self.results.append(result)
-        print(self.results)
 
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
@@ -121,11 +117,9 @@ class serialize(object):
             elif nbresults > 1:
                 for item in root:
                     self.getFields(item)
-
             else:
                 self.res = False
-
-        print("RESULTS %s" % nbresults)
+                logging.error("Serializing response failed")
 
 
 def test():
