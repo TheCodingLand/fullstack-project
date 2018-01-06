@@ -89,6 +89,8 @@ class serialize(object):
         result = Result()
         #self.res.update({ 'id' : id})
         result.id = xml.attrib['id']
+        print(result.id)
+
         for field in xml:
             k = globals()[field.tag]
             name = field.attrib['name']
@@ -97,6 +99,7 @@ class serialize(object):
             result.metadata.update({'%s' % name: field.tag})
             result.res.update({'%s' % name: f.getValueFromXML(field)})
             self.results.append(result)
+            print self.results
 
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
