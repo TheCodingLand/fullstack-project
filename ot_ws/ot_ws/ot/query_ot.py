@@ -131,7 +131,7 @@ class query_ot():
         self.body = r'%s%s</Filter></Get>' % (self.body, filterVars)
         self.send()
 
-    def getObjectList(self, objectClassName, filter, variables):
+    def getObjectList(self, objectClassName, filter, variables, requiredFields):
         """requests info from the api based on defined a filter and an arraw of variables [[variable1,Value1],[variable2,Value2]]"""
 
         self.body = ""
@@ -153,6 +153,13 @@ class query_ot():
                 filterVars = '%s<%s name="%s">%s</%s>' % (
                     filterVars, 'StringVal', variable.get('name'), variable.get('value'), 'StringVal')
             self.body = '%s%s</Filter>' % (self.body, filterVars)
+
+        if requiredFields != "":
+            requiered = ""
+            for f in requiredFields:
+                required = '<RequiredField>%s</RequiredField>' % (f)
+            self.body = '%s%s' % (self.body, required)
+
         self.body = r'%s</Get>' % (self.body)
         logging.error(self.body)
         self.send()

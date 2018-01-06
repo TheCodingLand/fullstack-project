@@ -354,8 +354,9 @@ class ObjectFilter(Resource):
             r = query_ot()
             # print (ticket_model)
             # print(fields)
+
             objectlist = r.getObjectList(post_data.get(
-                'objectclass'), post_data.get('filter'), post_data.get('variables'))
+                'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data('requiredfields'))
             items = serialize(r.xml_result.decode("utf-8")).results
             results = []
             for result in items:

@@ -45,4 +45,5 @@ genericfilter = api.model('GenericFilter:', {
     'objectclass': fields.String(description='object class as known in the ot API models.py file'),
     'filter': fields.String(description='the filter name as defined in omnitracker'),
     'variables': fields.List(fields.Nested(variablelist)),
+    'requiredfields': fields.List(fields.String(description='fields to return')),
 })
