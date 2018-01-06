@@ -1,10 +1,10 @@
 {
-"objectclass" : "Event",
-"filter" : "UCID :",
-"variables" : [
-{
-"name" : "UCID",
-"value" : "3501515163418612"
-}
-]
+  "objectclass": "Event",
+  "filter": "EventUCID",
+  "variables": [
+    {
+      "name": "UCID",
+      "value": "4761515163794742"
+    }
+  ]
 }
