@@ -4,7 +4,7 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mydjango.settings'
 import django
 django.setup()
-
+import requests
 from graphqlendpoint.models import Agent
 
 
