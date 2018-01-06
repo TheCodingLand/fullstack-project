@@ -19,10 +19,10 @@ print(req.json())
 agents = Agent.objects.all()
 print(req['status'])
 for agent in req['Agent']:
-    print agent['id']
-    print agent['data']['FirstName']
-    print agent['data']['LastName']
-    print agent['data']['Phone']
+    print(agent['id'])
+    print(agent['data']['FirstName'])
+    print(agent['data']['LastName'])
+    print(agent['data']['Phone'])
 
 
 # sid=response.json()['Object']['login']['sessionId']
