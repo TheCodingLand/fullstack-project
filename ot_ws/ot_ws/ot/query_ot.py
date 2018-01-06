@@ -2,6 +2,10 @@ import requests
 import os
 import platform
 import random
+import logging
+
+logging.warning('Watch out!')  # will print a message to the console
+logging.info('I told you so')
 
 from ot_ws.ot.ot_models import *
 ENABLED = False
@@ -44,11 +48,13 @@ class query_ot():
     def add(self, model, fields):
         self.command = "AddObject"
         fieldxml = ""
-        print(field)
+
         for field in fields:
             #print("looking for field xml string : of field %s, with value %s, class %s"%(field.name, field.value, field.fieldtype))
             #print (field.fieldXMLString())
+
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
+        logging.warning(fieldxml)
         self.body = r'%s<Object folderPath="%s">' % (self.body, model.folder) + \
             r'%s' % fieldxml
         self.body = '%s</Object>' % self.body

@@ -93,6 +93,8 @@ class ObjectsMetadata(Resource):
 
 
 def getFields(object_model, data):
+    """Creates ot_field instance so the apo knows how to send it to the original API
+    Also serves as validation for returned objects"""
     fields = []
     for key in data.keys():
         if key in object_model.fields.keys():
@@ -289,21 +291,23 @@ class TicketAdd(Resource):
         time.sleep(1)
         post_data = request.get_json()
         print(post_data)
+
         if not post_data:
             response_object = {
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
+            fields = getFields(ticket_model, post_data)
             return response_object, 400
             r = query_ot()
             # print (ticket_model)
             # print(fields)
-            result = r.add(ticket_model, post_data)
+            result = r.add(ticket_model, fields)
             if result:
                 response_object = {
                     'status': 'success',
                     'message': 'ticket was added!',
-                    'object': result
+                    'ticket': result
                 }
                 return response_object, 201
         try:
@@ -315,7 +319,7 @@ class TicketAdd(Resource):
                 response_object = {
                     'status': 'success',
                     'message': 'ticket was added!',
-                    'object': result
+                    'ticket': result
                 }
                 return response_object, 201
             else:
