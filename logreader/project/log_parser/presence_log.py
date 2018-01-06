@@ -21,7 +21,7 @@ class PresenceLog(LogLine):
             if self.getUserId() != False:
                 if len(self.getExtension()) == 3:
                     if len(self.getUserId()) == 3:
-                        logging.error(self.getUserId(), self.getExtension())
+                        logging.error("%s, %s" % (self.getUserId(), self.getExtension())
                         AgentEvent(self.getUserId(), self.date).update_agent_ext(
                             self.getExtension())
 
@@ -59,18 +59,18 @@ class PresenceLog(LogLine):
         return self.search(r"Extension\{(.*?)\}")
 
     def getAcdState(self):
-        state = self.search(r"Acd State\{(.*?)\}")
+        state=self.search(r"Acd State\{(.*?)\}")
         if state == False:
-            state = self.search(
+            state=self.search(
                 r"TpsSUserPresence::OnEvent. Rcvd Agent (ACDAVAIL)")
         return state
 
     def getUnavailable(self):
-        state = r"TpsSUserPresence::OnEvent. Rcvd Agent ACDUNAVAIL Event for UserId{" in self.line or "TpsSUserPresence::OnEvent. Rcvd Agent ACDUNAVAIL Event for UserId{" in self.line
+        state=r"TpsSUserPresence::OnEvent. Rcvd Agent ACDUNAVAIL Event for UserId{" in self.line or "TpsSUserPresence::OnEvent. Rcvd Agent ACDUNAVAIL Event for UserId{" in self.line
         return state
 
     def getAvailable(self):
-        state = r"TpsSUserPresence::OnEvent. Rcvd Agent ACDAVAIL Event for UserId{" in self.line or "TpsSUserPresence::OnEvent. Rcvd Agent ACDAVAIL Event for UserId{" in self.line
+        state=r"TpsSUserPresence::OnEvent. Rcvd Agent ACDAVAIL Event for UserId{" in self.line or "TpsSUserPresence::OnEvent. Rcvd Agent ACDAVAIL Event for UserId{" in self.line
 
         return state
 
