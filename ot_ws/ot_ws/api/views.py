@@ -199,7 +199,7 @@ class EventItem(Resource):
 
 
 @ns.route('/events/ucid/<int:event_ucid>', methods=['GET'])
-class EventItem(Resource):
+class EventItemUCID(Resource):
     def get(self, event_ucid):
         """Get single event details"""
         response_object = {
@@ -380,3 +380,73 @@ class ObjectFilter(Resource):
                 'message': 'Invalid payload.'
             }
             return response_object, 400
+
+
+@api.response(400, 'failed.')
+@ns.route('/event/<int:event_id>')
+class EventMod(Resource):
+    @api.response(201, 'object successfully modified.')
+    @api.expect(event)
+    def put(self):
+
+        post_data = request.get_json()
+        log.info(post_data)
+        if not post_data:
+            response_object = {
+                'status': 'fail',
+                'message': 'Invalid payload.'
+            }
+        else:
+            id = event_id
+            fields = getFields(event_model, post_data)
+            r = query_ot()
+            result = r.modify(id, fields)
+            if result:
+                response_object = {
+                    'status': 'success',
+                    'message': 'ticket was added!',
+                    'ticket': result
+                }
+                return response_object, 201
+
+        except:
+            response_object = {
+                'status': 'fail',
+                'message': 'Internal server error.'
+            }
+            return response_object, 500
+
+
+@api.response(400, 'failed.')
+@ns.route('/ticket/<int:ticket_id>')
+class TicketMod(Resource):
+    @api.response(201, 'object successfully modified.')
+    @api.expect(ticket)
+    def put(self):
+
+        post_data = request.get_json()
+        log.info(post_data)
+        if not post_data:
+            response_object = {
+                'status': 'fail',
+                'message': 'Invalid payload.'
+            }
+        else:
+            id = ticket_id
+            fields = getFields(ticket_model, post_data)
+            r = query_ot()
+            result = r.modify(id, fields)
+            if result:
+                response_object = {
+                    'status': 'success',
+                    'message': 'ticket was added!',
+                    'ticket': result
+                }
+                return response_object, 201
+
+        except:
+            response_object = {
+                'status': 'fail',
+                'message': 'Internal server error.'
+            }
+            return response_object, 500

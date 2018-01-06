@@ -33,26 +33,43 @@ class query_ot():
     def get(self, id):
         self.id = id
         """Takes ID returns a formatted object"""
-        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/></Get>' % (
+        self.body = r'<Get recursive="true"><Object objectId="%s"/></Get>' % (
             id)
 
         self.command = "GetObjectList"
         self.send()
 
-    def getWithFields(self, requiredFields):
+    def remove(self, id):
         self.id = id
-        """Takes ID returns a formatted object"""
-        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/>' % (
+        """Takes ID, deletes object"""
+        self.body = r'<RemoveObject><ObjectID>%s</ObjectID><IgnoreReferences>true</IgnoreReferences></RemoveObject >' % (
             id)
-        if requiredFields != []:
-            required = ""
-            for f in requiredFields:
-                required = '<RequiredField>%s</RequiredField>' % (f)
-            self.body = '%s%s' % (self.body, required)
-
-        self.body = r'%s</Get>' % (self.body)
 
         self.command = "GetObjectList"
+        self.send()
+
+    def modifyObjet(self, id, fields):
+        self.id = id
+        self.command = "ModifyObject"
+        fieldxml = ""
+        logging.info(fields)
+        for field in fields:
+            fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
+        logging.info(fieldxml)
+        self.body = r'%s<Object objectId="%s">' % (
+            self.id, self.body) + r'%s' % fieldxml
+        self.body = '%s</Object>' % self.body
+
+        self.send()
+
+        tree = ET.fromstring(self.xml_result)
+        root = tree \
+            .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResponse')
+
+        if root.attrib['success'] == "true":
+            return True
+        else:
+            return False
 
     def add(self, model, fields):
         self.command = "AddObject"
