@@ -132,7 +132,7 @@ class ot_api_event(object):
             return False
 
     def checkUserStatus(self, agent):
-        data = req.json()
+
         url = '%s/objects' % self.url
         payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [{ "name": "Phone", "value": "-%s"}], "requiredfields": [] }' % agent.ext
         req = requests.post(url, payload)
