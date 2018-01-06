@@ -288,7 +288,7 @@ class TicketAdd(Resource):
     def put(self):
         time.sleep(1)
         post_data = request.get_json()
-
+        print(post_data)
         if not post_data:
             response_object = {
                 'status': 'fail',
@@ -300,7 +300,7 @@ class TicketAdd(Resource):
             r = query_ot()
             # print (ticket_model)
             # print(fields)
-            event = r.add(ticket_model, fields)
+            event = r.add(ticket_model, post_data)
             if event:
                 response_object = {
                     'status': 'success',
@@ -363,26 +363,4 @@ class ObjectFilter(Resource):
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
-
-            r = query_ot()
-            # print (ticket_model)
-            # print(fields)
-            objectlist = r.getObjectList(post_data.get(
-                'objectclass'), post_data.get('filter'), post_data.get('variables'))
-            items = serialize(r.xml_result.decode("utf-8")).results
-            results = []
-            for result in items:
-                d = {}
-                d.update({'id': result.id})
-                d.update({'data': result.res})
-                results.append(d)
-
-            if results:
-                response_object = {
-                    'status': 'success',
-                    'message': 'object list :',
-                    'events': results
-                }
-                return response_object, 201
-
             return response_object, 400
