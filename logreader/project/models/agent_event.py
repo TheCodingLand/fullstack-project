@@ -30,7 +30,6 @@ class AgentEvent(object):
         conn.hmset(hash, data)
 
     def logoff(self, state):
-
         hash="%s-%s-%s-%s" % (self.timestamp,'logoff',self.id, state)
         #print(hash)
         data = { 'action': 'logoff', 'timestamp' : "%s" % self.timestamp, 'id' : self.id, 'data' : '%s' %  (state) }

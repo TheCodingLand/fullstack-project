@@ -55,19 +55,20 @@ class Call(models.Model):
 
 
 class Agent(models.Model):
-    firstname = models.CharField(max_length=200, null=True, blank=True)
-    lastname = models.CharField(max_length=200, null=True, blank=True)
+    firstname = models.CharField(max_length=30, null=True, blank=True)
+    lastname = models.CharField(max_length=30, null=True, blank=True)
     active = models.BooleanField(default=True)
-    ot_userloginname = models.CharField(max_length=200, null=True, blank=True)
-    ot_userdisplayname = models.CharField(max_length=200, null=True, blank=True)
-    ot_id = models.CharField(max_length=200,null=True, blank=True)
+    ot_userloginname = models.CharField(max_length=30, null=True, blank=True)
+    ot_userdisplayname = models.CharField(max_length=100, null=True, blank=True)
+    ot_id = models.CharField(max_length=30,null=True, blank=True)
     user=models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
-    phone_login = models.CharField(max_length=200, null =True, blank=True)
+    phone_login = models.CharField(max_length=3, null =True, blank=True)
     phone_active = models.BooleanField(default=False)
-    ext = models.CharField(max_length=200, null=True, unique=True)
-    phone_state = models.CharField(max_length=200, default = "available", blank=True)
+    ext = models.CharField(max_length=3, null=True, unique=True)
+    phone_state = models.CharField(max_length=30, default = "available", blank=True)
     avatar = models.ImageField(upload_to='userimage',blank=True)
     current_call = models.ForeignKey(Call,null=True, on_delete=models.SET_NULL, related_name='current_agent', blank=True)
+    isQueueLine =  models.BooleanField(default=False)
     def __str__(self):
         return "%s" % self.ext
         
@@ -87,15 +88,15 @@ class Ticket(models.Model):
        
 class Event(models.Model):
     creationdate = models.DateTimeField(null=True)
-    end=models.DateTimeField(null=True)
-    ot_id = models.IntegerField(null=True)
-    applicant = models.ForeignKey(Agent, related_name='events_applicant', on_delete=models.CASCADE, null=True)
-    responsible = models.ForeignKey(Agent, related_name='events_responsible', on_delete=models.CASCADE, null=True)
-    state = models.CharField(max_length=200, null=True)
-    transferhistory = models.CharField(max_length=200, null=True)
-    phone = models.CharField(max_length=200, null=True)
-    ticket = models.ForeignKey(Ticket, related_name='tickets', on_delete=models.CASCADE, null=True)
-    call = models.ForeignKey(Call, on_delete=models.SET_NULL, null=True, related_name='event')
+    end=models.DateTimeField(null=True, blank=True)
+    ot_id = models.IntegerField(null=True, blank=True)
+    applicant = models.ForeignKey(Agent, related_name='events_applicant', on_delete=models.CASCADE, null=True, blank=True)
+    responsible = models.ForeignKey(Agent, related_name='events_responsible', on_delete=models.CASCADE, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
+    transferhistory = models.CharField(max_length=200, null=True, blank=True)
+    phone = models.CharField(max_length=200, null=True, blank=True)
+    ticket = models.ForeignKey(Ticket, related_name='tickets', on_delete=models.CASCADE, null=True, blank=True)
+    call = models.ForeignKey(Call, on_delete=models.SET_NULL, null=True, related_name='event', blank=True)
     def __str__(self):
         return  "%s" % self.ot_id    
     

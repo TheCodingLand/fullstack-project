@@ -8,9 +8,11 @@ class TelephonyLog(LogLine):
 
     def parse(self):
         self.check_createNew()
+        self.isCentrale()
         self.getDetails()
         self.getTransfers()
         self.manageEnd()
+        
         
     def check_createNew(self):
         if self.getNewCallUcid():
@@ -29,9 +31,7 @@ class TelephonyLog(LogLine):
             destination = self.getAnswerExt()
             ev = CallEvent(self.getUcid(),self.date)
             ev.transfer(self.getAnswerExt())
-            
-            
-            
+        
             
     def manageEnd(self):
         if self.getTerminated():
@@ -39,6 +39,14 @@ class TelephonyLog(LogLine):
             ev.end()
     
 
+    def isCentrale(self):
+        if "DivertDestination" in self.line and Reason: "DIVERT_IVR_DISTRIBUTION" in self.line:
+             ev = CallEvent(self.getUcid(),self.date)
+             ev.newCentraleCall(self.getCentaleNumber())
+            
+    
+    def getCentaleNumber(self):
+        return self.search(r"DivertDestination: (.*?),")
 
     def getUcid(self):
         return self.search(r"UCID<(.*?)>")

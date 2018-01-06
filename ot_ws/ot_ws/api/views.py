@@ -14,7 +14,7 @@ import time
 from ot_ws.ot.ot_field import *
 
 
-ns = api.namespace('ot/events', description='Operations related to OT events')
+ns = api.namespace('ot/', description='Operations related to OT events')
 
 
 @ns.route('/schema')

@@ -23,7 +23,7 @@ services:
   volumes:
     - ./event-manager:/data/event-manager
   #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
-  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8000'
   depends_on:
    - redis
    - postgres
@@ -111,7 +111,7 @@ services:
   ports:
    - '5100:8080' # expose ports - HOST:CONTAINER
   environment:
-   - API_URL=http://148.110.107.15:5001/api/ot/events/schema
+   - API_URL=http://localhost:5001/api/ot/schema
   depends_on:
    ot-ws:
     condition: service_started

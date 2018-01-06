@@ -14,6 +14,11 @@ class CallEvent(object):
         data = { 'action': 'create', 'timestamp' : "%s" % self.timestamp, 'id' : self.id }
         conn.hmset(hash, data)
     
+    def newCentraleCall(self, ext):
+        hash="%s-%s-%s-%s" % (self.timestamp,'centrale',ext, self.id)
+        data = { 'action': 'centrale', 'timestamp' : "%s" % self.timestamp, 'id' : self.id, 'data' : ext }
+        conn.hmset(hash, data)
+    
     def setCaller(self, phone):
         hash="%s-%s-%s-%s" % (self.timestamp,'setcaller',phone, self.id)
         data = { 'action': 'setcaller', 'timestamp' : "%s" % self.timestamp, 'id' : self.id, 'data' : phone }

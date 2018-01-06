@@ -1,9 +1,15 @@
 import requests
 import os
 import platform
-url= os.getenv('OT_WS_URL')
+import random
+ENABLED=False
+if os.getenv("OMNITRACKER_API_ENABLED")=="True":
+    ENABLED = True
+if os.getenv("OMNITRACKER_API_URL"):
+    url = os.getenv("OMNITRACKER_API_URL")
+else:
+    url="http://otrcsl01.rcsl.lu/otws/v1.asmx"
 
-url="http://otrcsl01.rcsl.lu/otws/v1.asmx"
 import xml.etree.ElementTree as ET
 if platform.system() == "Windows":
     Encoding = "cp437"
@@ -26,7 +32,11 @@ class query_ot():
         """Takes ID returns a formatted object"""
         self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/></Get>' % (id)
         self.command="GetObjectList"
-        self.send()
+        if ENABLED:
+            self.send()
+        else:
+            self.xml_result = self.dummydata()
+
     
 
     def add(self, model, fields):
@@ -107,3 +117,76 @@ class query_ot():
         filterVars =  r'<%s name="%s">%s</%s>' % ('StringVal', 'UCID', UCID, 'StringVal')
         self.body = r'%s%s</Filter></Get>' % (self.body, filterVars)
         self.send()
+
+
+
+
+
+    def dummydata(self):
+        id =random.randint(1000000, 5000000)
+        
+        data="""<?xml version="1.0" encoding="utf-8"?>
+            <soap:Envelope
+                xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <soap:Body>
+                    <GetObjectListResponse
+                        xmlns="http://www.omninet.de/OtWebSvc/v1">
+                        <GetObjectListResult success="true" errorMsg="" totalNumberResults="1">
+                            <Object id="%s">
+                                <ReferenceToUserVal name="Applicant" type="userdisplayname" Value="Superuser" />
+                                <NullVal name="AssociatedCategory" />
+                                <NullVal name="AssociatedClosureCategory" />
+                                <ReferenceListVal name="RelatedEmails" objectIds="" />
+                                <ReferenceListVal name="AssociatedExternalPersons" objectIds="" />
+                                <ReferenceListVal name="AssociatedBmsJobExecs" objectIds="" />
+                                <NullVal name="AssociatedCI" />
+                                <AttachmentsVal name="Attachments" />
+                                <NullVal name="Call Status" />
+                                <NullVal name="Call Finished Date" />
+                                <NullVal name="CINumber" />
+                                <StringVal name="Class">(not specified)</StringVal>
+                                <TimeStampedMemoVal name="Answers" />
+                                <LongIntVal name="CountEventMails">0</LongIntVal>
+                                <DateTimeVal name="CreationDate">2017-12-19T15:56:00</DateTimeVal>
+                                <NullVal name="Description" />
+                                <NullVal name="EventID" />
+                                <NullVal name="Eventaction" />
+                                <StringVal name="Eventsystem">n.n.</StringVal>
+                                <ReferenceVal name="Eventtype" objectId="560566" />
+                                <ReferenceListVal name="ExternalTickets" objectIds="" />
+                                <StringVal name="Impact">(not specified)</StringVal>
+                                <NullVal name="InitialAssociatedCategory" />
+                                <DateTimeVal name="LastChange">2017-12-19T15:56:01</DateTimeVal>
+                                <BoolVal name="ManualSLAChange">false</BoolVal>
+                                <LongIntVal name="Number">193696</LongIntVal>
+                                <LongIntVal name="CountCorrelatedEvents">0</LongIntVal>
+                                <NullVal name="Phone Number" />
+                                <NullVal name="PickUpDateTime" />
+                                <StringVal name="PreferredContactType">NotSpecified</StringVal>
+                                <StringVal name="Priority">(not specified)</StringVal>
+                                <NullVal name="UCOnSiteBreachReason" />
+                                <NullVal name="UCResolutionBreachReason" />
+                                <NullVal name="UCResponseBreachReason" />
+                                <NullVal name="RelatedChange" />
+                                <ReferenceListVal name="CorrelatedEvents" objectIds="" />
+                                <NullVal name="RelatedIncident" />
+                                <NullVal name="RelatedProblem" />
+                                <BoolVal name="Reopened">false</BoolVal>
+                                <NullVal name="ReportingCompany" />
+                                <ReferenceToUserVal name="Responsible" type="groupname" Value="Event-Staff" />
+                                <StringVal name="Source">Call</StringVal>
+                                <StringVal name="State">new</StringVal>
+                                <StringVal name="Subclass">(not specified)</StringVal>
+                                <NullVal name="TIGGroup" />
+                                <NullVal name="Title" />
+                                <NullVal name="TransferHistory" />
+                                <StringVal name="UCID">1231424142313</StringVal>
+                                <StringVal name="Urgency">(not specified)</StringVal>
+                            </Object>
+                        </GetObjectListResult>
+                    </GetObjectListResponse>
+                </soap:Body>
+            </soap:Envelope>""" % (id)
+        return data.encode()

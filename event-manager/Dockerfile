@@ -17,4 +17,5 @@ RUN pip3 install -r requirementss.txt
 
 # Prepare
 COPY . /data/event-manager/
+
 RUN mkdir -p mydjango/static/admin
