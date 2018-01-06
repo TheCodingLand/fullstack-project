@@ -10,12 +10,7 @@ from graphqlendpoint.models import Agent
 
 users = []
 url = 'http://ot-ws:5000/api/ot/objects'
-payload = {
-    "objectclass": "Agent",
-    "filter": "",
-    "variables": [],
-    "requiredfields": []
-}
+payload = '{"objectclass": "Agent", "filter": "", "variables": [], "requiredfields": [] }'
 
 req = requests.post(url, payload)
 
