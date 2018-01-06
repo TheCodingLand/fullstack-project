@@ -54,7 +54,7 @@ def getAddedCalls():
 
 
 log.info("Waiting for startup of other components, so we can clear redis db all at once")
-time.sleep(500)
+time.sleep(10)
 log.info("Backlog Clearing Started")
 
 

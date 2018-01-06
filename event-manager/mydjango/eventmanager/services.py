@@ -47,6 +47,8 @@ class Services(object):
         # AGENTS
         if self.action == "login":
             self.done = dispatch().login(self.id, self.data)
+        if self.action == "update_agent_ext":
+            self.done = dispatch().update_agent_ext(self.id, self.data)
 
         if self.action == "changeACDstate":
             self.done = dispatch().changeACDstate(self.id, self.data)
