@@ -1,5 +1,6 @@
 
-    
+import logging
+log = logging.RootLogger(INFO)
 import redis
 from operator import itemgetter
 import time
@@ -10,50 +11,49 @@ from eventmanager import services
 
 
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
+if r.
+log.info("Connected to Redis, Database 2, port 6379")
 
 
 def getAddedCalls():
-    for key in r.scan_iter(match='*'):     
+    for key in r.scan_iter(match='*'):
         try:
             c = r.hgetall(key)
         except redis.exceptions.ResponseError:
             pass
         s = services.Services(c)
-        if s.done== True:
+        if s.done == True:
             r.delete(key)
-            
-#quick cleaup as this key is only used for real time data            
+
+# quick cleaup as this key is only used for real time data
 
 
-
-print("waiting for key to fill redis db")
+log.info("Waiting for startup of other components, so we can clear redis db all at once")
 time.sleep(15)
-
-print ("Clearing Backlog")
+log.info("Backlog Clearing Started")
 
 
 keyhashes = []
-keys = r.keys()    
-#print (keys)
+keys = r.keys()
+
 for key in keys:
-    try:    
+    try:
         k = r.hgetall(key)
-        k['key']=key
+        k['key'] = key
         keyhashes.append(k)
     except:
         key.delete()
 
-newlist = sorted(keyhashes, key=itemgetter('timestamp')) 
-for item in newlist:
-    #print(item['timestamp'])
+orderedlist = sorted(keyhashes, key=itemgetter('timestamp'))
+log.info(len(orderedlist))
+for item in orderedlist:
+
     s = services.Services(item)
-    if s.done== True:
+    if s.done == True:
         r.delete(item['key'])
 
-print("Normal Loop")
+
+log.info("Normal Loop")
 while True:
 
     getAddedCalls()
-    
-
-        

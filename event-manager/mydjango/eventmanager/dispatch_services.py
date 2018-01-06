@@ -10,6 +10,9 @@ import requests
 from django.db import connection
 from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api
+import logging
+log = logging.Logger()
+log.setLevel(INFO)
 
 
 class dispatch(object):
@@ -20,8 +23,8 @@ class dispatch(object):
 
     # calls
 
-    def centrale(self, id, timestamp, ext):
-
+    def centrale(self, id, timestamp, ext): e
+        log.info("Call in IVR,%s" % ext)
         call = Call.objects.get_or_create(ucid=id)[0]
         call.start = timestamp
         call.destination = ext
@@ -127,6 +130,7 @@ class dispatch(object):
 
     # agents
     def login(self, id, data):
+        log.info("agent login received,%s" % id)
         redis = Redis().update('agent', id, data)
         self.agent = Agent.objects.get_or_create(phone_login=id)[0]
         self.agent.phone_active = True
@@ -152,6 +156,7 @@ class dispatch(object):
         return True
 
     def changeACDstate(self, id, data):
+        log.info("agent state change received,%s : %s" % (id, data))
         redis = Redis().update('agent', id, data)
         try:
             self.agent = Agent.objects.get(phone_login=id)
@@ -170,6 +175,7 @@ class dispatch(object):
         return True
 
     def changeDeviceState(self, id, data):
+        log.info("device state change received,%s : %s" % (id, data))
         redis = Redis().update('agent', id, data)
         try:
             self.agent = Agent.objects.get(phone_login=id)
@@ -182,6 +188,7 @@ class dispatch(object):
         return True
 
     def logoff(self, id, data):
+        log.info("agent logoff received,%s" % id)
         redis = Redis().update('agent', id, data)
         try:
             self.agent = Agent.objects.get(phone_login=id)

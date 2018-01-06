@@ -25,7 +25,8 @@ SECRET_KEY = 'mh0j8avz_1(&b2*@nqcm88@wf)q%=2=#m2n=n+$4(eso)_q$s!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["88.207.210.73","148.110.107.15","192.168.178.115","192.168.1.22","nginx"]
+ALLOWED_HOSTS = ["88.207.210.73", "148.110.107.15",
+                 "192.168.178.115", "192.168.1.22", "nginx"]
 
 if 'PROJECT_URL' in os.environ:
     ALLOWED_HOSTS.append(os.environ['PROJECT_URL'])
@@ -58,7 +59,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mydjango.urls'
 
-CORS_ORIGIN_ALLOW_ALL= True
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -133,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#GRAPHENE = {
+# GRAPHENE = {
 #    'SCHEMA': 'mydjango.schema.schema'
 #}
 # Internationalization

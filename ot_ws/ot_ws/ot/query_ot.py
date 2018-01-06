@@ -35,11 +35,24 @@ class query_ot():
         """Takes ID returns a formatted object"""
         self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/></Get>' % (
             id)
+
         self.command = "GetObjectList"
-        if ENABLED:
-            self.send()
-        else:
-            self.xml_result = self.dummydata()
+        self.send()
+
+    def getWithFields(self, requiredFields):
+        self.id = id
+        """Takes ID returns a formatted object"""
+        self.body = r'<Get folderPath="" recursive="true"><ObjectIDs objectIDs="%s"/>' % (
+            id)
+        if requiredFields != []:
+            required = ""
+            for f in requiredFields:
+                required = '<RequiredField>%s</RequiredField>' % (f)
+            self.body = '%s%s' % (self.body, required)
+
+        self.body = r'%s</Get>' % (self.body)
+
+        self.command = "GetObjectList"
 
     def add(self, model, fields):
         self.command = "AddObject"
