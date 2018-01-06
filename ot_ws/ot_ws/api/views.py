@@ -46,8 +46,10 @@ class ObjectsMetadata(Resource):
             e = query_ot()
             e.get(object_id)
             # print ("%s" % e.xml_result)
-            result = serialize(e.xml_result.decode("utf-8")).results[0]
-            ot_object = result.res
+            result = serialize(e.xml_result.decode("utf-8"))
+            print(result)
+
+            ot_object = result.results[0].res
             if not ot_object:
                 return response_object, 404
             else:
@@ -74,8 +76,9 @@ class ObjectsMetadata(Resource):
             e = query_ot()
             e.get(object_id)
             # print ("%s" % e.xml_result)
-            result = serialize(e.xml_result.decode("utf-8")).results[0]
-            ot_object = result.metadata
+            result = serialize(e.xml_result.decode("utf-8"))
+            print(result)
+            ot_object = result.results[0].metadata
             if not ot_object:
                 return response_object, 404
             else:
@@ -160,8 +163,9 @@ class EventItem(Resource):
         try:
             e = query_ot()
             e.get(event_id)
-            result = serialize(e.xml_result.decode("utf-8")).results[0]
-            event = result.res
+            result = serialize(e.xml_result.decode("utf-8"))
+            id = result[0].id
+            event = result.results[0].res
             # event = test()
             if not event:
                 return response_object, 404
@@ -182,7 +186,7 @@ class EventItem(Resource):
             else:
                 response_object = {
                     'status': 'success',
-                    'id': result.id,
+                    'id': id,
                     'data': event
                 }
                 return response_object, 200
@@ -201,8 +205,8 @@ class EventItem(Resource):
         try:
             e = query_ot()
             e.GetEventByUCID(event_ucid)
-            result = serialize(e.xml_result.decode("utf-8")).results[0]
-            event = result.res
+            result = serialize(e.xml_result.decode("utf-8"))
+            event = result.results[0].res
             # event = test()
             if not event:
                 return response_object, 404
