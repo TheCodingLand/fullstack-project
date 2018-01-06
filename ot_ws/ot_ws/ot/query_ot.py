@@ -69,6 +69,7 @@ class query_ot():
         else:
             logging.error(self.xml)
             logging.error(self.xml_result)
+            id = 0
             #print("couldn't add item in %s with fields %s" % (model.folder, fields))
             #print("request : %s" % self.xml)
             #print("response : %s" % self.xml_result)

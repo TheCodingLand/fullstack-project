@@ -52,8 +52,9 @@ class Event(object):
             "UCResolutionBreachReason": "NullVal",
             "UCResponseBreachReason": "NullVal",
             "Urgency": "StringVal"
-            }
-            
+        }
+
+
 class Ticket(object):
     def __init__(self):
         self.folder = r'01. ITSM - Service Operation\02. Incident Management'
@@ -158,12 +159,14 @@ class Ticket(object):
             "Urgency": "StringVal",
             "WV": "NullVal",
             "Waittime": "LongIntVal"
-            }
-            
+        }
+
+
 class Agent(object):
     def __init__(self):
         self.folder = r'01. ITSM - Service Operation\02. Incident Management'
-        self.requiredfields = ["FirstName", "LastName", "Login Name", "displayname"]
+        self.requiredfields = ["FirstName",
+                               "LastName", "Login Name", "displayname"]
         self.fields = {
             "AcademicTitle": "NullVal",
             "Active": "BoolVal",
@@ -227,40 +230,41 @@ class Agent(object):
             "WebGuestPassword": "NullVal",
             "WebGuestUserName": "NullVal",
             "Windows Domain Name": "StringVal"
-          }
+        }
+
 
 class Category(object):
     def __init__(self):
-        self.folder = ""
-        self.requiredfields = ["Title", "Predecessor","SearchCode"]
+        self.folder = r"01.ITSM - Categories"
+        self.requiredfields = ["Title", "Predecessor", "SearchCode"]
         self.fields = {
-    "ActivitiesIncident": "ReferenceListVal",
-    "ActivitiesProblem": "ReferenceListVal",
-    "ActivitiesRequest": "ReferenceListVal",
-    "ActivitiesRfC": "ReferenceListVal",
-    "Applicant": "ReferenceToUserVal",
-    "Attachments": "AttachmentsVal",
-    "Class": "StringVal",
-    "Answers": "TimeStampedMemoVal",
-    "CreationDate": "DateTimeVal",
-    "Description": "NullVal",
-    "Imported": "BoolVal",
-    "KB-Subscription": "ReferenceListVal",
-    "LastChange": "DateTimeVal",
-    "Number": "LongIntVal",
-    "Path": "StringVal",
-    "Predecessor": "ReferenceVal",
-    "Responsible": "ReferenceToUserVal",
-    "ResponsibleIncident": "ReferenceToUserVal",
-    "ResponsibleProblem": "ReferenceToUserVal",
-    "ResponsibleRFC": "ReferenceToUserVal",
-    "ResponsibleRequest": "ReferenceToUserVal",
-    "SearchCode": "StringVal",
-    "ServiceCatalogue": "ReferenceListVal",
-    "StandardImpact": "StringVal",
-    "StandardPriority": "StringVal",
-    "StandardUrgency": "StringVal",
-    "State": "StringVal",
-    "Successors": "ReferenceListVal",
-    "Title": "StringVal"
-  }
+            "ActivitiesIncident": "ReferenceListVal",
+            "ActivitiesProblem": "ReferenceListVal",
+            "ActivitiesRequest": "ReferenceListVal",
+            "ActivitiesRfC": "ReferenceListVal",
+            "Applicant": "ReferenceToUserVal",
+            "Attachments": "AttachmentsVal",
+            "Class": "StringVal",
+            "Answers": "TimeStampedMemoVal",
+            "CreationDate": "DateTimeVal",
+            "Description": "NullVal",
+            "Imported": "BoolVal",
+            "KB-Subscription": "ReferenceListVal",
+            "LastChange": "DateTimeVal",
+            "Number": "LongIntVal",
+            "Path": "StringVal",
+            "Predecessor": "ReferenceVal",
+            "Responsible": "ReferenceToUserVal",
+            "ResponsibleIncident": "ReferenceToUserVal",
+            "ResponsibleProblem": "ReferenceToUserVal",
+            "ResponsibleRFC": "ReferenceToUserVal",
+            "ResponsibleRequest": "ReferenceToUserVal",
+            "SearchCode": "StringVal",
+            "ServiceCatalogue": "ReferenceListVal",
+            "StandardImpact": "StringVal",
+            "StandardPriority": "StringVal",
+            "StandardUrgency": "StringVal",
+            "State": "StringVal",
+            "Successors": "ReferenceListVal",
+            "Title": "StringVal"
+        }
