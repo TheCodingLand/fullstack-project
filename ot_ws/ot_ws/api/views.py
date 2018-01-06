@@ -297,14 +297,6 @@ class TicketAdd(Resource):
             return response_object, 400
 
         try:
-            fields = getFields(ticket_model, post_data)
-        except:
-            response_object = {
-                'status': 'fail',
-                'message': 'Invalid payload parsing fields.'
-            }
-            return response_object, 400
-        try:
             r = query_ot()
             # print (ticket_model)
             # print(fields)
