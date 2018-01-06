@@ -99,7 +99,7 @@ class serialize(object):
             result.metadata.update({'%s' % name: field.tag})
             result.res.update({'%s' % name: f.getValueFromXML(field)})
             self.results.append(result)
-            print self.results
+            print(self.results)
 
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
