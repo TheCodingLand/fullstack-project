@@ -1,7 +1,6 @@
 from project.models.agent_event import AgentEvent
 from project.log_parser.log_line import LogLine
 import logging
-logging.error()
 
 
 class PresenceLog(LogLine):
