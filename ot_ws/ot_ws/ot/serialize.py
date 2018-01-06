@@ -100,7 +100,7 @@ class serialize(object):
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
         tree = ET.fromstring(xml)
-        print(xml)
+        # print(xml)
         root = tree \
             .find('*//GetObjectListResult')
         if root.attrib['success'] == "true":

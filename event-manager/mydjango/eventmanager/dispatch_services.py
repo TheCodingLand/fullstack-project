@@ -12,7 +12,7 @@ from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api_event
 import logging
 log = logging.Logger("dispatcher")
-log.setLevel(logging.INFO)
+log.setLevel(logging.WARNING)
 
 
 class dispatch(object):
@@ -100,6 +100,7 @@ class dispatch(object):
             call.updatehistory()
             call.destination = destination
             call.save()
+            ot_api_event().transfer(call, agent)
             agent.save()
             # ot_api_event().transfer(call)
         return True
