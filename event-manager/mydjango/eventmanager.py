@@ -38,13 +38,13 @@ for item in req:
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 log.info("Connected to Redis, Database 2, port 6379")
 
-log.warning("CLEANUP MODE ENABLED")
+''' log.warning("CLEANUP MODE ENABLED")
 try:
     k = r.keys()
     for i in k:
         r.delete(i)
 except:
-    log.error("problem with redis db")
+    log.error("problem with redis db") '''
 
 
 def getAddedCalls():
