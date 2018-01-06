@@ -67,8 +67,8 @@ class query_ot():
         if root.attrib['success'] == "true":
             id = root.attrib['objectId']
         else:
-            logging.ERROR(self)
-            logging.ERROR(self.xml_result)
+            logging.error(self.xml)
+            logging.error(self.xml_result)
             #print("couldn't add item in %s with fields %s" % (model.folder, fields))
             #print("request : %s" % self.xml)
             #print("response : %s" % self.xml_result)
