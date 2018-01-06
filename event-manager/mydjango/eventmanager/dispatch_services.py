@@ -32,7 +32,7 @@ class dispatch(object):
         call.isContactCenterCall = True
         call.save()
 
-        centrale = Agent.objects.get_or_create(ext=ext)
+        centrale = Agent.objects.get_or_create(ext=ext)[0]
         centrale.isQueueLine = True
         centrale.firstname = "Centrale IVR"
         centrale.ot_userloginname = "Centrale"
