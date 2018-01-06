@@ -12,39 +12,36 @@ class TelephonyLog(LogLine):
         self.getDetails()
         self.getTransfers()
         self.manageEnd()
-        
-        
+
     def check_createNew(self):
         if self.getNewCallUcid():
             CallEvent(self.getNewCallUcid(), self.date).add()
-    
+
     def getDetails(self):
         if "UpdateRoutingData" in self.line:
-            ev = CallEvent(self.getUcid(),self.date)
+            ev = CallEvent(self.getUcid(), self.date)
             ev.setDetails(self.getCallType())
-    
+
     def getTransfers(self):
         if self.getEstablished() and self.getUcid():
             calling = self.getCalling()
-            ev=CallEvent(self.getUcid(),self.date)
+            ev = CallEvent(self.getUcid(), self.date)
             ev.setCaller(calling)
             destination = self.getAnswerExt()
-            ev = CallEvent(self.getUcid(),self.date)
+            ev = CallEvent(self.getUcid(), self.date)
             ev.transfer(self.getAnswerExt())
-        
-            
+
     def manageEnd(self):
         if self.getTerminated():
-            ev = CallEvent(self.getUcid(),self.date)
+            ev = CallEvent(self.getUcid(), self.date)
             ev.end()
-    
 
     def isCentrale(self):
-        if "DivertDestination" in self.line and Reason: "DIVERT_IVR_DISTRIBUTION" in self.line:
-             ev = CallEvent(self.getUcid(),self.date)
-             ev.newCentraleCall(self.getCentaleNumber())
-            
-    
+        if "DivertDestination" in self.line and Reason:
+            "DIVERT_IVR_DISTRIBUTION" in self.line:
+            ev = CallEvent(self.getUcid(), self.date)
+            ev.newCentraleCall(self.getCentaleNumber())
+
     def getCentaleNumber(self):
         return self.search(r"DivertDestination: (.*?),")
 
@@ -53,10 +50,10 @@ class TelephonyLog(LogLine):
 
     def getCalling(self):
         return self.search(r"CallingDID:([0-9]+)\(S\)")
-    
+
     def getAnswerExt(self):
         return self.search(r"AnswerDID:(.*?)\(S\)")
-    
+
     def getDestination(self):
         return self.search(r"DestinationDID:(.*?)\(S\)")
 
@@ -68,12 +65,12 @@ class TelephonyLog(LogLine):
 
     def getDiverted(self):
         return "Diverted Event," in self.line
-        
+
     def getTransferred(self):
         return "Transferred Event," in self.line
 
     def getEstablished(self):
         return "Established Event," in self.line
-        
+
     def getTerminated(self):
         return "Remove UCID<" in self.line
