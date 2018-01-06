@@ -349,12 +349,11 @@ class ObjectFilter(Resource):
                 d.update({'data': result.res})
                 results.append(d)
 
-            event = result.res
-            if event:
+            if results:
                 response_object = {
                     'status': 'success',
-                    'message': 'ticket was added!',
-                    'ticket': results
+                    'message': 'object list :',
+                    'events': results
                 }
                 return response_object, 201
             else:
@@ -368,4 +367,26 @@ class ObjectFilter(Resource):
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
+
+                r = query_ot()
+            # print (ticket_model)
+            # print(fields)
+            objectlist = r.getObjectList(post_data.get(
+                'objectclass'), post_data.get('filter'), post_data.get('variables'))
+            items = serialize(e.xml_result.decode("utf-8")).results
+            results = []
+            for result in items:
+                d = {}
+                d.update({'id': result.id})
+                d.update({'data': result.res})
+                results.append(d)
+
+            if results:
+                response_object = {
+                    'status': 'success',
+                    'message': 'object list :',
+                    'events': results
+                }
+                return response_object, 201
+
             return response_object, 400
