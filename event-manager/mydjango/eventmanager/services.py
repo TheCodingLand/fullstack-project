@@ -31,7 +31,7 @@ class Services(object):
         if self.action == "create":
             self.done = dispatch().create_call(self.id, self.timestamp)
         if self.action == "centrale":
-            self.done = dispatch().centrale(self.id, self.timestamp, data)
+            self.done = dispatch().centrale(self.id, self.timestamp, self.data)
         if self.action == "transfer":
             self.done = dispatch().transfer_call(
                 self.id, self.timestamp, self.data)
