@@ -29,7 +29,7 @@ for agent in data['Agent']:
     displayname = agent['data']['Title']
     email = agent['data']['Email Address']
     for a in agents:
-        if a.ext == phone[1:]
+        if a.ext == phone[1:]:
             a.firstname = firstname
             a.lastname = lastname
             a.ot_id = id
