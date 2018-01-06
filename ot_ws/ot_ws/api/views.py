@@ -303,7 +303,7 @@ class TicketAdd(Resource):
         else:
 
             fields = getFields(ticket_model, post_data)
-            return response_object, 400
+
             r = query_ot()
             # print (ticket_model)
             # print(fields)
