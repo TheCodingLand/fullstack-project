@@ -69,8 +69,9 @@ class dispatch(object):
         redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
-        agent = Agent.objects.get(ext=destination)
-        if agent.isQueueLine:
+        agents = Agent.objects.filter(ext=destination)
+        if len(agents) > 0:
+            if agent[0].isQueueLine:
             call.isContactCenterCall = True
             call.save()
             self.centrale(id, timestamp, destination)
