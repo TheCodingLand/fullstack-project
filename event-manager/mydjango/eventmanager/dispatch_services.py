@@ -54,7 +54,7 @@ class dispatch(object):
         call = Call.objects.get_or_create(ucid=id)[0]
         call.origin = data
         call.save()
-        ot_api_event().updateEventType(call)
+        ot_api_event().updateEventPhoneNumber(call)
         return True
 
     def update_details(self, id, timestamp, data):
@@ -62,7 +62,7 @@ class dispatch(object):
         call = Call.objects.get_or_create(ucid=id)[0]
         call.call_type = data
         call.save()
-        ot_api_event().call_type(call)
+        ot_api_event().updateEventType(call)
         return True
 
     def transfer_call(self, id, timestamp, destination):
