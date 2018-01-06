@@ -138,7 +138,7 @@ class ot_api_event(object):
         data = req.json()
         agent.ot_userdisplayname = data['Agent']['Title']
         if data['status'] == "success":
-            for item = data['Agent'][0]:
+            for item in data['Agent'][0]:
                 agent.ot_id = item['id']
                 agent.firstname = item['data']['FirstName']
                 agent.lastname = item['data']['LastName']
