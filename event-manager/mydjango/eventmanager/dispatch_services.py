@@ -72,7 +72,7 @@ class dispatch(object):
 
         agents = Agent.objects.filter(ext=destination)
         if len(agents) > 0:
-            if agent[0].isQueueLine:
+            if agents[0].isQueueLine:
                 if call.isContactCenterCall == False:
                     self.centrale(id, timestamp, destination)
 
