@@ -10,7 +10,7 @@ import requests
 from django.db import connection
 from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api_event
-import Transition from 'react-transition-group/Transition'
+
 import logging
 log = logging.Logger("dispatcher")
 log.setLevel(logging.WARNING)
