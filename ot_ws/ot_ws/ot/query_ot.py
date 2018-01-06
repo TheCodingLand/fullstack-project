@@ -48,7 +48,7 @@ class query_ot():
     def add(self, model, fields):
         self.command = "AddObject"
         fieldxml = ""
-
+        logging.error(fields)
         for field in fields:
             #print("looking for field xml string : of field %s, with value %s, class %s"%(field.name, field.value, field.fieldtype))
             #print (field.fieldXMLString())
