@@ -1,6 +1,6 @@
 
 import logging
-log = logging.RootLogger(INFO)
+log = logging.RootLogger(logging.INFO)
 import redis
 from operator import itemgetter
 import time

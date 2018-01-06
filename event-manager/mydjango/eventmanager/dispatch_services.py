@@ -12,7 +12,7 @@ from eventmanager.redis import Redis
 from eventmanager.ot_api import ot_api_event
 import logging
 log = logging.Logger()
-log.setLevel(INFO)
+log.setLevel(logging.INFO)
 
 
 class dispatch(object):
