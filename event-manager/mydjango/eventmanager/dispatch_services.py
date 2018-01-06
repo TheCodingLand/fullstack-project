@@ -79,10 +79,7 @@ class dispatch(object):
         transfers = call.getTransfers().filter(
             ttimestamp=timestamp, tdestination=destination)
         # check if this exists already
-        if len(transfers) > 0:
-            return True
-        else:
-            call = Call.objects.update_or_create(ucid=id)[0]
+        if len(transfers) == 0:
             if call.destination == "":
                 origin = ""
             else:
@@ -124,7 +121,13 @@ class dispatch(object):
         # ot_api_event().updateEndDate(call)
         return True
 
-    def update_agent(self):
+    def update_agent_ext(self, id, data):
+        agent = Agent.objects.get_or_create(phone_login=id)[0]
+        if agent.ext == data:
+            return True
+        else:
+            agent.ext = data
+            agent.save()
 
         return True
 
@@ -132,26 +135,26 @@ class dispatch(object):
     def login(self, id, data):
         log.info("agent login received,%s" % id)
         redis = Redis().update('agent', id, data)
-        self.agent = Agent.objects.get_or_create(phone_login=id)[0]
-        self.agent.phone_active = True
+        agent = Agent.objects.get_or_create(phone_login=id)[0]
+        agent.phone_active = True
 
         #
 
         if data != "False":
 
-            if data != self.agent.ext:
+            if data != agent.ext:
                 # We need to remove the extention from the old login
                 agent_old = Agent.objects.filter(ext=data)
 
                 if len(agent_old) == 1:
-                    if agent_old[0] != self.agent:
+                    if agent_old[0] != agent:
                         agent_old[0].ext = agent_old[0].phone_login
                         agent_old[0].phone_state = False
                         agent_old[0].save()
 
             else:
-                self.agent.ext = data
-        self.agent.save()
+                .agent.ext = data
+        agent.save()
 
         return True
 
@@ -159,9 +162,9 @@ class dispatch(object):
         log.info("agent state change received,%s : %s" % (id, data))
         redis = Redis().update('agent', id, data)
         try:
-            self.agent = Agent.objects.get(phone_login=id)
-            self.agent.phone_state = data
-            self.agent.save()
+            agent = Agent.objects.get(phone_login=id)
+            agent.phone_state = data
+            agent.save()
 
         except:
             pass
@@ -178,9 +181,9 @@ class dispatch(object):
         log.info("device state change received,%s : %s" % (id, data))
         redis = Redis().update('agent', id, data)
         try:
-            self.agent = Agent.objects.get(phone_login=id)
-            self.agent.device_state = data
-            self.agent.save()
+            agent = Agent.objects.get(phone_login=id)
+            agent.device_state = data
+            agent.save()
 
         except:
             pass
@@ -191,9 +194,9 @@ class dispatch(object):
         log.info("agent logoff received,%s" % id)
         redis = Redis().update('agent', id, data)
         try:
-            self.agent = Agent.objects.get(phone_login=id)
-            self.agent.phone_active = False
-            self.agent.save()
+            agent = Agent.objects.get(phone_login=id)
+            agent.phone_active = False
+            agent.save()
 
         except:
             pass
