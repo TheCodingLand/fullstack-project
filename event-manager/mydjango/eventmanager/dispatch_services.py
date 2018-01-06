@@ -80,29 +80,24 @@ class dispatch(object):
             ttimestamp=timestamp, tdestination=destination)
         # check if this exists already
         if len(transfers) == 0:
-            if call.destination == "":
-                origin = ""
-            else:
-                origin = call.destination
-
-        agents = Agent.objects.filter(ext=destination)
-
-        if len(agents) == 1:
-            agent = agents[0]
-            agent.current_call = None
-            agent.save()
-            agent.current_call = call
-
-            if origin != destination:
-                t = Transfer(call=call, torigin=origin,
+            torigin = call.destination
+            if torigin != destination:
+                t = Transfer(call=call, torigin=torigin,
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
             call.updatehistory()
             call.destination = destination
             call.save()
-            ot_api_event().transfer(call, agent)
-            agent.save()
-            # ot_api_event().transfer(call)
+
+            if len(agents) == 1:
+                agent = agents[0]
+                agent.current_call = None
+                agent.save()
+                agent.current_call = call
+                agent.save()
+                ot_api_event().transfer(call, agent)
+
+                # ot_api_event().transfer(call)
         return True
 
     def end(self, id, timestamp):
