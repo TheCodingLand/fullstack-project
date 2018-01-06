@@ -30,7 +30,7 @@ class ot_api_event(object):
 
         id = self.get_ot_id_from_ucid(call.ucid)
         if id:
-            log.info("event already in the system, skipping creation")
+            log.error("event already in the system, skipping creation")
             event = Events.object.get_or_create(ot_id=id)
             event.save()
 
@@ -49,6 +49,7 @@ class ot_api_event(object):
 
         event = Events.objects.get_or_create(ot_id=id)
         event.call = call
+        log.error("updated call to %s" % event.ot_id)
         event.save()
 
         # good to have the same date for the event as the start of the call
@@ -61,7 +62,7 @@ class ot_api_event(object):
             return False
         elif req.status_code == 200:
             event = Events.object.get()
-            log.info("updated applicant to %s" % agent.ot_userdisplayname)
+            log.error("updated applicant to %s" % agent.ot_userdisplayname)
             return True
 
     def updateResponsible(self, call, agent):
@@ -71,7 +72,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.info("updated responsible to %s" % agent.ot_userdisplayname)
+            log.error("updated responsible to %s" % agent.ot_userdisplayname)
             return True
 
     def updateEndDate(self, call):
@@ -82,7 +83,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.info("updated end date to %s" % agent.ot_userdisplayname)
+            log.error("updated end date to %s" % agent.ot_userdisplayname)
             return True
 
     def updateEventPhoneNumber(self, call):
@@ -92,7 +93,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.info("updated event phone number to %s" % call.origin)
+            log.error("updated event phone number to %s" % call.origin)
             return True
 
     def updateEventHistory(self, call):
@@ -102,7 +103,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.info("updated event history to %s" % call.history)
+            log.error("updated event history to %s" % call.history)
             return True
 
     def updateEventType(self, call):
@@ -112,7 +113,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.info("updated event history to %s" % call.call_type)
+            log.error("updated event history to %s" % call.call_type)
             return True
 
     def transfer(self, call, agent):
@@ -126,7 +127,7 @@ class ot_api_event(object):
             if req.status_code == 404:
                 return False
             elif req.status_code == 200:
-                log.info("updated event history to %s" % call.call_type)
+                log.error("updated event history to %s" % call.call_type)
                 return True
             return False
 
