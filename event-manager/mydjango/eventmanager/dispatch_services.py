@@ -126,6 +126,12 @@ class dispatch(object):
         if agent.ext == data:
             return True
         else:
+            agents_old = Agent.objects.filter(ext=data)
+            if len(agent.old) > 0:
+                for a_old in agents_old:
+                    a_old.ext = a_old.phone_login
+                    a_old.save()
+
             agent.ext = data
             agent.save()
 
