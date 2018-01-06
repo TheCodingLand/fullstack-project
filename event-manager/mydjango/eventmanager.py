@@ -37,6 +37,11 @@ for item in req:
 
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 
+log.warning("CLEANUP MODE ENABLED")
+k = redis.keys('*')
+for i in k:
+    i.delete()
+
 log.info("Connected to Redis, Database 2, port 6379")
 
 
