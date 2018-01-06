@@ -139,8 +139,8 @@ class query_ot():
             constructor = globals()[objectClassName]
             item = constructor()
         else:
-            raise "error, impossible to create an instance of %s, check your input / class definitions" % (
-                objectClassName)
+            logging.error("error, impossible to create an instance of %s, check your input / class definitions" % (
+                objectClassName))
 
         self.command = "GetObjectList"
         self.body = r'%s<Get folderPath="%s" recursive="true">' \
@@ -154,8 +154,8 @@ class query_ot():
                     filterVars, 'StringVal', variable.get('name'), variable.get('value'), 'StringVal')
             self.body = '%s%s</Filter>' % (self.body, filterVars)
 
-        if requiredFields != "":
-            requiered = ""
+        if requiredFields != []:
+            required = ""
             for f in requiredFields:
                 required = '<RequiredField>%s</RequiredField>' % (f)
             self.body = '%s%s' % (self.body, required)
