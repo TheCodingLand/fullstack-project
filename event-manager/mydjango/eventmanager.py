@@ -9,6 +9,31 @@ from datetime import datetime
 from operator import itemgetter
 from eventmanager import services
 
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mydjango.settings'
+import django
+django.setup()
+import requests
+from graphqlendpoint.models import Agent
+
+
+''' users = []
+url = 'http://ot-ws:5000/api/ot/objects/'
+payload = {
+    "objectclass": "Agent",
+    "filter": "",
+    "variables":
+    []}
+
+req = requests.post(url, payload)
+
+print(requests)
+
+agents = Agent.objects.all()
+
+for item in req:
+    log("%s" % item) '''
+
 
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 

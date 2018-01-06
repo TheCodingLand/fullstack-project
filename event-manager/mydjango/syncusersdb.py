@@ -9,7 +9,7 @@ from graphqlendpoint.models import Agent
 
 
 users = []
-url = 'http://ot-ws:5000/api/ot/'
+url = 'http://ot-ws:5000/api/ot/objects'
 payload = {
     "objectclass": "Agent",
     "filter": "",
