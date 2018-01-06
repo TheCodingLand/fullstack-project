@@ -96,6 +96,8 @@ class query_ot():
 
         # print(result.content)
         self.xml_result = result.content
+        logging.info(self.xml)
+        logging.info(self.xml_result)
 
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""
