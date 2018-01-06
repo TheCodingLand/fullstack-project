@@ -5,7 +5,7 @@ import random
 import logging
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
+log.setLevel(logging.WARNING)
 from ot_ws.ot.ot_models import *
 ENABLED = False
 if os.getenv("OMNITRACKER_API_ENABLED") == "True":
