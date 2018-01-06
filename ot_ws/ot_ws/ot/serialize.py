@@ -98,13 +98,13 @@ class serialize(object):
 
             result.metadata.update({'%s' % name: field.tag})
             result.res.update({'%s' % name: f.getValueFromXML(field)})
-            self.results.append(result)
-            print(self.results)
+        self.results.append(result)
+        print(self.results)
 
     def parse(self, xml):
         xml = re.sub(' xmlns="[^"]+"', '', xml, count=1)
         tree = ET.fromstring(xml)
-        print(tree)
+        print(xml)
         root = tree \
             .find('*//GetObjectListResult')
         if root.attrib['success'] == "true":
