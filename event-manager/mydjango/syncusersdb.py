@@ -20,7 +20,7 @@ req = requests.post(url, payload)
 
 print(requests)
 
-agents = Agents.objects.all()
+agents = Agent.objects.all()
 
 for item in req:
     print("%s" % item)
