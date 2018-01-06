@@ -16,8 +16,8 @@ class ot_api_event(object):
 
     def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
-        payload = '{ "objectclass": "Event", "filter": "EventUCID", "variables": [{ "name": "UCID", "value": "%s"}]}' % ucid 
-        
+        payload = '{ "objectclass": "Event", "filter": "EventUCID", "variables": [{ "name": "UCID", "value": "%s"}]}' % ucid
+
         req = requests.post(url, payload)
         try:
             id = req.get('id')
@@ -119,9 +119,10 @@ class ot_api_event(object):
         self.checkUserStatus(agent)
 
         if agent.ot_userdisplayname != "":
-            payload = '{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (call.history, agent.displayname)
-            url="%s/events/%s" % (self.url, id)
-            req=requests.post(url, payload)
+            payload = '{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (
+                call.history, agent.displayname)
+            url = "%s/events/%s" % (self.url, id)
+            req = requests.post(url, payload)
             if req.status_code == 404:
                 return False
             elif req.status_code == 200:
@@ -132,11 +133,11 @@ class ot_api_event(object):
     def checkUserStatus(self, agent):
         data = req.json()
         url = '%s/objects' % self.url
-        payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [{ "name": "Phone", "value": "-%s"}], "requiredfields": [] }' % % agent.ext
+        payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [{ "name": "Phone", "value": "-%s"}], "requiredfields": [] }' % agent.ext
         req = requests.post(url, payload)
         data = req.json()
         agent.ot_userdisplayname = data['Agent']['Title']
-        if data['status'] =="success":
+        if data['status'] == "success":
             for item = data['Agent'][0]:
                 agent.ot_id = item['id']
                 agent.firstname = item['data']['FirstName']
@@ -145,8 +146,3 @@ class ot_api_event(object):
                 agent.ot_userdisplayname = item['data']['Title']
                 agent.email = item['data']['Email Address']
                 agent.save()
-
-
-        
-        
-        
