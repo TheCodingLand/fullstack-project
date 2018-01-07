@@ -7,6 +7,7 @@ log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
 ENABLED = False
+
 if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
     ENABLED = True
 
@@ -58,7 +59,7 @@ class ot_api_event(object):
                 return False
 
         else:
-            log.info('API DISABLED')
+            log.error('API DISABLED')
             return False
 
     def get_ot_id_from_ucid(self, ucid):
