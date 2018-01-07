@@ -1,3 +1,9 @@
+DB_NAME=myproject_web
+DB_USER=myproject_web
+DB_PASS=shoov3Phezaimahsh7eb2Tii4ohkah8k
+DB_SERVICE=postgres
+DB_PORT=5432
+
 OMNITRACKER_API_URL=http://otrcsl01.rcsl.lu/otws/v1.asmx
 OMNITRACKER_API_ENABLED=TRUE
 APP_SETTINGS=ot_ws.config.DevelopmentConfig
