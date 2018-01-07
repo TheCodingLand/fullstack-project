@@ -52,20 +52,20 @@ class query_ot():
         self.id = id
         self.command = "ModifyObject"
         fieldxml = ""
-        logging.error(fields)
+        # logging.error(fields)
         for field in fields:
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
 
         self.body = r'<Object objectId="%s">' % (
             self.id) + r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
-        logging.error(self.body)
+        # logging.error(self.body)
         self.send()
-        logging.error(self.xml)
-        logging.error(self.xml_result)
+        # logging.error(self.xml)
+        # logging.error(self.xml_result)
         tree = ET.fromstring(self.xml_result)
         root = tree \
-            .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResponse')
+            .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResult')
 
         if root.attrib['success'] == "true":
             return True
@@ -112,10 +112,10 @@ class query_ot():
             "ascii", "xmlcharrefreplace")
 
         result = requests.post(url, data=data, headers=self.headers)
-        logging.error(result.text)
+        # logging.error(result.text)
         self.xml_result = result.content
-        logging.info(self.xml)
-        logging.info(self.xml_result)
+        # logging.info(self.xml)
+        # logging.info(self.xml_result)
 
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""
