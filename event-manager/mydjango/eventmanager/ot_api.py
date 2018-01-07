@@ -143,7 +143,10 @@ class ot_api_event(object):
             return True
 
     def updateEndDate(self, call):
-        log.error("doing updates on end call")
+        try:
+            event = Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return False
 
         payload = {"Call Finished Date": "%s" % call.end}
         url = '%s/event/%s' % (self.url, id)
@@ -151,6 +154,7 @@ class ot_api_event(object):
 
 
         if req == False:
+            log.error("could do the updates ! ")
             return False
 
 
