@@ -8,9 +8,8 @@ import threading
 import sys
 
 if os.getenv('LOGFILE'):
-    logfile = '/media/callcenter/DIAGS/%s' % os.environ['LOGFILE']
-else:
-    logfile = '/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000'
+    logfile = '%s' % os.environ['LOGFILE']
+
 
 if 'Telephony' in logfile:
     from project.log_parser.telephony_log import TelephonyLog as Log

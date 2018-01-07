@@ -2,6 +2,8 @@ version: '2.1'
 
 services:
  web:
+  env_file:
+     - prod_env
   build: ./frontend-react/
   ports:
     - "3000"
@@ -15,14 +17,16 @@ services:
     - "3001"
 
  event-manager:
+  env_file:
+     - prod_env
   restart: always
   build: ./event-manager/
+  
   expose:
     - "8000"
   links:
     - postgres:postgres
     - redis:redis
-  env_file: env
   working_dir: /data/event-manager/mydjango
   volumes:
     - ./event-manager:/data/event-manager
@@ -34,6 +38,8 @@ services:
   
  nginx:
   restart: always
+  env_file:
+     - prod_env
   build: ./nginx/
   ports:
     - "8099:80"
@@ -46,16 +52,18 @@ services:
 
  postgres:
   restart: always
+  env_file:
+     - prod_env
   image: postgres:latest
   volumes:
     - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     - ./backups/postgresql:/backup
-  env_file:
-    - env
   expose:
     - "5432"
 
  php-redis-admin:
+  env_file:
+     - prod_env
   image: faktiva/php-redis-admin
   container_name: pra
   environment:
@@ -66,6 +74,8 @@ services:
    - redis
     
  redis:
+  env_file:
+     - prod_env
   restart: always
   image: redis:latest
   expose:
@@ -77,39 +87,46 @@ services:
  
 
  logreader-tel:
+  env_file:
+     - prod_env
   container_name: logreader-tel
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
    - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
   environment:
-   - LOGFILE=TelephonyServer_ccrcsl02.000
+   - LOGFILE=/media/callcenter/DIAGS/Telephony_ccrcsl02.000
   depends_on:
    - redis
 
  logreader-agent:
+  env_file:
+     - prod_env
   container_name: logreader-agent
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
    - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
   environment:
-   - LOGFILE=PresenceServer_ccrcsl02.000
+   - LOGFILE=/media/callcenter/DIAGS/PresenceServer_ccrcsl02.000
   depends_on:
    - redis
    
  ot-ws:
+  env_file:
+     - prod_env
   container_name: ot-ws
   build: ./ot_ws
   volumes:
    - './ot_ws:/usr/src/app'
   environment:
-   - OT_WS_URL=http://otrcsl01.rcsl.lu/otws/v1.asmx
-   - APP_SETTINGS=ot_ws.config.DevelopmentConfig
+
   ports:
    - 5001:5000 # expose ports - HOST:CONTAINER
       
  swagger:
+  env_file:
+     - prod_env
   container_name: swagger
   build: ./swagger
   ports:
