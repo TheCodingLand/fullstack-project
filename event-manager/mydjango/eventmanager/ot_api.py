@@ -15,7 +15,6 @@ class ot_api_event(object):
 
     def get_ot_id_from_call(self, id):
         event = Event.objects.get(call=call)
-
         return event.ot_id
 
     def get_ot_id_from_ucid(self, ucid):
@@ -30,7 +29,7 @@ class ot_api_event(object):
 
         try:
             data = req.json()
-            #id = data['Event'][0]['id']
+            id = data['Event'][0]['id']
         except KeyError:
             log.error("Could not get Event with payload %s" %
                       json.dumps(payload))
@@ -55,7 +54,7 @@ class ot_api_event(object):
     def create(self, call):
 
         id = self.get_ot_id_from_ucid(call.ucid)
-        if id > 0:
+        if id:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
