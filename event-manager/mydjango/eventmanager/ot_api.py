@@ -62,6 +62,10 @@ class ot_api_event(object):
             log.error('API DISABLED')
             return False
 
+
+
+
+
     def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
         # log.error(ucid)
@@ -133,15 +137,24 @@ class ot_api_event(object):
             log.info("updated applicant to %s" % agent.ot_userdisplayname)
             return True
 
+
+
+
+
+
     def updateResponsible(self, call, agent):
+
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
-        url = '%s/event/%s' % (self.url, id)
+
+        url = '%s/event/%s' % (self.url, )
         req = self.execute('put', url, payload)
         if req == False:
             return False
         else:
             log.info("updated responsible to %s" % agent.ot_userdisplayname)
             return True
+
+
 
     def updateEndDate(self, call):
         try:
@@ -152,16 +165,15 @@ class ot_api_event(object):
         if event.ot_id is None:
             log.error("no OT ID in event !!")
             return False
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
 
-        url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
         payload = {"Call Finished Date": "%s" % call.end}
+
         req = self.execute('put', url, payload)
 
         if req == False:
             log.error("could do the updates ! ")
             return False
-
-
         #updating event and tickets
         ot_api_event().getTicketFromEvent(call)
 
