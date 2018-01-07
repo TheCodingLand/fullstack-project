@@ -15,7 +15,8 @@ import django
 django.setup()
 import requests
 from graphqlendpoint.models import Agent
-
+if os.getenv("MODE"):
+    MODE = os.environ['MODE']
 
 if MODE == 'OMNITRACKER':
 
