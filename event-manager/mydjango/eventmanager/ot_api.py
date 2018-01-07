@@ -24,13 +24,13 @@ class ot_api_event(object):
         payload = {"objectclass": "Event", "filter": "EventUCID", "variables": [
             {"name": "UCID", "value": "%s" % ucid}], "requiredfields": []}
 
-        log.error(payload)
+        # log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
         req = requests.post(url, json=payload, headers=self.headers)
 
         try:
             data = req.json()
-            id = data['Event'][0]['id']
+            #id = data['Event'][0]['id']
         except KeyError:
             log.error("Could not get Event with payload %s" %
                       json.dumps(payload))
@@ -56,7 +56,7 @@ class ot_api_event(object):
 
         id = self.get_ot_id_from_ucid(call.ucid)
         if id:
-            log.error("event already in the system, skipping creation")
+            #log.error("event already in the system, skipping creation")
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
@@ -71,7 +71,7 @@ class ot_api_event(object):
 
         event = Event.objects.get_or_create(ot_id=id)[0]
         event.call = call
-        log.error("updated call to %s" % event.ot_id)
+        #log.error("updated call to %s" % event.ot_id)
         event.save()
         return True
 
