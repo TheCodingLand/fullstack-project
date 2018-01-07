@@ -16,7 +16,7 @@ class ot_api_event(object):
                         'Accept': 'text/plain'}
         self.url = 'http://ot-ws:5000/api/ot/'
 
-    def get_ot_id_from_call(self, id):
+    def get_ot_id_from_call(self, call):
         event = Event.objects.get(call=call)
         return event.ot_id
 
