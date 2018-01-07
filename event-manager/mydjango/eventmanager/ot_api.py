@@ -44,7 +44,7 @@ class ot_api_event(object):
                 return False
             if req.status_code == 400:
                 log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
-                    method, url, payload))
+                    method, url, json.dumps(payload)))
                 return False
             if req.status_code == 500:
                 log.error("ERROR : 500 !! method :%s, url:%s, payload:%s" % (
@@ -204,10 +204,10 @@ class ot_api_event(object):
         if agent.ot_userdisplayname == None:
             log.error("user not defined, getting data from Web service")
             url = 'http://ot-ws:5000/api/ot/objects'
-            payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
+            payload = {"objectclass": "Agent", "filter": "userbyext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
             req = self.execute('post', url, payload)
-            log(req.status_code)
+
             if req == False:
                 log.error("FAILED ! %s")
                 return False
