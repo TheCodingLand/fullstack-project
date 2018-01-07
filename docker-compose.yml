@@ -16,8 +16,6 @@ services:
     - "3000"  
     - "3001"
 
-
-
  event-manager-ot:
   env_file:
      - prod_env
@@ -37,7 +35,6 @@ services:
   command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8888'
   depends_on:
    - redis
-   - event-manager
    - postgres
 
  event-manager:
@@ -56,10 +53,11 @@ services:
   volumes:
     - ./event-manager:/data/event-manager
   #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
-  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'gunicorn mydjango.wsgi:application -w 2 -b :8000'
   depends_on:
    - redis
    - postgres
+   - event-manager-ot
   
  nginx:
   restart: always
