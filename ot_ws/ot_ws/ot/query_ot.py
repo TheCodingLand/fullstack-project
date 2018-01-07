@@ -8,12 +8,10 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
 from ot_ws.ot.ot_models import *
 ENABLED = False
-if os.getenv("OMNITRACKER_API_ENABLED") == "True":
+if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
     ENABLED = True
 if os.getenv("OMNITRACKER_API_URL"):
     url = os.getenv("OMNITRACKER_API_URL")
-else:
-    url = "http://otrcsl01.rcsl.lu/otws/v1.asmx"
 
 import xml.etree.ElementTree as ET
 Encoding = "utf-8"
