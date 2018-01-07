@@ -143,16 +143,16 @@ class ot_api_event(object):
             return True
 
     def updateEndDate(self, call):
+        log.error("doing updates on end call")
 
         payload = {"Call Finished Date": "%s" % call.end}
         url = '%s/event/%s' % (self.url, id)
         req = self.execute('put', url, payload)
 
+
         if req == False:
             return False
-        else:
-            log.error("updated end date to %s" % agent.ot_userdisplayname)
-            return True
+
 
         #updating event and tickets
         ot_api_event().getTicketFromEvent(call)
