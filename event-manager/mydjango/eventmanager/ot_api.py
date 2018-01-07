@@ -42,7 +42,7 @@ class ot_api_event(object):
                 log.info(req.status_code)
                 return req
             if req.status_code == 404:
-                log.error("%s not found %s" % (req.status_code, url))
+                log.info("%s not found %s" % (req.status_code, url))
                 return False
             if req.status_code == 400:
                 log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
@@ -59,7 +59,7 @@ class ot_api_event(object):
                 return False
 
         else:
-            log.error('API DISABLED')
+            log.info('API DISABLED')
             return False
 
 
