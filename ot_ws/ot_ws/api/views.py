@@ -172,7 +172,7 @@ class EventItem(Resource):
             e = query_ot()
             e.get(event_id)
             result = serialize(e.xml_result.decode("utf-8"))
-            id = result[0].id
+            id = result.results[0].id
             event = result.results[0].res
             # event = test()
             if not event:

@@ -31,7 +31,7 @@ class ot_api_event(object):
             if method == 'put':
                 req = requests.put(url, json=payload, headers=self.headers)
             if method == 'get':
-                req = requests.get(url, json=payload, headers=self.headers)
+                req = requests.get(url, headers=self.headers)
 
             if req.status_code == 201:
                 log.info(req.status_code)
@@ -78,6 +78,7 @@ class ot_api_event(object):
             log.error("Could not get Event with payload %s" %
                       json.dumps(payload))
             return False
+
         return id
 
     def put(self, ucid):
@@ -229,3 +230,12 @@ class ot_api_event(object):
                         agent.ot_userdisplayname = item['data']['Title']
                         agent.email = item['data']['Email Address']
                         agent.save()
+
+    def getTicketFromEvent(self, event):
+        if event.ot_id != None:
+            req = self.execute(
+                'get', 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id, "")
+
+            #ticket_id = data['Event'][0]['data']
+            # event.ticket_id=ot_ticket
+            # event.save()
