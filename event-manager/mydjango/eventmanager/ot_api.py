@@ -34,6 +34,7 @@ class ot_api_event(object):
             if method == 'put':
 
                 log.error('updating %s' % payload)
+
                 req = requests.put(url, json=payload)
 
             if method == 'get':
@@ -172,9 +173,10 @@ class ot_api_event(object):
             log.error("no OT ID in event !!")
             return False
 
-        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
+        url = 'http://ot-ws:5000/api/ot/event/%s/' % event.ot_id
         payload = {"Call Finished Date": "%s" % call.end}
 
+        #req = self.execute('get', url, payload)
         req = self.execute('put', url, payload)
 
         if req == False:
