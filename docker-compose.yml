@@ -19,8 +19,6 @@ services:
  event-manager-ot:
   env_file:
      - prod_env
-  environment:
-     - MODE=OMNITRACKER
   restart: always
   build: ./event-manager/
   expose:
@@ -40,8 +38,6 @@ services:
  event-manager:
   env_file:
      - prod_env
-  environment:
-     - MODE=FRONTEND
   restart: always
   build: ./event-manager/
   expose:
