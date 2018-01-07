@@ -404,7 +404,7 @@ class EventMod(Resource):
             id = event_id
             fields = getFields(event_model, post_data)
             r = query_ot()
-            result = r.modify(id, fields)
+            result = r.modifyObjet(id, fields)
             if result:
                 response_object = {
                     'status': 'success',
@@ -438,7 +438,7 @@ class TicketMod(Resource):
             id = ticket_id
             fields = getFields(ticket_model, post_data)
             r = query_ot()
-            result = r.modify(id, fields)
+            result = r.modifyObjet(id, fields)
             if result:
                 response_object = {
                     'status': 'success',
