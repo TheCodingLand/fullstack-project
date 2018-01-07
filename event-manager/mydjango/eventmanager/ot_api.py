@@ -33,7 +33,8 @@ class ot_api_event(object):
             data = req.json()
             id = data['Event'][0]['id']
         except KeyError:
-            log.error("Could not get Event with payload %s" % payload)
+            log.error("Could not get Event with payload %s" %
+                      json.dumps(payload))
             return False
         return id
 
@@ -47,48 +48,49 @@ class ot_api_event(object):
         try:
             id = data['Event']['id']
         except KeyError:
-            log.error("Could not create Event with payload %s" % json.dumps(payload)
+            log.error("Could not create Event with payload %s" %
+                      json.dumps(payload))
             return False
         return id
 
     def create(self, call):
 
-        id=self.get_ot_id_from_ucid(call.ucid)
+        id = self.get_ot_id_from_ucid(call.ucid)
         if id:
             log.error("event already in the system, skipping creation")
-            event=Event.objects.get_or_create(ot_id=id)[0]
+            event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
         else:
-            id=self.put(call.ucid)
-            url='http://ot-ws:5000/api/ot/events/%s' % (id)
-            payload={"CreationDate": "%s" % call.start}
-            req=requests.post(url, data=json.dumps(
+            id = self.put(call.ucid)
+            url = 'http://ot-ws:5000/api/ot/events/%s' % (id)
+            payload = {"CreationDate": "%s" % call.start}
+            req = requests.post(url, data=json.dumps(
                 payload), headers=self.headers)
 
-        event=Event.objects.get_or_create(ot_id=id)[0]
-        event.call=call
+        event = Event.objects.get_or_create(ot_id=id)[0]
+        event.call = call
         log.error("updated call to %s" % event.ot_id)
         event.save()
 
         # good to have the same date for the event as the start of the call
 
     def updateApplicant(self, call, agent):
-        payload={"Applicant": "%s" % agent.ot_userdisplayname}
-        url='%s/events/%s' % (self.url, id)
-        req=requests.post(url, payload, headers={
-                            "Content-Type": "application/json"})
+        payload = {"Applicant": "%s" % agent.ot_userdisplayname}
+        url = '%s/events/%s' % (self.url, id)
+        req = requests.post(url, payload, headers={
+            "Content-Type": "application/json"})
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            event=Event.objects.get()
+            event = Event.objects.get()
             log.error("updated applicant to %s" % agent.ot_userdisplayname)
             return True
 
     def updateResponsible(self, call, agent):
-        payload={"Responsible": "%s" % agent.ot_userdisplayname}
-        url='%s/events/%s' % (self.url, id)
-        req=requests.post(url, data=json.dumps(
+        payload = {"Responsible": "%s" % agent.ot_userdisplayname}
+        url = '%s/events/%s' % (self.url, id)
+        req = requests.post(url, data=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -97,9 +99,9 @@ class ot_api_event(object):
             return True
 
     def updateEndDate(self, call):
-        payload={"Call Finished Date": "%s" % call.end}
-        url=r'%s/events/%s' % (self.url, id)
-        req=requests.post(url, data=json.dumps(
+        payload = {"Call Finished Date": "%s" % call.end}
+        url = r'%s/events/%s' % (self.url, id)
+        req = requests.post(url, data=json.dumps(
             payload), headers=self.headers)
 
         if req.status_code == 404:
@@ -109,9 +111,9 @@ class ot_api_event(object):
             return True
 
     def updateEventPhoneNumber(self, call):
-        payload={"Phone Number": "%s" % call.origin}
-        url=r'%s/events/%s' % (self.url, id)
-        req=requests.post(url, data=json.dumps(
+        payload = {"Phone Number": "%s" % call.origin}
+        url = r'%s/events/%s' % (self.url, id)
+        req = requests.post(url, data=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -120,9 +122,9 @@ class ot_api_event(object):
             return True
 
     def updateEventHistory(self, call):
-        payload={"TransferHistory": "%s" % call.history}
-        url='%s/events/%s' % (self.url, id)
-        req=requests.post(url, data=json.dumps(
+        payload = {"TransferHistory": "%s" % call.history}
+        url = '%s/events/%s' % (self.url, id)
+        req = requests.post(url, data=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -131,9 +133,9 @@ class ot_api_event(object):
             return True
 
     def updateEventType(self, call):
-        payload={"Title": "%s" % call.call_type}
-        url=r'%s/events/%s' % (self.url, id)
-        req=requests.post(url, data=json.dumps(
+        payload = {"Title": "%s" % call.call_type}
+        url = r'%s/events/%s' % (self.url, id)
+        req = requests.post(url, data=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -145,11 +147,11 @@ class ot_api_event(object):
 
         if agent.ot_userdisplayname != "":
 
-            payload={"Applicant": "%s" % agent.ot_userdisplayname, "Responsible": "%s" %
+            payload = {"Applicant": "%s" % agent.ot_userdisplayname, "Responsible": "%s" %
                        agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
 
-            url='%s/events/%s' % (self.url, id)
-            req=requests.post(url, data=json.dumps(
+            url = '%s/events/%s' % (self.url, id)
+            req = requests.post(url, data=json.dumps(
                 payload), headers=self.headers)
             if req.status_code == 404:
                 return False
@@ -160,19 +162,19 @@ class ot_api_event(object):
 
     def checkUserStatus(self, agent):
         if agent.ot_userdisplayname == "":
-            url='http://ot-ws:5000/api/ot/objects'
-            payload={"objectclass": "Agent", "filter": "agentfromext", "variables": [
+            url = 'http://ot-ws:5000/api/ot/objects'
+            payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
-            req=requests.post(url, data=json.dumps(
+            req = requests.post(url, data=json.dumps(
                 payload), headers=self.headers)
-            data=req.json()
-            agent.ot_userdisplayname=data['Agent']['Title']
+            data = req.json()
+            agent.ot_userdisplayname = data['Agent']['Title']
             if data['status'] == "success":
                 for item in data['Agent'][0]:
-                    agent.ot_id=item['id']
-                    agent.firstname=item['data']['FirstName']
-                    agent.lastname=item['data']['LastName']
-                    agent.ot_userloginname=item['data']['Login Name']
-                    agent.ot_userdisplayname=item['data']['Title']
-                    agent.email=item['data']['Email Address']
+                    agent.ot_id = item['id']
+                    agent.firstname = item['data']['FirstName']
+                    agent.lastname = item['data']['LastName']
+                    agent.ot_userloginname = item['data']['Login Name']
+                    agent.ot_userdisplayname = item['data']['Title']
+                    agent.email = item['data']['Email Address']
                     agent.save()
