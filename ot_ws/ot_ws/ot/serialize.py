@@ -119,7 +119,7 @@ class serialize(object):
                     self.getFields(item)
             else:
                 self.res = False
-                logging.error("Serializing response failed")
+                logging.error("Serializing response failed %s" % xml)
 
 
 def test():
