@@ -171,6 +171,7 @@ class EventItem(Resource):
         try:
             e = query_ot()
             e.get(event_id)
+            logging.error(e.xml_result.decode("utf-8"))
             result = serialize(e.xml_result.decode("utf-8"))
             id = result.results[0].id
             event = result.results[0].res
@@ -198,7 +199,7 @@ class EventItem(Resource):
                     'data': event
                 }
                 return response_object, 200
-        except KeyError:
+        except IndexError:
             return response_object, 404
 
 
