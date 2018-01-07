@@ -6,7 +6,7 @@ log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
 ENABLED = False
-if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
+if os.getenv("OMNITRACKER_API_ENABLED") == "yes":
     ENABLED = True
 
 

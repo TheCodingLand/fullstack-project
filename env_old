@@ -17,6 +17,5 @@ LOGFILE1=PresenceServer_ccrcsl02.000
 LOGFILE2=TelephonyServer_ccrcsl02.000
 
 
-
 OMNITRACKER_API_URL=http://otrcsl01.rcsl.lu/otws/v1.asmx
-OMNITRACKER_API_ENABLED=TRUE
+OMNITRACKER_API_ENABLED=yes
