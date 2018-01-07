@@ -464,6 +464,8 @@ class ObjectFields(Resource):
     def post(self, objectid):
 
         post_data = request.get_json()
+        log.error("pulling object %s with field %s" %
+                  (objectid, post_data.get('requiredfields')))
         # log.info(request.get_json())
         try:
             r = query_ot()
@@ -476,7 +478,8 @@ class ObjectFields(Resource):
 
             if items.results == []:
                 return response_object, 404
-
+            log.error("pulling object %s with field %s" %
+                      (objectid, post_data.get('requiredfields')))
             id = items.results[0].id
             data = items.result[0].res
 
