@@ -40,10 +40,11 @@ class ot_api_event(object):
                 log.info(req.status_code)
                 return req
             if req.status_code == 404:
-                log.warning(req.status_code)
+                log.info(req.status_code)
                 return False
             if req.status_code == 400:
-                log.error(req.status_code)
+                log.error("req.status_code ERROR : 400 !! method :%s, url:%s, payload:%s" % (
+                    method, url, payload))
                 return False
             if req.status_code == 500:
                 log.error(req.status_code)
@@ -61,7 +62,7 @@ class ot_api_event(object):
         # log.error(ucid)
         payload = {"objectclass": "Event", "filter": "EventUCID", "variables": [
             {"name": "UCID", "value": "%s" % ucid}], "requiredfields": []}
-
+        id = 0
         # log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
         req = self.execute('post', url, payload)
