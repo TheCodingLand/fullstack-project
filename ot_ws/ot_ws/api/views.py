@@ -467,7 +467,7 @@ class ObjectFields(Resource):
         log.error("pulling object %s with field %s" %
                   (objectid, post_data.get('requiredfields')))
         # log.info(request.get_json())
-        try:
+        if True:
             r = query_ot()
             # log.info(post_data)
 
@@ -497,9 +497,9 @@ class ObjectFields(Resource):
                     'message': 'Sorry. failed.'
                 }
                 return response_object, 400
-        except:
-            response_object = {
-                'status': 'fail',
-                'message': 'Invalid payload.'
-            }
-            return response_object, 400
+        # except:
+        #     response_object = {
+        #         'status': 'fail',
+        #         'message': 'Invalid payload.'
+        #     }
+        #     return response_object, 400
