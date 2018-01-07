@@ -61,15 +61,19 @@ class query_ot():
         self.body = '%s</Object>' % self.body
         # logging.error(self.body)
         self.send()
-        # logging.error(self.xml)
-        # logging.error(self.xml_result)
-        tree = ET.fromstring(self.xml_result)
-        root = tree \
-            .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResult')
+        if ENABLED == True
 
-        if root.attrib['success'] == "true":
-            return True
+            tree = ET.fromstring(self.xml_result)
+            root = tree \
+                .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResult')
+
+            if root.attrib['success'] == "true":
+                return True
+            else:
+                return False
+
         else:
+            log.error("API disabled %s" % self.xml)
             return False
 
     def add(self, model, fields):
@@ -85,18 +89,35 @@ class query_ot():
         self.body = '%s</Object>' % self.body
 
         self.send()
-        tree = ET.fromstring(self.xml_result)
-        root = tree \
-            .find('*//{http://www.omninet.de/OtWebSvc/v1}AddObjectResult')
+        if ENABLED == True
 
-        if root.attrib['success'] == "true":
-            id = root.attrib['objectId']
+            tree = ET.fromstring(self.xml_result)
+            root = tree \
+                .find('*//{http://www.omninet.de/OtWebSvc/v1}AddObjectResult')
+
+            if root.attrib['success'] == "true":
+                id = root.attrib['objectId']
+            else:
+                log.error("could not complete request %s" % self.xml)
+                log.error("server response : %s" % logging.error(
+                    "could not complete request %s" % self.xml_result))
+                id = 0
+            return id    tree = ET.fromstring(self.xml_result)
+            root = tree \
+                .find('*//{http://www.omninet.de/OtWebSvc/v1}AddObjectResult')
+
+            if root.attrib['success'] == "true":
+                id = root.attrib['objectId']
+            else:
+                log.error("could not complete request %s" % self.xml)
+                log.error("server response : %s" % logging.error(
+                    "could not complete request %s" % self.xml_result))
+                id = 0
+            return id
         else:
-            log.error("could not complete request %s" % self.xml)
-            log.error("server response : %s" % logging.error(
-                "could not complete request %s" % self.xml_result))
+            log.error("API disabled %s" % self.xml)
             id = 0
-        return id
+            return id
 
     def getField(self, id, field):
         """Takes ID and a specific ot_field to query"""
@@ -111,9 +132,11 @@ class query_ot():
         data = self.xml.replace(r'\r\n', r'&#x000d;&#x000a;').encode(
             "ascii", "xmlcharrefreplace")
 
-        result = requests.post(url, data=data, headers=self.headers)
+        if ENABLED == True:
+            result = requests.post(url, data=data, headers=self.headers)
         # logging.error(result.text)
-        self.xml_result = result.content
+            self.xml_result = result.content
+
         # logging.info(self.xml)
         # logging.info(self.xml_result)
 
