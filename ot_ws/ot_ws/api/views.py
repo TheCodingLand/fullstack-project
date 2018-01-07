@@ -488,7 +488,7 @@ class ObjectFields(Resource):
                     'status': 'success',
                     'message': 'object :',
                     'id': id,
-                    'data': results
+                    'data': data
                 }
                 return response_object, 201
             else:
