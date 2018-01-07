@@ -119,8 +119,6 @@ services:
   build: ./ot_ws
   volumes:
    - './ot_ws:/usr/src/app'
-  environment:
-
   ports:
    - 5001:5000 # expose ports - HOST:CONTAINER
       
