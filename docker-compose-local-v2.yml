@@ -116,9 +116,8 @@ services:
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
-   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
   environment:
-   - LOGFILE=/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000
+   - LOGFILE=./log/TelephonyServer_ccrcsl02.000
   depends_on:
    - redis
 
@@ -129,9 +128,8 @@ services:
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
-   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
   environment:
-   - LOGFILE=/media/callcenter/DIAGS/PresenceServer_ccrcsl02.000
+   - LOGFILE=./log/PresenceServer_ccrcsl02.000
   depends_on:
    - redis
    
