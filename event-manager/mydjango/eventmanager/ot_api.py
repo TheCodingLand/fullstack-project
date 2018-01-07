@@ -55,8 +55,7 @@ class ot_api_event(object):
     def create(self, call):
 
         id = self.get_ot_id_from_ucid(call.ucid)
-        if id:
-            #log.error("event already in the system, skipping creation")
+        if id > 0:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
