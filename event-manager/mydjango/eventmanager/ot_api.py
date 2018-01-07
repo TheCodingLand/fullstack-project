@@ -201,7 +201,7 @@ class ot_api_event(object):
 
     def checkUserStatus(self, agent):
 
-        if agent.ot_userdisplayname == "":
+        if agent.ot_userdisplayname == None:
             log.error("user not defined, getting data from Web service")
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
