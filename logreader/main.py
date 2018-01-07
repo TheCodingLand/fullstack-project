@@ -15,6 +15,7 @@ if 'Telephony' in logfile:
     from project.log_parser.telephony_log import TelephonyLog as Log
 else:
     from project.log_parser.presence_log import PresenceLog as Log
+
 conn = redis.StrictRedis(host="redis", port=6379, db=2)
 
 
@@ -55,7 +56,7 @@ class parseLog(threading.Thread):
             if self.line != '':
                 self.parseline()
                 k = conn.keys('*')
-                while len(k) > 10:
+                while len(k) > 15:
                     time.sleep(0.1)
                     k = conn.keys('*')
 
