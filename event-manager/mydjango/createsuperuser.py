@@ -7,7 +7,7 @@ from django.contrib.auth.management.commands.createsuperuser import get_user_mod
 if 'CREATE_SUPER_USER' in os.environ:
 
     if get_user_model().objects.filter(username='$SUPER_USER'):
-        print 'Super user already exists. SKIPPING...'
+        print('Super user already exists. SKIPPING...')
     else:
         print('Creating super user...')
         get_user_model()._default_manager.db_manager().create_superuser(
