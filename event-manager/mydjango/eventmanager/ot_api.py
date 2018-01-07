@@ -6,7 +6,7 @@ log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
 ENABLED = False
-if os.getenv("OMNITRACKER_API_ENABLED") == "yes":
+if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
     ENABLED = True
 
 
@@ -203,6 +203,7 @@ class ot_api_event(object):
             req = self.execute('post', url, payload)
 
             if req == False:
+                log.error("FAILED ! %s")
                 return False
             else:
                 data = req.json()
