@@ -67,7 +67,7 @@ class dispatch(object):
         return True
 
     def transfer_call(self, id, timestamp, destination):
-        #print("managing a transfer")
+        log.error('managing a transfer')
         redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
@@ -91,13 +91,15 @@ class dispatch(object):
             call.save()
 
             if len(agents) == 1:
+                log.error("no agents found with ext %s" % destination)
                 agent = agents[0]
                 agent.current_call = None
                 agent.save()
                 agent.current_call = call
                 agent.save()
                 ot_api_event().transfer(call, agent)
-
+            else:
+                log.error("no agents found with ext %s" % destination)
                 # ot_api_event().transfer(call)
         return True
 

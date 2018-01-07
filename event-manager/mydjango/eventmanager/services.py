@@ -1,8 +1,5 @@
 import pytz
 import os
-if os.getenv("MODE"):
-    MODE = os.environ['MODE']
-
 
 from eventmanager.dispatch_services import dispatch
 
