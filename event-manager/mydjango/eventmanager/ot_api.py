@@ -5,6 +5,9 @@ import logging
 log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
+ENABLED = False
+if os.getenv("OMNITRACKER_API_ENABLED") == "True":
+    ENABLED = True
 
 
 class ot_api_event(object):
@@ -17,6 +20,42 @@ class ot_api_event(object):
         event = Event.objects.get(call=call)
         return event.ot_id
 
+    def execute(self, method, url, payload):
+
+        if ENABLED:
+            if method not in ['get', 'post', 'put']
+                log.error('invalid method %s' % method)
+                return False
+            if method == 'post':
+                req = requests.post(url, json=payload, headers=self.headers)
+            if method == 'put':
+                req = requests.put(url, json=payload, headers=self.headers)
+            if method == 'get':
+                req = requests.get(url, json=payload, headers=self.headers)
+
+            if req.status_code == 201:
+                log.info(req.status_code)
+                return req
+            elif req.status_code == 200:
+                log.info(req.status_code)
+                return req
+            if req.status_code == 404:
+                log.warning(req.status_code)
+                return False
+            if req.status_code == 400:
+                log.error(req.status_code)
+                return False
+            if req.status_code == 500:
+                log.error(req.status_code)
+                return False
+            else:
+                log.error('api error !')
+                return False
+
+        else:
+            log.info('API DISABLED')
+            return False
+
     def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
         # log.error(ucid)
@@ -25,12 +64,13 @@ class ot_api_event(object):
 
         # log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
-        req = requests.post(url, json=payload, headers=self.headers)
+        self.execute('post', url, payload)
+        self.execute('post', url, payload)
 
         try:
             data = req.json()
             id = data['Event'][0]['id']
-        except KeyError:
+        except:
             log.error("Could not get Event with payload %s" %
                       json.dumps(payload))
             return False
@@ -40,7 +80,7 @@ class ot_api_event(object):
         payload = {'UCID': '%s' %
                    ucid, 'Applicant': 'Centrale', 'Source': 'Call Incoming'}
         url = 'http://ot-ws:5000/api/ot/events'
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         data = req.json()
 
         try:
@@ -62,7 +102,7 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            req = requests.put(url, json=payload, headers=self.headers)
+            self.execute('put', url, payload)
             log.error(req.json())
             log.error(req.status_code)
             log.error(req.text)
@@ -78,7 +118,7 @@ class ot_api_event(object):
     def updateApplicant(self, call, agent):
         payload = {"Applicant": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -89,7 +129,7 @@ class ot_api_event(object):
     def updateResponsible(self, call, agent):
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
         url = '%s/event/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -99,7 +139,7 @@ class ot_api_event(object):
     def updateEndDate(self, call):
         payload = {"Call Finished Date": "%s" % call.end}
         url = '%s/event/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
 
         if req.status_code == 404:
             return False
@@ -110,7 +150,7 @@ class ot_api_event(object):
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
         url = '%s/event/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -120,7 +160,7 @@ class ot_api_event(object):
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
         url = '%s/event/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -130,7 +170,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.put(url, json=payload, headers=self.headers)
+        self.execute('put', url, payload)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -145,7 +185,7 @@ class ot_api_event(object):
                        agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
-            req = requests.put(url, json=payload, headers=self.headers)
+            self.execute('put', url, payload)
             if req.status_code == 404:
                 return False
             elif req.status_code == 200:
@@ -158,7 +198,7 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
-            req = requests.post(url, json=payload, headers=self.headers)
+            self.execute('post', url, payload)
             data = req.json()
             agent.ot_userdisplayname = data['Agent']['Title']
             if data['status'] == "success":
