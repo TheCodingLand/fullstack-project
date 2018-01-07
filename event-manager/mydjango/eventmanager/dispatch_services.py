@@ -91,11 +91,9 @@ class dispatch(object):
             call.save()
 
             if len(agents) == 1:
-                log.error("agent found with ext %s" % destination)
                 agent = agents[0]
                 agent.current_call = call
                 agent.save()
-                log.error("transferring to  %s" % destination)
                 ot_api_event().transfer(call, agent)
             else:
                 log.error("no agents found with ext %s" % destination)

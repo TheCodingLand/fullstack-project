@@ -186,9 +186,13 @@ class ot_api_event(object):
         self.checkUserStatus(agent)
 
         if agent.ot_userdisplayname != "":
+            if agent.isQueueLine == False:
 
-            payload = {"Applicant": "%s" % agent.ot_userdisplayname, "Responsible": "%s" %
-                       agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
+                payload = {"Applicant": "%s" % agent.ot_userdisplayname,
+                           "TransferHistory": "%s" % call.history}
+            else:
+                payload = {"Applicant": "Centrale",
+                           "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
             req = self.execute('put', url, payload)
