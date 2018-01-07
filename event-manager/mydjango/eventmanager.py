@@ -60,8 +60,9 @@ def getAddedCalls():
 # quick cleaup as this key is only used for real time data
 
 
+''' 
 log.info("Waiting for startup of other components, so we can clear redis db all at once")
-time.sleep(10)
+
 log.info("Backlog Clearing Started")
 
 
@@ -85,7 +86,7 @@ for item in orderedlist:
         r.delete(item['key'])
 
 
-log.info("Normal Loop")
+log.info("Normal Loop") '''
 while True:
 
     getAddedCalls()
