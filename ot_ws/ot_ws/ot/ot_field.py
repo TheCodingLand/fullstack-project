@@ -87,7 +87,7 @@ class DateTimeVal(ot_field):
         self.value = arrow.get(self.value).datetime
         self.value = self.value.astimezone().replace(tzinfo=None)
         fieldquery = r'<%s name="%s">%s</%s>' \
-            % (self.fieldtype, self.name, self.value.isoformat()[:-7], self.fieldtype)
+            % (self.fieldtype, self.name, self.value.isoformat()[:-5], self.fieldtype)
         return fieldquery
 
 
