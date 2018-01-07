@@ -56,7 +56,7 @@ class query_ot():
         for field in fields:
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
 
-        self.body = r'%s<Object objectId="%s">' % (
+        self.body = r'<Object objectId="%s">' % (
             self.id, self.body) + r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
         logging.error(self.body)
