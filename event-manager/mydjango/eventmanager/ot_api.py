@@ -37,11 +37,11 @@ class ot_api_event(object):
         id = self.get_ot_id_from_ucid(call.ucid)
         if id:
             log.error("event already in the system, skipping creation")
-            event = Events.object.get_or_create(ot_id=id)
+            event = Event.object.get_or_create(ot_id=id)
             event.save()
 
         payload = '{ "UCID": call.ucid, "Applicant": "Centrale", "Responsible": "Centale", "Source": "Call Incoming" }'
-        url = "%s/events" % self.url
+        url = 'http://ot-ws:5000/api/ot/events'
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
         try:
