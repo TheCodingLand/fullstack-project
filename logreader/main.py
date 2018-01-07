@@ -3,7 +3,7 @@
 
 import os
 import time
-
+import redis
 import threading
 import sys
 
