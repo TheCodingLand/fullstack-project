@@ -114,7 +114,8 @@ class dispatch(object):
                 agent.save()
 
         call.save()
-        # ot_api_event().updateEndDate(call)
+
+        ot_api_event().updateEndDate(call)
         return True
 
     def update_agent_ext(self, id, data):

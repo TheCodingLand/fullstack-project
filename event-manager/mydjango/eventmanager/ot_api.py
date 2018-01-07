@@ -1,6 +1,7 @@
 import os
 import requests
-from graphqlendpoint.models import Agent, Event, Call, Transfer
+from graphqlendpoint.models import Agent, Event, Call, Transfer, Ticket
+from django.core.exceptions import ObjectDoesNotExist
 import logging
 log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
@@ -142,6 +143,7 @@ class ot_api_event(object):
             return True
 
     def updateEndDate(self, call):
+
         payload = {"Call Finished Date": "%s" % call.end}
         url = '%s/event/%s' % (self.url, id)
         req = self.execute('put', url, payload)
@@ -151,6 +153,9 @@ class ot_api_event(object):
         else:
             log.error("updated end date to %s" % agent.ot_userdisplayname)
             return True
+
+        #updating event and tickets
+        ot_api_event().getTicketFromEvent(call)
 
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
@@ -231,7 +236,12 @@ class ot_api_event(object):
                         agent.email = item['data']['Email Address']
                         agent.save()
 
-    def getTicketFromEvent(self, event):
+    def getTicketFromEvent(self, call):
+        try:
+            event=Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return
+
         if event.ot_id == None:
             return False
         req = self.execute(
@@ -239,20 +249,41 @@ class ot_api_event(object):
         if req == False:
             return False
         data = req.json()
+        try:
+            agent=Agent.objects.get(ot_id=data['data']['Applicant'])
+            event.Applicant= agent
+
+        except ObjectDoesNotExist:
+            pass
+
+        event.phone=data['data']['Phone Number']
+        event.end =data['data']['Call Finished Date']
         ticket_id = data['data']['RelatedIncident']
         ticket = Ticket.get_or_create(ot_id=ticket_id)[0]
         event.ticket = ticket
         event.save()
 
-        req = self.execute(
-            'get', 'http://ot-ws:5000/api/ot/ticket/%s' % ticket_id, "")
+        requiredfields= {  'requiredfields': [ 'Title', 'SolutionDescription', 'AssociatedCategory' , 'Applicant',  'Responsible', 'State'] }
+
+        req = self.execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
 
         data = req.json()
-
         ticket.title = data['data']['Title']
-        ticket.creationdate = CreationDate
-        ticket.category = AssociatedCategory
-        ticket.applicant = Applicant
-        ticket.responsible = Responsible
-        ticket.state = State
-        ticket.solution
+        ticket.creationdate = data['data']['CreationDate']
+        ticket.category = data['data']['AssociatedCategory']
+        try:
+            ticket.applicant =Agent.objects.get(ot_id=['data']['Applicant'])
+
+        except ObjectDoesNotExist:
+            ticket.applicant = None
+
+        try :
+            ticket.responsible =Agent.objects.get(ot_id=['data']['Responsible'])
+        except ObjectDoesNotExist:
+            ticket.applicant = None
+
+        ticket.applicant = Agent.object.get(['data']['Applicant'])
+        ticket.responsible = data['data']['Responsible']
+        ticket.state = data['data']['State']
+        ticket.solution = data['data']['SolutionDescription']
+        ticket.save()
