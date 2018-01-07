@@ -186,7 +186,9 @@ class ot_api_event(object):
         if agent.isQueueLine == False:
             self.checkUserStatus(agent)
 
-        if agent.ot_userdisplayname != "":
+        id = self.get_ot_id_from_call(call)
+
+        if agent.ot_userdisplayname != "" and id != None:
             if agent.isQueueLine == False:
 
                 payload = {"Applicant": "%s" % agent.ot_userdisplayname,
