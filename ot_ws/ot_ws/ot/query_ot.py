@@ -61,7 +61,7 @@ class query_ot():
         self.body = '%s</Object>' % self.body
         # logging.error(self.body)
         self.send()
-        if ENABLED == True
+        if ENABLED == True:
 
             tree = ET.fromstring(self.xml_result)
             root = tree \
@@ -89,7 +89,7 @@ class query_ot():
         self.body = '%s</Object>' % self.body
 
         self.send()
-        if ENABLED == True
+        if ENABLED == True:
 
             tree = ET.fromstring(self.xml_result)
             root = tree \
