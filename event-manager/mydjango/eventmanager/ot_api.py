@@ -24,14 +24,18 @@ class ot_api_event(object):
 
     def execute(self, method, url, payload):
         if ENABLED:
+
             if method not in ['get', 'post', 'put']:
                 log.error('invalid method %s' % method)
                 return False
+
             if method == 'post':
-                req = requests.post(url, json=payload, headers=self.headers)
+                req = requests.post(url, json=payload)
             if method == 'put':
+
                 log.error('updating %s' % payload)
-                req = requests.put(url, json=payload, headers=self.headers)
+                req = requests.put(url, json=payload)
+
             if method == 'get':
                 req = requests.get(url, headers=self.headers)
 
@@ -91,6 +95,8 @@ class ot_api_event(object):
         payload = {'UCID': '%s' %
                    ucid, 'Applicant': 'Centrale', 'Source': 'Call Incoming'}
         url = 'http://ot-ws:5000/api/ot/events'
+
+
         req = self.execute('put', url, payload)
 
         if req == False:
@@ -165,8 +171,8 @@ class ot_api_event(object):
         if event.ot_id is None:
             log.error("no OT ID in event !!")
             return False
-        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
 
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         payload = {"Call Finished Date": "%s" % call.end}
 
         req = self.execute('put', url, payload)
