@@ -37,7 +37,7 @@ class ot_api_event(object):
         id = self.get_ot_id_from_ucid(call.ucid)
         if id:
             log.error("event already in the system, skipping creation")
-            event = Event.objects.get_or_create(ot_id=id)
+            event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
         payload = '{ "UCID": call.ucid, "Applicant": "Centrale", "Responsible": "Centale", "Source": "Call Incoming" }'
