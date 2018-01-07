@@ -1,6 +1,6 @@
 import redis
 import json
-
+import os
 pub = redis.StrictRedis(host="redis", port=6379, db=3)
 
 from graphqlendpoint.models import Agent, Event, Call, Transfer

@@ -9,7 +9,7 @@ from datetime import datetime
 from operator import itemgetter
 from eventmanager import services
 
-import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mydjango.settings'
 import django
 django.setup()
