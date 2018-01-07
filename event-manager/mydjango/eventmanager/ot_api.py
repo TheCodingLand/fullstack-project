@@ -127,7 +127,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = r'%s/events/%s' % (self.url, id)
-       req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.post(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
