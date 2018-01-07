@@ -23,7 +23,6 @@ class ot_api_event(object):
         return event.ot_id
 
     def execute(self, method, url, payload):
-
         if ENABLED:
             if method not in ['get', 'post', 'put']:
                 log.error('invalid method %s' % method)
@@ -31,6 +30,7 @@ class ot_api_event(object):
             if method == 'post':
                 req = requests.post(url, json=payload, headers=self.headers)
             if method == 'put':
+                log.error('updating %s' % payload)
                 req = requests.put(url, json=payload, headers=self.headers)
             if method == 'get':
                 req = requests.get(url, headers=self.headers)
@@ -42,7 +42,7 @@ class ot_api_event(object):
                 log.info(req.status_code)
                 return req
             if req.status_code == 404:
-                log.info(req.status_code)
+                log.error("%s not found %s" % (req.status_code, url))
                 return False
             if req.status_code == 400:
                 log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
@@ -151,7 +151,7 @@ class ot_api_event(object):
 
         payload = {'Call Finished Date': '%s' % call.end }
 
-        url = '%s/events/%s' % (self.url, event.ot_id)
+        url = '%s/event/%s' % (self.url, event.ot_id)
 
         req = self.execute('put', url, payload)
 
