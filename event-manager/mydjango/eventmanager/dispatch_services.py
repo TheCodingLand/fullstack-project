@@ -67,7 +67,7 @@ class dispatch(object):
         return True
 
     def transfer_call(self, id, timestamp, destination):
-        log.error('managing a transfer')
+
         redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
