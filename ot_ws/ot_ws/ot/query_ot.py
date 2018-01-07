@@ -38,7 +38,7 @@ class query_ot():
             for f in requiredFields:
                 required = r'<RequiredField>%s</RequiredField>' % (f)
 
-        self.body = "%s%s</Get>" (self.body, required)
+        self.body = "%s%s</Get>" % (self.body, required)
 
         self.command = "GetObjectList"
         self.send()
