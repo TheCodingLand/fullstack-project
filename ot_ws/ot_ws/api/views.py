@@ -216,6 +216,7 @@ class EventItemUCID(Resource):
             e.GetEventByUCID(event_ucid)
             result = serialize(e.xml_result.decode("utf-8"))
             event = result.results[0].res
+            id = result.results[0].id
             # event = test()
             if not event:
                 return response_object, 404
@@ -236,7 +237,7 @@ class EventItemUCID(Resource):
             else:
                 response_object = {
                     'status': 'success',
-                    'id': result.id,
+                    'id': id,
                     'data': event
                 }
                 return response_object, 200

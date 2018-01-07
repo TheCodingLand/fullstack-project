@@ -36,12 +36,14 @@ class query_ot():
         if requiredFields != []:
             required = ""
             for f in requiredFields:
-                required = '<RequiredField>%s</RequiredField>' % (f)
+                required = r'<RequiredField>%s</RequiredField>' % (f)
 
         self.body = "%s%s</Get>" (self.body, required)
 
         self.command = "GetObjectList"
         self.send()
+        logging.error(self.xml)
+        logging.error(self.xml_result)
 
     def get(self, id):
         self.id = id
