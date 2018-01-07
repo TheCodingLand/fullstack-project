@@ -149,12 +149,13 @@ class ot_api_event(object):
         except ObjectDoesNotExist:
             return False
 
-        payload = {'Call Finished Date': '%s' % call.end }
+        if event.ot_id is None:
+            log.error("no OT ID in event !!")
+            return False
 
-        url = '%s/event/%s' % (self.url, event.ot_id)
-
+        url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
+        payload = {"Call Finished Date": "%s" % call.end}
         req = self.execute('put', url, payload)
-
 
         if req == False:
             log.error("could do the updates ! ")
