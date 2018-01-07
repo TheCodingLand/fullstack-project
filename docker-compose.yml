@@ -16,12 +16,37 @@ services:
     - "3000"  
     - "3001"
 
+
+
+ event-manager-ot:
+  env_file:
+     - prod_env
+  environment:
+     - MODE=BACKEND
+  restart: always
+  build: ./event-manager/
+  expose:
+    - "8888"
+  links:
+    - postgres:postgres
+    - redis:redis
+  working_dir: /data/event-manager/mydjango
+  volumes:
+    - ./event-manager:/data/event-manager
+  #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8888'
+  depends_on:
+   - redis
+   - event-manager
+   - postgres
+
  event-manager:
   env_file:
      - prod_env
+  environment:
+     - MODE=FRONTEND
   restart: always
   build: ./event-manager/
-  
   expose:
     - "8000"
   links:
