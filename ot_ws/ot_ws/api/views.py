@@ -459,7 +459,7 @@ class TicketMod(Resource):
 @ns.route('/object/<int:objectid>')
 class ObjectFields(Resource):
     @api.response(201, 'object found')
-    @api.expect(filterwithfields)
+    @api.expect(GetWithFields)
     def post(self, objectid):
 
         post_data = request.get_json()

@@ -48,7 +48,7 @@ genericfilter = api.model('GenericFilter:', {
     'requiredfields': fields.List(fields.String(description='fields to return')),
 })
 
-getWithFields = api.model('GetWithFields:', {
+GetWithFields = api.model('GetWithFields:', {
     'objectclass': fields.String(description='object class as known in the ot API models.py file'),
     'requiredfields': fields.List(fields.String(description='fields to return')),
 })
