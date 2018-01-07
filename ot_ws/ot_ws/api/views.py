@@ -131,6 +131,7 @@ class EventAdd(Resource):
                 'message': 'Invalid payload parsing fields.'
             }
             return response_object, 400
+
         try:
             r = query_ot()
 

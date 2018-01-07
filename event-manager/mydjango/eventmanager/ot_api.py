@@ -26,7 +26,7 @@ class ot_api_event(object):
 
         log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         log.error(req.text)
         try:
@@ -42,7 +42,7 @@ class ot_api_event(object):
         payload = {"UCID": "%s" %
                    ucid, "Applicant": "Centrale", "Source": "Call Incoming"}
         url = 'http://ot-ws:5000/api/ot/events'
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         data = req.json()
         try:
@@ -65,7 +65,7 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/events/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            req = requests.post(url, data=json.dumps(
+            req = requests.post(url, json=json.dumps(
                 payload), headers=self.headers)
 
         event = Event.objects.get_or_create(ot_id=id)[0]
@@ -90,7 +90,7 @@ class ot_api_event(object):
     def updateResponsible(self, call, agent):
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -101,7 +101,7 @@ class ot_api_event(object):
     def updateEndDate(self, call):
         payload = {"Call Finished Date": "%s" % call.end}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
 
         if req.status_code == 404:
@@ -113,7 +113,7 @@ class ot_api_event(object):
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -124,7 +124,7 @@ class ot_api_event(object):
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -135,7 +135,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, data=json.dumps(
+        req = requests.post(url, json=json.dumps(
             payload), headers=self.headers)
         if req.status_code == 404:
             return False
@@ -151,7 +151,7 @@ class ot_api_event(object):
                        agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
 
             url = '%s/events/%s' % (self.url, id)
-            req = requests.post(url, data=json.dumps(
+            req = requests.post(url, json=json.dumps(
                 payload), headers=self.headers)
             if req.status_code == 404:
                 return False
@@ -165,7 +165,7 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
-            req = requests.post(url, data=json.dumps(
+            req = requests.post(url, json=json.dumps(
                 payload), headers=self.headers)
             data = req.json()
             agent.ot_userdisplayname = data['Agent']['Title']
