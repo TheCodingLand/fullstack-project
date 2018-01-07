@@ -57,7 +57,7 @@ class ot_api_event(object):
                 return False
 
         else:
-            log.info('API DISABLED')
+            log.error('API DISABLED')
             return False
 
     def get_ot_id_from_ucid(self, ucid):
