@@ -1,0 +1,16 @@
+OMNITRACKER_API_URL=http://otrcsl01.rcsl.lu/otws/v1.asmx
+OMNITRACKER_API_ENABLED=FALSE
+APP_SETTINGS=ot_ws.config.DevelopmentConfig
+
+
+PROJECT_URL=localhost
+API_URL=localhost
+
+
+
+CREATE_SUPER_USER=TRUE
+SUPER_USER=root
+SUPER_USER_PASSWORD=test1234
+SUPER_USER_EMAIL=admin@example.com
+
+

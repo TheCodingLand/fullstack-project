@@ -1,0 +1,159 @@
+version: '2.1'
+
+services:
+ web:
+  env_file:
+     - prod_env
+  build: ./frontend-react/
+  ports:
+    - "3000"
+    - "3001"
+  links:
+    - redis
+  working_dir : /usr/src/app
+  command: sh -c 'npm start && node run redis.jsx'
+  expose:
+    - "3000"  
+    - "3001"
+
+ event-manager-ot:
+  env_file:
+     - prod_env
+  environment:
+     - MODE=OMNITRACKER
+  restart: always
+  build: ./event-manager/
+  expose:
+    - "8888"
+  links:
+    - postgres:postgres
+    - redis:redis
+  working_dir: /data/event-manager/mydjango
+  volumes:
+    - ./event-manager:/data/event-manager
+  #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8888'
+  depends_on:
+   - redis
+   - postgres
+
+ event-manager:
+  env_file:
+     - prod_env
+  environment:
+     - MODE=FRONTEND
+  restart: always
+  build: ./event-manager/
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+    - redis:redis
+  working_dir: /data/event-manager/mydjango
+  volumes:
+    - ./event-manager:/data/event-manager
+  #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  command: sh -c 'gunicorn mydjango.wsgi:application -w 2 -b :8000'
+  depends_on:
+   - redis
+   - postgres
+   - event-manager-ot
+  
+ nginx:
+  restart: always
+  env_file:
+     - prod_env
+  build: ./nginx/
+  ports:
+    - "8099:80"
+    - "8098:8001"
+  volumes_from:
+    - event-manager
+  links:
+    - event-manager:event-manager
+    - web:web
+
+ postgres:
+  restart: always
+  env_file:
+     - prod_env
+  image: postgres:latest
+  volumes:
+    - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    - ./backups/postgresql:/backup
+  expose:
+    - "5432"
+
+ php-redis-admin:
+  env_file:
+     - prod_env
+  image: faktiva/php-redis-admin
+  container_name: pra
+  environment:
+   - PHPREDMIN_DATABASE_REDIS_0_HOST=redis
+  ports:
+   - "8093:80"
+  depends_on:
+   - redis
+    
+ redis:
+  env_file:
+     - prod_env
+  restart: always
+  image: redis:latest
+  expose:
+    - "6379"
+  ports:
+    - "6379:6379"
+  volumes:
+   - ./redis:/data
+ 
+
+ logreader-tel:
+  env_file:
+     - prod_env
+  container_name: logreader-tel
+  build: ./logreader
+  volumes:
+   - './logreader:/usr/src/app'
+   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
+  environment:
+   - LOGFILE=/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000
+  depends_on:
+   - redis
+
+ logreader-agent:
+  env_file:
+     - prod_env
+  container_name: logreader-agent
+  build: ./logreader
+  volumes:
+   - './logreader:/usr/src/app'
+   - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
+  environment:
+   - LOGFILE=/media/callcenter/DIAGS/PresenceServer_ccrcsl02.000
+  depends_on:
+   - redis
+   
+ ot-ws:
+  env_file:
+     - prod_env
+  container_name: ot-ws
+  build: ./ot_ws
+  volumes:
+   - './ot_ws:/usr/src/app'
+  ports:
+   - 5001:5000 # expose ports - HOST:CONTAINER
+      
+ swagger:
+  env_file:
+     - prod_env
+  container_name: swagger
+  build: ./swagger
+  ports:
+   - '5100:8080' # expose ports - HOST:CONTAINER
+  environment:
+   - API_URL=http://148.110.107.15:5001/api/ot/schema
+  depends_on:
+   ot-ws:
+    condition: service_started
