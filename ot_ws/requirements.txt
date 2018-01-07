@@ -5,3 +5,4 @@ flask-cors==3.0.2
 dateutils
 requests
 flask-restplus
+arrow

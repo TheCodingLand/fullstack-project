@@ -1,7 +1,7 @@
 import dateutil.parser
 import json
 import datetime
-
+import arrow
 from dateutil.parser import parse
 
 
@@ -84,8 +84,7 @@ class DateTimeVal(ot_field):
         return self.value
 
     def fieldXMLString(self):
-        self.value = datetime.datetime.strptime(
-            self.value, '%Y-%m-%d %H:%M:%S.%f')
+        self.value = arrow.get(self.value).datetime
         fieldquery = r'<%s name="%s">%s</%s>' \
             % (self.fieldtype, self.name, self.value.isoformat(), self.fieldtype)
         return fieldquery
