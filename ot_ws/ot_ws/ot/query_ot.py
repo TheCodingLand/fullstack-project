@@ -72,6 +72,7 @@ class query_ot():
             return False
 
     def add(self, model, fields):
+        logging.error("sending object event")
         self.command = "AddObject"
         fieldxml = ""
         # logging.info(fields)

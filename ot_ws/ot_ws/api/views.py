@@ -141,8 +141,10 @@ class EventAdd(Resource):
                     'message': 'event was added!',
                     'event': event
                 }
+
                 return response_object, 201
             else:
+                logging.error(post_data)
                 response_object = {
                     'status': 'fail',
                     'message': 'Sorry. failed.'
@@ -344,7 +346,7 @@ class ObjectFilter(Resource):
     @api.response(201, 'list of objects : ok')
     @api.expect(genericfilter)
     def post(self):
-        time.sleep(1)
+
         post_data = request.get_json()
         # log.info(request.get_json())
         try:
