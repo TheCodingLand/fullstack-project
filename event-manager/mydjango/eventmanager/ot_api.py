@@ -43,9 +43,10 @@ class ot_api_event(object):
         url = 'http://ot-ws:5000/api/ot/events'
         req = requests.post(url, json=payload, headers=self.headers)
         data = req.json()
-        print(req.json)
+        log.error(req.json)
+        log.error(req.status_code)
         try:
-            id = data['Event']['id']
+            id = data['Event']
         except KeyError:
             log.error("Could not create Event with payload %s" %
                       json.dumps(payload))
