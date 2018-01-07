@@ -3,7 +3,7 @@ version: '2.1'
 services:
  web:
   env_file:
-     - prod_env
+     - local_env
   build: ./frontend-react/
   ports:
     - "3000"
@@ -18,7 +18,7 @@ services:
 
  event-manager-ot:
   env_file:
-     - prod_env
+     - local_env
   environment:
      - MODE=OMNITRACKER
   restart: always
@@ -39,7 +39,7 @@ services:
 
  event-manager:
   env_file:
-     - prod_env
+     - local_env
   environment:
      - MODE=FRONTEND
   restart: always
@@ -62,7 +62,7 @@ services:
  nginx:
   restart: always
   env_file:
-     - prod_env
+     - local_env
   build: ./nginx/
   ports:
     - "8099:80"
@@ -76,7 +76,7 @@ services:
  postgres:
   restart: always
   env_file:
-     - prod_env
+     - local_env
   image: postgres:latest
   volumes:
     - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
@@ -86,7 +86,7 @@ services:
 
  php-redis-admin:
   env_file:
-     - prod_env
+     - local_env
   image: faktiva/php-redis-admin
   container_name: pra
   environment:
@@ -98,7 +98,7 @@ services:
     
  redis:
   env_file:
-     - prod_env
+     - local_env
   restart: always
   image: redis:latest
   expose:
@@ -111,7 +111,7 @@ services:
 
  logreader-tel:
   env_file:
-     - prod_env
+     - local_env
   container_name: logreader-tel
   build: ./logreader
   volumes:
@@ -124,7 +124,7 @@ services:
 
  logreader-agent:
   env_file:
-     - prod_env
+     - local_env
   container_name: logreader-agent
   build: ./logreader
   volumes:
@@ -137,7 +137,7 @@ services:
    
  ot-ws:
   env_file:
-     - prod_env
+     - local_env
   container_name: ot-ws
   build: ./ot_ws
   volumes:
@@ -147,7 +147,7 @@ services:
       
  swagger:
   env_file:
-     - prod_env
+     - local_env
   container_name: swagger
   build: ./swagger
   ports:
