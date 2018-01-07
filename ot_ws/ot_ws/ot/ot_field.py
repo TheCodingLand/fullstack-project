@@ -1,6 +1,9 @@
 import dateutil.parser
 import json
 import datetime
+from datetime import datetime
+from dateutil.parser import parse
+import pandas as pd
 
 
 def date_handler(obj): return (
@@ -82,6 +85,8 @@ class DateTimeVal(ot_field):
         return self.value
 
     def fieldXMLString(self):
+        self.value = datetime.datetime.strptime(
+            self.value, '%Y-%m-%d %H:%M:%S.%f')
         fieldquery = r'<%s name="%s">%s</%s>' \
             % (self.fieldtype, self.name, self.value.isoformat(), self.fieldtype)
         return fieldquery
