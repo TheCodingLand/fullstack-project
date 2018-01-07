@@ -15,7 +15,7 @@ import django
 django.setup()
 import requests
 from graphqlendpoint.models import Agent
-if os.environ
+
 r = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 log.info("Connected to Redis, Database 2, port 6379")
 if os.getenv("OMNITRACKER_API_ENABLED") == "True":
