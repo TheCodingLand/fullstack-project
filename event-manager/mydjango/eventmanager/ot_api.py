@@ -53,9 +53,9 @@ class ot_api_event(object):
                     method, url, payload))
                 return False
             else:
-                log.error("UNKNOWN API ERROR !! method :%s, url:%s, payload:%s" % (
+                log.error("UNKNOWN API ERROR !! method :%s, url :%s, payload:%s" % (
                     method, url, payload))
-                log.error('api error !')
+                log.error('api error %s!' % req.text)
                 return False
 
         else:
