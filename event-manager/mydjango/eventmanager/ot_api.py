@@ -179,7 +179,7 @@ class ot_api_event(object):
 
     def transfer(self, call, agent):
 
-        self.checkUserStatus()
+        self.checkUserStatus(agent)
 
         if agent.ot_userdisplayname != "":
 
