@@ -43,13 +43,16 @@ class ot_api_event(object):
                 log.info(req.status_code)
                 return False
             if req.status_code == 400:
-                log.error("req.status_code ERROR : 400 !! method :%s, url:%s, payload:%s" % (
+                log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
                     method, url, payload))
                 return False
             if req.status_code == 500:
-                log.error(req.status_code)
+                log.error("ERROR : 500 !! method :%s, url:%s, payload:%s" % (
+                    method, url, payload))
                 return False
             else:
+                log.error("UNKNOWN API ERROR !! method :%s, url:%s, payload:%s" % (
+                    method, url, payload))
                 log.error('api error !')
                 return False
 
