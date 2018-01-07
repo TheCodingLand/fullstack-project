@@ -31,7 +31,7 @@ class query_ot():
     def get(self, id):
         self.id = id
         """Takes ID returns a formatted object"""
-        self.body = r'<Get folderPath="" recursive="true"><Object objectId="%s"/></Get>' % (
+        self.body = r'<Get folderPath="" recursive="false"><Object objectId="%s"/></Get>' % (
             id)
 
         self.command = "GetObjectList"
