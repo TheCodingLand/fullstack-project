@@ -95,7 +95,7 @@ services:
    - './logreader:/usr/src/app'
    - '/media/callcenter/DIAGS:/media/callcenter/DIAGS/'
   environment:
-   - LOGFILE=/media/callcenter/DIAGS/Telephony_ccrcsl02.000
+   - LOGFILE=/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000
   depends_on:
    - redis
 
