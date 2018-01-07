@@ -55,7 +55,7 @@ class ot_api_event(object):
 
         else:
             id = self.put(call.ucid)
-            url = 'http://ot-ws:5000/api/ot/events/%s' % (url, id)
+            url = 'http://ot-ws:5000/api/ot/events/%s' % (id)
             payload = '{"CreationDate": "%s" }' % call.start
             req = requests.post(url, payload, headers={
                                 "Content-Type": "application/json"})
