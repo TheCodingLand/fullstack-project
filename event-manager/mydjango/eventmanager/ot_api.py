@@ -57,7 +57,7 @@ class ot_api_event(object):
                 return False
 
         else:
-            log.error('API DISABLED')
+            log.info('API DISABLED')
             return False
 
     def get_ot_id_from_ucid(self, ucid):
@@ -201,13 +201,13 @@ class ot_api_event(object):
 
     def checkUserStatus(self, agent):
 
-        if agent.ot_userdisplayname == None:
+        if agent.ot_userdisplayname == "":
             log.error("user not defined, getting data from Web service")
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
             req = self.execute('post', url, payload)
-            log.error(req.status_code)
+            log(req.status_code)
             if req == False:
                 log.error("FAILED ! %s")
                 return False
