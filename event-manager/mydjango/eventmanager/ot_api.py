@@ -60,7 +60,7 @@ class ot_api_event(object):
             req = requests.post(url, payload, headers={
                                 "Content-Type": "application/json"})
 
-        event = Event.objects.get_or_create(ot_id=id)
+        event = Event.objects.get_or_create(ot_id=id)[0]
         event.call = call
         log.error("updated call to %s" % event.ot_id)
         event.save()
