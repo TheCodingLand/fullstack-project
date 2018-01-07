@@ -102,17 +102,6 @@ class query_ot():
                 log.error("server response : %s" % logging.error(
                     "could not complete request %s" % self.xml_result))
                 id = 0
-            return id    tree = ET.fromstring(self.xml_result)
-            root = tree \
-                .find('*//{http://www.omninet.de/OtWebSvc/v1}AddObjectResult')
-
-            if root.attrib['success'] == "true":
-                id = root.attrib['objectId']
-            else:
-                log.error("could not complete request %s" % self.xml)
-                log.error("server response : %s" % logging.error(
-                    "could not complete request %s" % self.xml_result))
-                id = 0
             return id
         else:
             log.error("API disabled %s" % self.xml)
