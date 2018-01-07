@@ -52,14 +52,14 @@ class query_ot():
         self.id = id
         self.command = "ModifyObject"
         fieldxml = ""
-        # logging.info(fields)
+        logging.error(fields)
         for field in fields:
             fieldxml = "%s%s" % (fieldxml, field.fieldXMLString())
-        # logging.info(fieldxml)
+
         self.body = r'%s<Object objectId="%s">' % (
             self.id, self.body) + r'%s' % fieldxml
         self.body = '%s</Object>' % self.body
-
+        logging.error(self.body)
         self.send()
 
         tree = ET.fromstring(self.xml_result)
