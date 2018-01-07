@@ -481,7 +481,7 @@ class ObjectFields(Resource):
             log.error("pulling object %s with field %s" %
                       (objectid, post_data.get('requiredfields')))
             id = items.results[0].id
-            data = items.result[0].res
+            data = items.results[0].res
 
             if data:
                 response_object = {
