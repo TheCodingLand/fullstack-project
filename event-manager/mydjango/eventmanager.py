@@ -48,7 +48,7 @@ except:
 
 
 def getAddedCalls():
-    for key in r.scan_iter(match='*'):
+    for key in r.keys('*'):
         try:
             c = r.hgetall(key)
         except redis.exceptions.ResponseError:
