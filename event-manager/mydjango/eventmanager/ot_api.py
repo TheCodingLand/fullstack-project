@@ -149,7 +149,7 @@ class ot_api_event(object):
             return False
 
         payload = {"Call Finished Date": "%s" % call.end}
-        url = '%s/event/%s' % (self.url, id)
+        url = '%s/event/%s' % (self.url, event.ot_id)
         req = self.execute('put', url, payload)
 
 
