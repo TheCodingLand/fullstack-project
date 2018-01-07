@@ -179,6 +179,8 @@ class ot_api_event(object):
 
     def transfer(self, call, agent):
 
+        self.checkUserStatus()
+
         if agent.ot_userdisplayname != "":
 
             payload = {"Applicant": "%s" % agent.ot_userdisplayname, "Responsible": "%s" %
