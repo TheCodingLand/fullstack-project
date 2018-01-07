@@ -183,7 +183,8 @@ class ot_api_event(object):
 
     def transfer(self, call, agent):
 
-        self.checkUserStatus(agent)
+        if agent.isQueueLine == False:
+            self.checkUserStatus(agent)
 
         if agent.ot_userdisplayname != "":
             if agent.isQueueLine == False:
