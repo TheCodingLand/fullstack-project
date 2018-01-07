@@ -6,7 +6,7 @@ log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
 ENABLED = False
-if os.getenv("OMNITRACKER_API_ENABLED") == "True":
+if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
     ENABLED = True
 
 
@@ -203,7 +203,6 @@ class ot_api_event(object):
             if req == False:
                 return False
             else:
-
                 data = req.json()
                 agent.ot_userdisplayname = data['Agent']['Title']
                 if data['status'] == "success":
