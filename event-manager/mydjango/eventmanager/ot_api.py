@@ -136,9 +136,9 @@ class ot_api_event(object):
             return True
 
     def transfer(self, call, agent):
-        self.checkUserStatus(agent)
 
         if agent.ot_userdisplayname != "":
+
             payload = '{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (
                 call.history, agent.displayname)
             url = '%s/events/%s' % (self.url, id)
@@ -152,19 +152,19 @@ class ot_api_event(object):
             return False
 
     def checkUserStatus(self, agent):
-
-        url = '%s/objects' % self.url
-        payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [{ "name": "Phone", "value": "-%s"}], "requiredfields": [] }' % agent.ext
-        req = requests.post(url, payload, headers={
-                            "Content-Type": "application/json"})
-        data = req.json()
-        agent.ot_userdisplayname = data['Agent']['Title']
-        if data['status'] == "success":
-            for item in data['Agent'][0]:
-                agent.ot_id = item['id']
-                agent.firstname = item['data']['FirstName']
-                agent.lastname = item['data']['LastName']
-                agent.ot_userloginname = item['data']['Login Name']
-                agent.ot_userdisplayname = item['data']['Title']
-                agent.email = item['data']['Email Address']
-                agent.save()
+        if agent.ot_userdisplayname == "":
+            url = 'http://ot-ws:5000/api/ot/objects'
+            payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [ { "name": "Phone", "value": "-%s" } ], "requiredfields": [] }' % agent.ext
+            req = requests.post(url, payload, headers={
+                                "Content-Type": "application/json"})
+            data = req.json()
+            agent.ot_userdisplayname = data['Agent']['Title']
+            if data['status'] == "success":
+                for item in data['Agent'][0]:
+                    agent.ot_id = item['id']
+                    agent.firstname = item['data']['FirstName']
+                    agent.lastname = item['data']['LastName']
+                    agent.ot_userloginname = item['data']['Login Name']
+                    agent.ot_userdisplayname = item['data']['Title']
+                    agent.email = item['data']['Email Address']
+                    agent.save()
