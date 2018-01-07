@@ -469,7 +469,8 @@ class ObjectFields(Resource):
             r = query_ot()
             # log.info(post_data)
 
-            objectlist = r.getWithFields(id, post_data.get('requiredfields'))
+            objectlist = r.getWithFields(
+                objectid, post_data.get('requiredfields'))
 
             items = serialize(r.xml_result.decode("utf-8")).results
             results = []
