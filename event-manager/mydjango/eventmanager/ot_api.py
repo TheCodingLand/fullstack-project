@@ -33,7 +33,7 @@ class ot_api_event(object):
         return id
 
     def put(self, ucid):
-        payload = '{ "UCID": "%s", "Applicant": "Centrale", "Responsible": "Centrale", "Source": "Call Incoming" }' % ucid
+        payload = '{ "UCID": "%s", "Applicant": "Centrale", "Source": "Call Incoming" }' % ucid
         url = 'http://ot-ws:5000/api/ot/events'
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
