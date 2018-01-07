@@ -27,7 +27,7 @@ class ot_api_event(object):
         log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
         req = requests.post(url, json=payload, headers=self.headers)
-        log.error(req.text)
+        
         try:
             data = req.json()
             id = data['Event'][0]['id']
@@ -43,8 +43,7 @@ class ot_api_event(object):
         url = 'http://ot-ws:5000/api/ot/events'
         req = requests.put(url, json=payload, headers=self.headers)
         data = req.json()
-        log.error(req.json())
-        log.error(req.status_code)
+        
         try:
             id = data['event']
         except KeyError:
@@ -66,6 +65,9 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/events/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
             req = requests.post(url, json=payload, headers=self.headers)
+            log.error(req.json())
+            log.error(req.status_code)
+            log.error(req.text)
 
         event = Event.objects.get_or_create(ot_id=id)[0]
         event.call = call
