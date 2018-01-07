@@ -140,7 +140,7 @@ class ot_api_event(object):
         if agent.ot_userdisplayname != "":
 
             payload = '{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (
-                call.history, agent.displayname)
+                call.history, agent.ot_userdisplayname)
             url = '%s/events/%s' % (self.url, id)
             req = requests.post(url, payload, headers={
                                 "Content-Type": "application/json"})
