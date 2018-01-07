@@ -28,6 +28,21 @@ class query_ot():
         self.result = ""
         self.id = ""
 
+    def getWithFields(self, id, requiredFields):
+        self.id = id
+        """Takes ID returns an object with specific fields formatted object"""
+        self.body = r'<Get folderPath="" recursive="false"><ObjectIDs objectIDs="%s"/>' % (
+            id)
+        if requiredFields != []:
+            required = ""
+            for f in requiredFields:
+                required = '<RequiredField>%s</RequiredField>' % (f)
+
+        self.body = "%s%s</Get>" (self.body, required)
+
+        self.command = "GetObjectList"
+        self.send()
+
     def get(self, id):
         self.id = id
         """Takes ID returns a formatted object"""

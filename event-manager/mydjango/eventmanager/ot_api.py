@@ -232,10 +232,27 @@ class ot_api_event(object):
                         agent.save()
 
     def getTicketFromEvent(self, event):
-        if event.ot_id != None:
-            req = self.execute(
-                'get', 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id, "")
+        if event.ot_id == None:
+            return False
+        req = self.execute(
+            'get', 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id, "")
+        if req == False:
+            return False
+        data = req.json()
+        ticket_id = data['data']['RelatedIncident']
+        ticket = Ticket.get_or_create(ot_id=ticket_id)[0]
+        event.ticket = ticket
+        event.save()
 
-            #ticket_id = data['Event'][0]['data']
-            # event.ticket_id=ot_ticket
-            # event.save()
+        req = self.execute(
+            'get', 'http://ot-ws:5000/api/ot/ticket/%s' % ticket_id, "")
+
+        data = req.json()
+
+        ticket.title = data['data']['Title']
+        ticket.creationdate = CreationDate
+        ticket.category = AssociatedCategory
+        ticket.applicant = Applicant
+        ticket.responsible = Responsible
+        ticket.state = State
+        ticket.solution

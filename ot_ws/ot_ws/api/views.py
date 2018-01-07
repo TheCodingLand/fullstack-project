@@ -453,3 +453,47 @@ class TicketMod(Resource):
             'message': 'Internal server error.'
         }
         return response_object, 500
+
+
+@api.response(400, 'failed.')
+@ns.route('/object/<int:objectid>')
+class ObjectFields(Resource):
+    @api.response(201, 'object found')
+    @api.expect(filterwithfields)
+    def post(self, objectid):
+
+        post_data = request.get_json()
+        # log.info(request.get_json())
+        try:
+            r = query_ot()
+            # log.info(post_data)
+
+            objectlist = r.getWithFields(id, post_data.get('requiredfields'))
+
+            items = serialize(r.xml_result.decode("utf-8")).results
+            results = []
+            for result in items:
+                d = {}
+                d.update({'id': result.id})
+                d.update({'data': result.res})
+                results.append(d)
+
+            if results:
+                response_object = {
+                    'status': 'success',
+                    'message': 'object : :',
+                    '%s' % post_data.get('objectclass'): results
+                }
+                return response_object, 201
+            else:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'Sorry. failed.'
+                }
+                return response_object, 400
+        except:
+            response_object = {
+                'status': 'fail',
+                'message': 'Invalid payload.'
+            }
+            return response_object, 400
