@@ -198,7 +198,7 @@ class EventItem(Resource):
                     'data': event
                 }
                 return response_object, 200
-        except ValueError:
+        except ValueError, KeyError:
             return response_object, 404
 
 
