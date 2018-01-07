@@ -207,7 +207,7 @@ class ot_api_event(object):
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
             req = self.execute('post', url, payload)
-
+            log.error(req.status_code)
             if req == False:
                 log.error("FAILED ! %s")
                 return False
