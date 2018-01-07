@@ -119,7 +119,7 @@ class query_ot():
 
     def initQuery(self):
         """puts together hearders qnd command definition for the query"""
-        self.headers = {'Content-Type': 'text/xml', 'charset': 'iso-8859-1',
+        self.headers = {'Content-Type': 'text/xml', 'charset': 'utf-8',
                         'SOAPAction': '"http://www.omninet.de/OtWebSvc/v1/%s"'
                         % (self.command)}
         self.query = self.build()
