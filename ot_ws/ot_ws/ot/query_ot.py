@@ -61,7 +61,8 @@ class query_ot():
         self.body = '%s</Object>' % self.body
         logging.error(self.body)
         self.send()
-
+        logging.error(self.xml)
+        logging.error(self.xmlresult)
         tree = ET.fromstring(self.xml_result)
         root = tree \
             .find('*//{http://www.omninet.de/OtWebSvc/v1}ModifyObjectResponse')
