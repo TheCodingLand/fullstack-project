@@ -11,7 +11,7 @@ class ot_api_event(object):
         self.url = 'http://ot-ws:5000/api/ot/'
 
     def get_ot_id_from_call(self, id):
-        event = Events.object.get(call=call)
+        event = Event.objects.get(call=call)
         return event.ot_id
 
     def get_ot_id_from_ucid(self, ucid):
@@ -37,7 +37,7 @@ class ot_api_event(object):
         id = self.get_ot_id_from_ucid(call.ucid)
         if id:
             log.error("event already in the system, skipping creation")
-            event = Event.object.get_or_create(ot_id=id)
+            event = Event.objects.get_or_create(ot_id=id)
             event.save()
 
         payload = '{ "UCID": call.ucid, "Applicant": "Centrale", "Responsible": "Centale", "Source": "Call Incoming" }'
@@ -54,7 +54,7 @@ class ot_api_event(object):
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
 
-        event = Events.objects.get_or_create(ot_id=id)
+        event = Event.objects.get_or_create(ot_id=id)
         event.call = call
         log.error("updated call to %s" % event.ot_id)
         event.save()
@@ -69,7 +69,7 @@ class ot_api_event(object):
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            event = Events.object.get()
+            event = Event.objects.get()
             log.error("updated applicant to %s" % agent.ot_userdisplayname)
             return True
 
