@@ -1,6 +1,6 @@
 import os
 import logging
-log = logging.RootLogger(logging.INFO)
+
 import redis
 from operator import itemgetter
 import time
@@ -21,9 +21,9 @@ if os.getenv("MODE"):
 if MODE == 'OMNITRACKER':
 
     b = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=5)
-    log.info("Connected to Redis, Database 2, port 6379")
+    logging.warning("Connected to Redis, Database 2, port 6379")
     if os.getenv("OMNITRACKER_API_ENABLED") == "True":
-        log.warning('ENABLED OMNITRACKER API enabled on this host')
+        logging.warning('ENABLED OMNITRACKER API enabled on this host')
 
     while True:
         for key in b.keys('*'):
@@ -37,10 +37,10 @@ if MODE == 'OMNITRACKER':
 
 if MODE == 'FRONTEND':
     os.environ['OMNITRACKER_API_ENABLED'] = 'FALSE'
-    log.warning('FRONDEND MODE')
+    logging.warning('FRONDEND MODE')
     f = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
     b = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=5)
-    log.info("Connected to Redis, Database 2, port 6379")
+    logging.warning("Connected to Redis, Database 2 and 5, port 6379")
 
     while True:
         keys = f.keys('*')
@@ -52,7 +52,7 @@ if MODE == 'FRONTEND':
             s = services.Services(c)
             if s.done == True:
                 backendkeys = b.keys('*')
-                while backendkeys > 5:
+                while len(backendkeys) > 5:
                     # we let the backend catch up
                     time.sleep(0.1)
                     backendkeys = b.keys('*')
