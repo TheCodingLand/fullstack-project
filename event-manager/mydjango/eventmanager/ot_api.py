@@ -20,12 +20,12 @@ class ot_api_event(object):
         payload = '{ "objectclass": "Event", "filter": "EventUCID", "variables": [ { "name": "UCID", "value": "%s" } ], "requiredfields": [] }' % ucid
 
         log.error(payload)
-        url = "%s/objects" % self.url
+        url = 'http://ot-ws:5000/api/ot/objects'
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
         try:
             data = req.json()
-            id = data.get('id')
+            id = data['Event']['id']
         except KeyError:
             log.error("Could not get Event with payload %s" % payload)
             return False
