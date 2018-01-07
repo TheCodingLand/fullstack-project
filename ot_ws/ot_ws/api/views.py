@@ -1,6 +1,6 @@
 # project/api/views.py
 from flask_restplus import Namespace, Resource, fields
-from ot_ws.api.models.apimodels import event, ticket, genericfilter
+from ot_ws.api.models.apimodels import event, ticket, genericfilter, GetWithFields
 import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
