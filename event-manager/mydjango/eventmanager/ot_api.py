@@ -23,7 +23,7 @@ class ot_api_event(object):
     def execute(self, method, url, payload):
 
         if ENABLED:
-            if method not in ['get', 'post', 'put']
+            if method not in ['get', 'post', 'put']:
                 log.error('invalid method %s' % method)
                 return False
             if method == 'post':
@@ -64,9 +64,9 @@ class ot_api_event(object):
 
         # log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
-        self.execute('post', url, payload)
-        self.execute('post', url, payload)
-
+        req = self.execute('post', url, payload)
+        if req == False:
+            return False
         try:
             data = req.json()
             id = data['Event'][0]['id']
@@ -80,7 +80,11 @@ class ot_api_event(object):
         payload = {'UCID': '%s' %
                    ucid, 'Applicant': 'Centrale', 'Source': 'Call Incoming'}
         url = 'http://ot-ws:5000/api/ot/events'
-        self.execute('put', url, payload)
+        req = self.execute('put', url, payload)
+
+        if req == False:
+            return False
+
         data = req.json()
 
         try:
@@ -102,15 +106,12 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            self.execute('put', url, payload)
-            log.error(req.json())
-            log.error(req.status_code)
-            log.error(req.text)
-
-        event = Event.objects.get_or_create(ot_id=id)[0]
-        event.call = call
-        #log.error("updated call to %s" % event.ot_id)
-        event.save()
+            req = self.execute('put', url, payload)
+        if id:
+            event = Event.objects.get_or_create(ot_id=id)[0]
+            event.call = call
+            #log.error("updated call to %s" % event.ot_id)
+            event.save()
         return True
 
         # good to have the same date for the event as the start of the call
@@ -118,62 +119,61 @@ class ot_api_event(object):
     def updateApplicant(self, call, agent):
         payload = {"Applicant": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        self.execute('put', url, payload)
-        if req.status_code == 404:
+        req = self.execute('put', url, payload)
+        if req == False:
             return False
-        elif req.status_code == 200:
-            event = Event.objects.get()
-            log.error("updated applicant to %s" % agent.ot_userdisplayname)
+        else:
+            log.info("updated applicant to %s" % agent.ot_userdisplayname)
             return True
 
     def updateResponsible(self, call, agent):
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
         url = '%s/event/%s' % (self.url, id)
-        self.execute('put', url, payload)
-        if req.status_code == 404:
+        req = self.execute('put', url, payload)
+        if req == False:
             return False
-        elif req.status_code == 200:
-            log.error("updated responsible to %s" % agent.ot_userdisplayname)
+        else:
+            log.info("updated responsible to %s" % agent.ot_userdisplayname)
             return True
 
     def updateEndDate(self, call):
         payload = {"Call Finished Date": "%s" % call.end}
         url = '%s/event/%s' % (self.url, id)
-        self.execute('put', url, payload)
+        req = self.execute('put', url, payload)
 
-        if req.status_code == 404:
+        if req == False:
             return False
-        elif req.status_code == 200:
+        else:
             log.error("updated end date to %s" % agent.ot_userdisplayname)
             return True
 
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
         url = '%s/event/%s' % (self.url, id)
-        self.execute('put', url, payload)
-        if req.status_code == 404:
+        req = self.execute('put', url, payload)
+        if req == False:
             return False
-        elif req.status_code == 200:
+        else:
             log.error("updated event phone number to %s" % call.origin)
             return True
 
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
         url = '%s/event/%s' % (self.url, id)
-        self.execute('put', url, payload)
-        if req.status_code == 404:
+        req = self.execute('put', url, payload)
+        if req == False:
             return False
-        elif req.status_code == 200:
+        else:
             log.error("updated event history to %s" % call.history)
             return True
 
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = '%s/events/%s' % (self.url, id)
-        self.execute('put', url, payload)
-        if req.status_code == 404:
+        req = self.execute('put', url, payload)
+        if req == False:
             return False
-        elif req.status_code == 200:
+        else:
             log.error("updated event type to %s" % call.call_type)
             return True
 
@@ -185,10 +185,10 @@ class ot_api_event(object):
                        agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
-            self.execute('put', url, payload)
-            if req.status_code == 404:
+            req = self.execute('put', url, payload)
+            if req == False:
                 return False
-            elif req.status_code == 200:
+            else:
                 log.error("updated event history to %s" % call.call_type)
                 return True
             return False
@@ -198,15 +198,20 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
-            self.execute('post', url, payload)
-            data = req.json()
-            agent.ot_userdisplayname = data['Agent']['Title']
-            if data['status'] == "success":
-                for item in data['Agent'][0]:
-                    agent.ot_id = item['id']
-                    agent.firstname = item['data']['FirstName']
-                    agent.lastname = item['data']['LastName']
-                    agent.ot_userloginname = item['data']['Login Name']
-                    agent.ot_userdisplayname = item['data']['Title']
-                    agent.email = item['data']['Email Address']
-                    agent.save()
+            req = self.execute('post', url, payload)
+
+            if req == False:
+                return False
+            else:
+
+                data = req.json()
+                agent.ot_userdisplayname = data['Agent']['Title']
+                if data['status'] == "success":
+                    for item in data['Agent'][0]:
+                        agent.ot_id = item['id']
+                        agent.firstname = item['data']['FirstName']
+                        agent.lastname = item['data']['LastName']
+                        agent.ot_userloginname = item['data']['Login Name']
+                        agent.ot_userdisplayname = item['data']['Title']
+                        agent.email = item['data']['Email Address']
+                        agent.save()
