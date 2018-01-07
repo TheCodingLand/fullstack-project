@@ -72,7 +72,7 @@ class query_ot():
             return False
 
     def add(self, model, fields):
-        logging.error("sending object event")
+        log.error("sending object event")
         self.command = "AddObject"
         fieldxml = ""
         # logging.info(fields)
@@ -91,8 +91,8 @@ class query_ot():
         if root.attrib['success'] == "true":
             id = root.attrib['objectId']
         else:
-            logging.error("could not complete request %s" % self.xml)
-            logging.error("server response : %s" % logging.error(
+            log.error("could not complete request %s" % self.xml)
+            log.error("server response : %s" % logging.error(
                 "could not complete request %s" % self.xml_result))
             id = 0
         return id
