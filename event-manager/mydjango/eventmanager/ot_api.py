@@ -43,6 +43,7 @@ class ot_api_event(object):
         url = 'http://ot-ws:5000/api/ot/events'
         req = requests.post(url, json=payload, headers=self.headers)
         data = req.json()
+        print(req.json)
         try:
             id = data['Event']['id']
         except KeyError:
