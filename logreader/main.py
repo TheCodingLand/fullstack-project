@@ -8,7 +8,7 @@ import threading
 import sys
 
 if os.getenv('LOGFILE'):
-    logfile = '/media/callcenter/DIAGS/%s'% os.environ['LOGFILE']
+    logfile = '/media/callcenter/DIAGS/%s' % os.environ['LOGFILE']
 else:
     logfile = '/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000'
 
@@ -16,6 +16,8 @@ if 'Telephony' in logfile:
     from project.log_parser.telephony_log import TelephonyLog as Log
 else:
     from project.log_parser.presence_log import PresenceLog as Log
+conn = redis.StrictRedis(host="redis", port=6379, db=2)
+
 
 class parseLog(threading.Thread):
 
@@ -29,15 +31,15 @@ class parseLog(threading.Thread):
         self.oldfilesize = 0
         self.f = ""
         self.percent = 0
-        
+
     def parseline(self):
-        e=Log(self.line)
+        e = Log(self.line)
         e.parse()
-        
+
     def run(self):
         self.f = open(self.LogFile)
         sys.stdout.write("opened file %s" % (self.LogFile))
-        
+
         self.num_lines = sum(1 for line in self.f)
         self.f.close()
         self.f = open(self.LogFile)
@@ -53,12 +55,12 @@ class parseLog(threading.Thread):
             self.line = self.f.readline()
             if self.line != '':
                 self.parseline()
-                time.sleep(.001)
-                self.percent = (self.f.tell()/self.filesize)*100
-                #print('%s : log at line %s %%' % (self.LogFile.split("/")[-1], self.percent))
+                k = conn.keys('*')
+                while k > 15:
+                    time.sleep(0.1)
 
         self.f.close()
 
+
 thread = parseLog(logfile)
 thread.start()
-
