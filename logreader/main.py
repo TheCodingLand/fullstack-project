@@ -56,7 +56,7 @@ class parseLog(threading.Thread):
             if self.line != '':
                 self.parseline()
                 k = conn.keys('*')
-                while len(k) > 15:
+                while len(k) > 5:
                     time.sleep(0.1)
 
         self.f.close()
