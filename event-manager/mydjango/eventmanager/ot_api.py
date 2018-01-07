@@ -17,7 +17,7 @@ class ot_api_event(object):
     def get_ot_id_from_ucid(self, ucid):
         """Temporary as we have two systems injecting events"""
         # log.error(ucid)
-        payload = '{ "objectclass": "Event", "filter": "EventUCID", "variables": [ { "name": "UCID", "value": "%s" } ], "requiredfields": [] }' % ucid
+        payload = r'{ "objectclass": "Event", "filter": "EventUCID", "variables": [ { "name": "UCID", "value": "%s" } ], "requiredfields": [] }' % ucid
 
         log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
@@ -33,7 +33,7 @@ class ot_api_event(object):
         return id
 
     def put(self, ucid):
-        payload = '{ "UCID": "%s", "Applicant": "Centrale", "Source": "Call Incoming" }' % ucid
+        payload = r'{ "UCID": "%s", "Applicant": "Centrale", "Source": "Call Incoming" }' % ucid
         url = 'http://ot-ws:5000/api/ot/events'
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
@@ -68,7 +68,7 @@ class ot_api_event(object):
         # good to have the same date for the event as the start of the call
 
     def updateApplicant(self, call, agent):
-        payload = '{"Applicant": "%s"}' % agent.ot_userdisplayname
+        payload = r'{"Applicant": "%s"}' % agent.ot_userdisplayname
         url = '%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
@@ -80,7 +80,7 @@ class ot_api_event(object):
             return True
 
     def updateResponsible(self, call, agent):
-        payload = '{"Responsible": "%s"}' % agent.ot_userdisplayname
+        payload = r'{"Responsible": "%s"}' % agent.ot_userdisplayname
         url = '%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
@@ -91,8 +91,8 @@ class ot_api_event(object):
             return True
 
     def updateEndDate(self, call):
-        payload = '{"Call Finished Date": "%s"}' % call.end
-        url = '%s/events/%s' % (self.url, id)
+        payload = r'{"Call Finished Date": "%s"}' % call.end
+        url = r'%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
 
@@ -103,8 +103,8 @@ class ot_api_event(object):
             return True
 
     def updateEventPhoneNumber(self, call):
-        payload = '{"Phone Number": "%s"}' % call.origin
-        url = '%s/events/%s' % (self.url, id)
+        payload = r'{"Phone Number": "%s"}' % call.origin
+        url = r'%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
         if req.status_code == 404:
@@ -114,7 +114,7 @@ class ot_api_event(object):
             return True
 
     def updateEventHistory(self, call):
-        payload = '{"TransferHistory": "%s"}' % call.history
+        payload = r'{"TransferHistory": "%s"}' % call.history
         url = '%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
@@ -125,21 +125,21 @@ class ot_api_event(object):
             return True
 
     def updateEventType(self, call):
-        payload = '{"Title": "%s"}' % call.call_type
-        url = '%s/events/%s' % (self.url, id)
+        payload = r'{"Title": "%s"}' % call.call_type
+        url = r'%s/events/%s' % (self.url, id)
         req = requests.post(url, payload, headers={
                             "Content-Type": "application/json"})
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
-            log.error("updated event history to %s" % call.call_type)
+            log.error("updated event type to %s" % call.call_type)
             return True
 
     def transfer(self, call, agent):
 
         if agent.ot_userdisplayname != "":
 
-            payload = '{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (
+            payload = r'{"Applicant": "%s", "Responsible" : "%s", "TransferHistory": "%s"}' % (
                 agent.ot_userdisplayname, agent.ot_userdisplayname, call.history)
             url = '%s/events/%s' % (self.url, id)
             req = requests.post(url, payload, headers={
@@ -154,7 +154,7 @@ class ot_api_event(object):
     def checkUserStatus(self, agent):
         if agent.ot_userdisplayname == "":
             url = 'http://ot-ws:5000/api/ot/objects'
-            payload = '{ "objectclass": "Agent", "filter": "agentfromext", "variables": [ { "name": "Phone", "value": "-%s" } ], "requiredfields": [] }' % agent.ext
+            payload = r'{ "objectclass": "Agent", "filter": "agentfromext", "variables": [ { "name": "Phone", "value": "-%s" } ], "requiredfields": [] }' % agent.ext
             req = requests.post(url, payload, headers={
                                 "Content-Type": "application/json"})
             data = req.json()
