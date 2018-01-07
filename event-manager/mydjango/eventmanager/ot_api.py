@@ -148,8 +148,10 @@ class ot_api_event(object):
         except ObjectDoesNotExist:
             return False
 
-        payload = {"Call Finished Date": "%s" % call.end}
-        url = '%s/event/%s' % (self.url, event.ot_id)
+        payload = {'Call Finished Date': '%s' % call.end }
+
+        url = '%s/events/%s' % (self.url, event.ot_id)
+
         req = self.execute('put', url, payload)
 
 
