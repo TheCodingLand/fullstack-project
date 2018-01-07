@@ -200,7 +200,9 @@ class ot_api_event(object):
             return False
 
     def checkUserStatus(self, agent):
+
         if agent.ot_userdisplayname == "":
+            log.error("user not defined, getting data from Web service")
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "agentfromext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
@@ -211,7 +213,6 @@ class ot_api_event(object):
                 return False
             else:
                 data = req.json()
-                agent.ot_userdisplayname = data['Agent']['Title']
                 if data['status'] == "success":
                     for item in data['Agent'][0]:
                         agent.ot_id = item['id']
