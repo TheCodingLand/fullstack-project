@@ -32,6 +32,19 @@ class ot_api_event(object):
             return False
         return id
 
+    def put(self, ucid):
+        payload = '{ "UCID": "%s", "Applicant": "Centrale", "Responsible": "Centale", "Source": "Call Incoming" }' % ucid
+        url = 'http://ot-ws:5000/api/ot/events'
+        req = requests.post(url, payload, headers={
+                            "Content-Type": "application/json"})
+        data = req.json()
+        try:
+            id = data['Event']['id']
+        except KeyError:
+            log.error("Could not create Event with payload %s" % payload)
+            return False
+        return id
+
     def create(self, call):
 
         id = self.get_ot_id_from_ucid(call.ucid)
@@ -40,19 +53,12 @@ class ot_api_event(object):
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.save()
 
-        payload = '{ "UCID": call.ucid, "Applicant": "Centrale", "Responsible": "Centale", "Source": "Call Incoming" }'
-        url = 'http://ot-ws:5000/api/ot/events'
-        req = requests.post(url, payload, headers={
-                            "Content-Type": "application/json"})
-        try:
-            id = req.get('id')
-        except KeyError:
-            log.error("Could not create Event with payload %s" % payload)
-            return False
-        url = "%s/%s" % (url, id)
-        payload = {"CreationDate": call.start}
-        req = requests.post(url, payload, headers={
-                            "Content-Type": "application/json"})
+        else:
+            id = self.put(call.ucid)
+            url = 'http://ot-ws:5000/api/ot/events/%s' % (url, id)
+            payload = '{"CreationDate": "%s" }' % call.start
+            req = requests.post(url, payload, headers={
+                                "Content-Type": "application/json"})
 
         event = Event.objects.get_or_create(ot_id=id)
         event.call = call
