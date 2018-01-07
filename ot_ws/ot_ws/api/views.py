@@ -472,19 +472,20 @@ class ObjectFields(Resource):
             objectlist = r.getWithFields(
                 objectid, post_data.get('requiredfields'))
 
-            items = serialize(r.xml_result.decode("utf-8")).results
-            results = []
-            for result in items:
-                d = {}
-                d.update({'id': result.id})
-                d.update({'data': result.res})
-                results.append(d)
+            items = serialize(r.xml_result.decode("utf-8"))
 
-            if results:
+            if items.results == []:
+                return response_object, 404
+
+            id = items.results[0].id
+            data = items.result[0].res
+
+            if data:
                 response_object = {
                     'status': 'success',
-                    'message': 'object : :',
-                    '%s' % post_data.get('objectclass'): results
+                    'message': 'object :',
+                    'id': id,
+                    'data': results
                 }
                 return response_object, 201
             else:
