@@ -77,7 +77,7 @@ class ot_api_event(object):
     def updateApplicant(self, call, agent):
         payload = {"Applicant": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -88,7 +88,7 @@ class ot_api_event(object):
     def updateResponsible(self, call, agent):
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -98,7 +98,7 @@ class ot_api_event(object):
     def updateEndDate(self, call):
         payload = {"Call Finished Date": "%s" % call.end}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
 
         if req.status_code == 404:
             return False
@@ -109,7 +109,7 @@ class ot_api_event(object):
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -119,7 +119,7 @@ class ot_api_event(object):
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
         url = '%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -129,7 +129,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = r'%s/events/%s' % (self.url, id)
-        req = requests.post(url, json=payload, headers=self.headers)
+        req = requests.put(url, json=payload, headers=self.headers)
         if req.status_code == 404:
             return False
         elif req.status_code == 200:
@@ -144,7 +144,7 @@ class ot_api_event(object):
                        agent.ot_userdisplayname, "TransferHistory": "%s" % call.history}
 
             url = '%s/events/%s' % (self.url, id)
-            req = requests.post(url, json=payload, headers=self.headers)
+            req = requests.put(url, json=payload, headers=self.headers)
             if req.status_code == 404:
                 return False
             elif req.status_code == 200:
