@@ -322,7 +322,7 @@ class ot_api_event(object):
         event.phone=data['data']['Phone Number']
         event.end =data['data']['Call Finished Date']
         ticket_id = data['data']['RelatedIncident']
-        ticket = Ticket.get_or_create(ot_id=ticket_id)[0]
+        ticket = Ticket.objects.get_or_create(ot_id=ticket_id)[0]
         event.ticket = ticket
         event.save()
 
