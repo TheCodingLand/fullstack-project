@@ -369,7 +369,7 @@ class ot_api_event(object):
                 return None
             data = req.json()
             log.error(data)
-            cat.title = data['data']['State']
+            cat.title = data['data']['Title']
             cat.seachcode= data['data']['SearchCode']
             cat.predecessor= data['data']['Predecessor']
             cat.save()
