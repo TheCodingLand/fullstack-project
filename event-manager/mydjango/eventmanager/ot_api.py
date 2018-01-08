@@ -7,15 +7,54 @@ log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
 import json
 ENABLED = False
-
+headers = {'Content-type': 'application/json',
+                        'Accept': 'text/plain'}
 if os.getenv("OMNITRACKER_API_ENABLED") == "TRUE":
     ENABLED = True
 
+def execute(method, url, payload):
+    if ENABLED:
+        if method == 'post':
+            req = requests.post(url, json=payload,headers=headers)
+        if method == 'put':
+            req = requests.put(url, json=payload,headers=headers)
+        if method == 'get':
+            req = requests.get(url, headers=headers)
+
+        if req.status_code == 201:
+            log.info(req.status_code)
+            return req
+        if req.status_code == 200:
+            log.info(req.status_code)
+            return req
+        if req.status_code== 301:
+            log.info(req.status_code)
+            return req
+        if req.status_code == 404:
+            if "Call Finished Date" in payload.keys():
+                log.error("%s not found %s, %s" % (req.status_code, url, req.text))
+            return False
+        if req.status_code == 400:
+            log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
+                method, url, json.dumps(payload)))
+            return False
+        if req.status_code == 500:
+            log.error("ERROR : 500 !! method :%s, url:%s, payload:%s" % (
+                method, url, payload))
+            return False
+        else:
+            log.error("UNKNOWN API ERROR !! method :%s, url :%s, payload:%s" % (
+                method, url, payload))
+            log.error('api error %s!' % req.text)
+            return False
+
+    else:
+        log.info('API DISABLED')
+        return False
 
 class ot_api_event(object):
     def __init__(self):
-        self.headers = {'Content-type': 'application/json',
-                        'Accept': 'text/plain'}
+
         self.url = 'http://ot-ws:5000/api/ot/'
 
     def get_ot_id_from_call(self, call):
@@ -24,20 +63,10 @@ class ot_api_event(object):
 
     def execute(self, method, url, payload):
         if ENABLED:
-
-            if method not in ['get', 'post', 'put']:
-                log.error('invalid method %s' % method)
-                return False
-
             if method == 'post':
-                req = requests.post(url, json=payload)
+                req = requests.post(url, json=payload,headers=self.headers)
             if method == 'put':
-
-                #log.error('updating %s' % payload)
-
-                req = requests.put(url, json=payload)
-
-
+                req = requests.put(url, json=payload,headers=self.headers)
             if method == 'get':
                 req = requests.get(url, headers=self.headers)
 
@@ -129,7 +158,7 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            req = self.execute('post', url, payload)
+            req = self.execute('put', url, payload)
         if id:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.call = call
@@ -183,7 +212,7 @@ class ot_api_event(object):
 
         #req = self.execute('get', url, payload)
 
-        req = self.execute('post', url, payload)
+        req = self.execute('put', url, payload)
 
         if req == False:
             log.error("couldn't do the updates ! ")
@@ -203,8 +232,8 @@ class ot_api_event(object):
 
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
-        url = '%s/events%s' % (self.url, id)
-        req = self.execute('post', url, payload)
+        url = '%s/event/%s' % (self.url, id)
+        req = self.execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -214,7 +243,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = '%s/events/%s' % (self.url, id)
-        req = self.execute('post', url, payload)
+        req = self.execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -238,7 +267,7 @@ class ot_api_event(object):
                            "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
-            req = self.execute('post', url, payload)
+            req = self.execute('put', url, payload)
             if req == False:
                 return False
             else:
