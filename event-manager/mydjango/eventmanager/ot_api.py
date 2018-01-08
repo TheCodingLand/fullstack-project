@@ -358,9 +358,10 @@ class ot_api_event(object):
 
 
     def getCategory(self, id):
+
         try:
             cat = Category.objects.get(ot_id=id)
-            return cat
+
         except ObjectDoesNotExist:
             req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id, '')
             if req==False:
@@ -374,7 +375,7 @@ class ot_api_event(object):
             cat.seachcode= data['data']['SearchCode']
             cat.predecessor= data['data']['Predecessor']
             cat.save()
-
+        return cat
 
 
 
