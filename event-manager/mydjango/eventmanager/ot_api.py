@@ -1,6 +1,6 @@
 import os
 import requests
-from graphqlendpoint.models import Agent, Event, Call, Transfer, Ticket
+from graphqlendpoint.models import Agent, Event, Call, Transfer, Ticket, Category
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 log = logging.Logger("EventToOTService")
@@ -354,3 +354,26 @@ class ot_api_event(object):
         ticket.state = data['data']['State']
         ticket.solution = data['data']['SolutionDescription']
         ticket.save()
+
+
+
+    def getCategory(self, id):
+        try:
+            cat = Category.objects.get(ot_id=id)
+            return cat
+        except ObjectDoesNotExist:
+            req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id)
+            if req==False:
+                return False
+            data = req.json()
+            log.error(data)
+            cat = Category()
+            cat.ot_id=id = data['id']
+            cat.title = data['data']['State']
+            cat.seachcode= data['data']['SearchCode']
+            cat.predecessor= data['data']['Predecessor']
+            cat.save
+
+
+
+
