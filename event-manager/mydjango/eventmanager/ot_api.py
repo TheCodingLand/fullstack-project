@@ -58,7 +58,10 @@ class ot_api_event(object):
         self.url = 'http://ot-ws:5000/api/ot/'
 
     def get_ot_id_from_call(self, call):
-        event = Event.objects.get(call=call)
+        try:
+            event = Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return None
         return event.ot_id
 
     def execute(self, method, url, payload):

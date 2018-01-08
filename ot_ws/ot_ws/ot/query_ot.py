@@ -42,8 +42,8 @@ class query_ot():
 
         self.command = "GetObjectList"
         self.send()
-        logging.error(self.xml)
-        logging.error(self.xml_result)
+        #logging.error(self.xml)
+        #logging.error(self.xml_result)
 
     def get(self, id):
         self.id = id
@@ -92,7 +92,7 @@ class query_ot():
             return False
 
     def add(self, model, fields):
-        log.error("sending object event")
+        #log.error("sending object event")
         self.command = "AddObject"
         fieldxml = ""
         # logging.info(fields)
