@@ -129,7 +129,7 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            req = self.execute('put', url, payload)
+            req = self.execute('post', url, payload)
         if id:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.call = call
@@ -182,6 +182,7 @@ class ot_api_event(object):
         payload = {"Call Finished Date": "%s" % call.end}
 
         #req = self.execute('get', url, payload)
+
         req = self.execute('put', url, payload)
 
         if req == False:
@@ -202,8 +203,8 @@ class ot_api_event(object):
 
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
-        url = '%s/event/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        url = '%s/events%s' % (self.url, id)
+        req = self.execute('post', url, payload)
         if req == False:
             return False
         else:
@@ -213,7 +214,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = '%s/events/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        req = self.execute('post', url, payload)
         if req == False:
             return False
         else:
@@ -237,7 +238,7 @@ class ot_api_event(object):
                            "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
-            req = self.execute('put', url, payload)
+            req = self.execute('post', url, payload)
             if req == False:
                 return False
             else:

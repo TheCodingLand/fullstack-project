@@ -393,7 +393,7 @@ class ObjectFilter(Resource):
 class EventMod(Resource):
     @api.response(201, 'object successfully modified.')
     @api.expect(event)
-    def put(self, event_id):
+    def post(self, event_id):
 
         post_data = request.get_json()
         # log.info(post_data)
@@ -427,7 +427,7 @@ class EventMod(Resource):
 class TicketMod(Resource):
     @api.response(201, 'object successfully modified.')
     @api.expect(ticket)
-    def put(self, ticket_id):
+    def post(self, ticket_id):
 
         post_data = request.get_json()
         # log.info(post_data)
