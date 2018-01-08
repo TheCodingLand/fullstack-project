@@ -33,9 +33,10 @@ class ot_api_event(object):
                 req = requests.post(url, json=payload)
             if method == 'put':
 
-                log.error('updating %s' % payload)
+                #log.error('updating %s' % payload)
 
                 req = requests.put(url, json=payload)
+                
 
             if method == 'get':
                 req = requests.get(url, headers=self.headers)
