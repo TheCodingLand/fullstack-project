@@ -183,7 +183,7 @@ class ot_api_event(object):
 
         #req = self.execute('get', url, payload)
 
-        req = self.execute('put', url, payload)
+        req = self.execute('post', url, payload)
 
         if req == False:
             log.error("couldn't do the updates ! ")
