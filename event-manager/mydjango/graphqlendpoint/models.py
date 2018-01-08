@@ -13,7 +13,7 @@ class Category(models.Model):
     title = models.CharField(max_length=200, null=True)
     predecessor = models.CharField(max_length=200,null=True, blank=True)
     searchcode = models.CharField(max_length=200, null=True)
-    ot_id = models.CharField(max_length=200, null=True)
+    ot_id = models.CharField(max_length=200, unique=True  null=True)
 
     def create_from_json(self, data):
         self.title = data.get("Title")
