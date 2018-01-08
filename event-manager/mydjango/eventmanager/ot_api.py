@@ -366,8 +366,6 @@ class ot_api_event(object):
                 return None
             data = req.json()
             log.error(data)
-            cat = Category()
-            cat.ot_id=id = data['id']
             cat.title = data['data']['State']
             cat.seachcode= data['data']['SearchCode']
             cat.predecessor= data['data']['Predecessor']
