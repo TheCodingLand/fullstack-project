@@ -171,7 +171,7 @@ class EventItem(Resource):
         try:
             e = query_ot()
             e.get(event_id)
-            logging.error(e.xml_result.decode("utf-8"))
+            #logging.error(e.xml_result.decode("utf-8"))
             result = serialize(e.xml_result.decode("utf-8"))
             id = result.results[0].id
             event = result.results[0].res
