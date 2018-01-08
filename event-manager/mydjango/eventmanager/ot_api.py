@@ -358,7 +358,7 @@ class ot_api_event(object):
 
 
     def getCategory(self, id):
-        cat = Category.objects.get_or_create(ot_id=id)
+        cat = Category.objects.get_or_create(ot_id=id)[0]
         if cat.title==None:
             req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id, '')
             if req==False:
