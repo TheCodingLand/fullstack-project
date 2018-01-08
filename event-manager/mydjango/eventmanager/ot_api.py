@@ -339,13 +339,13 @@ class ot_api_event(object):
         ticket.creationdate = data['data']['CreationDate']
         ticket.category = self.getCategory(data['data']['AssociatedCategory'])
         try:
-            ticket.applicant =Agent.objects.get(ot_userdisplayname=['data']['Applicant'])
+            ticket.applicant =Agent.objects.get(ot_userdisplayname=data['data']['Applicant'])
 
         except ObjectDoesNotExist:
             ticket.applicant = None
 
         try :
-            ticket.responsible =Agent.objects.get(ot_userdisplayname=['data']['Responsible'])
+            ticket.responsible =Agent.objects.get(ot_userdisplayname=data['data']['Responsible'])
         except ObjectDoesNotExist:
             ticket.applicant = None
 
