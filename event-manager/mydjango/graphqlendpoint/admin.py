@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 # Register your models here.
 
-from graphqlendpoint.models import Agent,Event, Call, Transfer,LoggedInUser, ActiveCalls, Ticket
+from graphqlendpoint.models import Agent,Event, Call, Transfer,LoggedInUser, ActiveCalls, Ticket, Category
         
 class AgentAdmin(admin.ModelAdmin):
 
@@ -20,8 +20,11 @@ class EventAdmin(admin.ModelAdmin):
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'state')
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'searchcode', 'ot_id')
 
 
+admin.site.register(Category, CategoryAdmin)
 
 admin.site.register(Call, CallAdmin)
 admin.site.register(Agent, AgentAdmin)

@@ -3,6 +3,11 @@ import logging
 import redis
 from eventmanager import services
 
+from graphqlendpoint.models import Agent, Event, Call, Transfer, Ticket, Category
+
+cats=Category.ojects.all()
+for cat in cats:
+    cat.delete()
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'mydjango.settings'
 import django
