@@ -308,7 +308,7 @@ class ot_api_event(object):
         if event.ot_id == None:
             return False
         req = execute(
-            'get', 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id, "")
+            'get', 'http://ot-ws:5000/api/ot/events/%s' % event.ot_id, "")
         if req == False:
             return False
         data = req.json()
