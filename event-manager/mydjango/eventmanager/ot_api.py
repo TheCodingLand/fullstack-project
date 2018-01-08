@@ -113,7 +113,7 @@ class ot_api_event(object):
         id = 0
         # log.error(payload)
         url = 'http://ot-ws:5000/api/ot/objects'
-        req = self.execute('post', url, payload)
+        req = execute('post', url, payload)
         if req == False:
             return False
         try:
@@ -132,7 +132,7 @@ class ot_api_event(object):
         url = 'http://ot-ws:5000/api/ot/events'
 
 
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
 
         if req == False:
             return False
@@ -158,7 +158,7 @@ class ot_api_event(object):
             id = self.put(call.ucid)
             url = 'http://ot-ws:5000/api/ot/event/%s' % (id)
             payload = {"CreationDate": "%s" % call.start}
-            req = self.execute('put', url, payload)
+            req = execute('put', url, payload)
         if id:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.call = call
@@ -171,7 +171,7 @@ class ot_api_event(object):
     def updateApplicant(self, call, agent):
         payload = {"Applicant": "%s" % agent.ot_userdisplayname}
         url = '%s/events/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -188,7 +188,7 @@ class ot_api_event(object):
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
 
         url = '%s/event/%s' % (self.url, )
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -210,9 +210,9 @@ class ot_api_event(object):
         url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         payload = {"Call Finished Date": "%s" % call.end}
 
-        #req = self.execute('get', url, payload)
+        #req = execute('get', url, payload)
 
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
 
         if req == False:
             log.error("couldn't do the updates ! ")
@@ -223,7 +223,7 @@ class ot_api_event(object):
     def updateEventPhoneNumber(self, call):
         payload = {"Phone Number": "%s" % call.origin}
         url = '%s/event/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -233,7 +233,7 @@ class ot_api_event(object):
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
         url = '%s/event/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -243,7 +243,7 @@ class ot_api_event(object):
     def updateEventType(self, call):
         payload = {"Title": "%s" % call.call_type}
         url = '%s/events/%s' % (self.url, id)
-        req = self.execute('put', url, payload)
+        req = execute('put', url, payload)
         if req == False:
             return False
         else:
@@ -267,7 +267,7 @@ class ot_api_event(object):
                            "TransferHistory": "%s" % call.history}
 
             url = '%s/event/%s' % (self.url, id)
-            req = self.execute('put', url, payload)
+            req = execute('put', url, payload)
             if req == False:
                 return False
             else:
@@ -282,7 +282,7 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/objects'
             payload = {"objectclass": "Agent", "filter": "userbyext", "variables": [
                 {"name": "Phone", "value": "-%s" % agent.ext}], "requiredfields": []}
-            req = self.execute('post', url, payload)
+            req = execute('post', url, payload)
 
             if req == False:
                 log.error("FAILED ! %s")
@@ -307,7 +307,7 @@ class ot_api_event(object):
 
         if event.ot_id == None:
             return False
-        req = self.execute(
+        req = execute(
             'get', 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id, "")
         if req == False:
             return False
@@ -328,7 +328,7 @@ class ot_api_event(object):
 
         requiredfields= {  'requiredfields': [ 'Title', 'SolutionDescription', 'AssociatedCategory' , 'Applicant',  'Responsible', 'State'] }
 
-        req = self.execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
+        req = execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
 
         data = req.json()
         ticket.title = data['data']['Title']
