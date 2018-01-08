@@ -358,11 +358,8 @@ class ot_api_event(object):
 
 
     def getCategory(self, id):
-
-        try:
-            cat = Category.objects.get(ot_id=id)
-
-        except ObjectDoesNotExist:
+        cat = Category.objects.get_or_create(ot_id=id)
+        if cat.title==None:
             req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id, '')
             if req==False:
                 log.error(req)
