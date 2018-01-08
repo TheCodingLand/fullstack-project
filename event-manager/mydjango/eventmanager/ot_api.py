@@ -337,7 +337,7 @@ class ot_api_event(object):
         log.error(data)
         ticket.title = data['data']['Title']
         ticket.creationdate = data['data']['CreationDate']
-        ticket.category = data['data']['AssociatedCategory']
+        ticket.category = self.getCategory(data['data']['AssociatedCategory'])
         try:
             ticket.applicant =Agent.objects.get(ot_id=['data']['Applicant'])
 
@@ -364,7 +364,7 @@ class ot_api_event(object):
         except ObjectDoesNotExist:
             req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id)
             if req==False:
-                return False
+                return None
             data = req.json()
             log.error(data)
             cat = Category()
@@ -372,7 +372,7 @@ class ot_api_event(object):
             cat.title = data['data']['State']
             cat.seachcode= data['data']['SearchCode']
             cat.predecessor= data['data']['Predecessor']
-            cat.save
+            cat.save()
 
 
 
