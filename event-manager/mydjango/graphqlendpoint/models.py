@@ -11,7 +11,7 @@ class LoggedInUser(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=200, null=True)
-    predecessor = models.IntegerField(null=True, blank=True)
+    predecessor = models.CharField(max_length=200,null=True, blank=True)
     searchcode = models.CharField(max_length=200, null=True)
     ot_id = models.CharField(max_length=200, null=True)
 
