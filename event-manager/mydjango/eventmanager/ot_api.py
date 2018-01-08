@@ -349,8 +349,8 @@ class ot_api_event(object):
         except ObjectDoesNotExist:
             ticket.applicant = None
 
-        ticket.applicant = Agent.object.get(['data']['Applicant'])
-        ticket.responsible = data['data']['Responsible']
+        ticket.applicant = Agent.object.get(ot_userdisplayname=data['data']['Applicant'])
+        ticket.responsible = Agent.object.get(ot_userdisplayname=data['data']['Responsible'])
         ticket.state = data['data']['State']
         ticket.solution = data['data']['SolutionDescription']
         ticket.save()
