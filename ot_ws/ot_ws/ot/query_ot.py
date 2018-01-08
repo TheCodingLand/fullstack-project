@@ -36,7 +36,7 @@ class query_ot():
         if requiredFields != []:
             required = ""
             for f in requiredFields:
-                required = r'<RequiredField>%s</RequiredField>' % (f)
+                required = r'%s<RequiredField>%s</RequiredField>' % (required,f)
 
         self.body = "%s%s</Get>" % (self.body, required)
 
