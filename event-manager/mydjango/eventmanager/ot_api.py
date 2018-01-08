@@ -362,7 +362,7 @@ class ot_api_event(object):
             cat = Category.objects.get(ot_id=id)
             return cat
         except ObjectDoesNotExist:
-            req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id)
+            req = execute('get', 'http://ot-ws:5000/api/ot/ot_objects/%s' % id, '')
             if req==False:
                 return None
             data = req.json()
