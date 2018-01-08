@@ -178,7 +178,7 @@ class ot_api_event(object):
             log.error("no OT ID in event !!")
             return False
 
-        url = 'http://ot-ws:5000/api/ot/event/%s/' % event.ot_id
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         payload = {"Call Finished Date": "%s" % call.end}
 
         #req = self.execute('get', url, payload)
