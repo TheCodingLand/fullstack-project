@@ -36,7 +36,7 @@ class ot_api_event(object):
                 #log.error('updating %s' % payload)
 
                 req = requests.put(url, json=payload)
-                
+
 
             if method == 'get':
                 req = requests.get(url, headers=self.headers)
@@ -44,11 +44,15 @@ class ot_api_event(object):
             if req.status_code == 201:
                 log.info(req.status_code)
                 return req
-            elif req.status_code == 200:
+            if req.status_code == 200:
+                log.info(req.status_code)
+                return req
+            if req.status_code== 301:
                 log.info(req.status_code)
                 return req
             if req.status_code == 404:
-                log.info("%s not found %s" % (req.status_code, url))
+                if "Call Finished Date" in payload.keys():
+                    log.error("%s not found %s, %s" % (req.status_code, url, req.text))
                 return False
             if req.status_code == 400:
                 log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
@@ -181,7 +185,7 @@ class ot_api_event(object):
         req = self.execute('put', url, payload)
 
         if req == False:
-            log.error("could do the updates ! ")
+            log.error("couldn't do the updates ! ")
             return False
         #updating event and tickets
         ot_api_event().getTicketFromEvent(call)
