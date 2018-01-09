@@ -3,7 +3,7 @@
 var redis = require('redis');
 
 
-const redis_host = "148.110.107.15" 
+const redis_host = "redis" 
 
 
 var host= "redis://"+redis_host+":6379";

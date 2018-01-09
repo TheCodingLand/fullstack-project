@@ -11,7 +11,7 @@ services:
   links:
     - redis
   working_dir : /usr/src/app
-  command: sh -c 'npm start && node run redis.jsx'
+  command: sh -c 'npm start && node run redis.js'
   expose:
     - "3000"  
     - "3001"
