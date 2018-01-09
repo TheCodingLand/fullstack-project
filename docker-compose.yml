@@ -11,10 +11,8 @@ services:
   links:
     - redis
   working_dir : /usr/src/app
-  command: sh -c 'npm start && node run redis.js'
-  expose:
-    - "3000"  
-    - "3001"
+  command: sh -c 'npm start && node redis.js'
+ 
 
  event-manager-ot:
   env_file:
@@ -63,7 +61,6 @@ services:
   ports:
     - "8099:80"
     - "8098:8001"
-    - "3001:3001"
   volumes_from:
     - event-manager
   links:
