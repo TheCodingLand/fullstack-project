@@ -1,10 +1,7 @@
 
 //redis sub channels :
 var redis = require('redis');
-
-
 const redis_host = "redis" 
-
 
 var host= "redis://"+redis_host+":6379";
 
@@ -15,7 +12,6 @@ sub2.select(4);
 
 //var queries2=redis.createClient(host);
 //var bodyParser = require('body-parser');
-
 
 //SOCKETIO
 var starttime = Date.now();
@@ -32,24 +28,17 @@ sub.subscribe("call");
 sub2.subscribe("agent");
  // Handle receiving messages
 var timeInMs = Date.now();
+
 var callback = function (channel, data) {
-
-
 if (Date.now() - timeInMs >100 ){
-
 timeInMs = Date.now();
-
 data = "update recieved on " + channel + " " + data
 io.emit('message', {data})
 console.log(data);
-
 }};
-
 
 sub.on('message', callback);
 sub2.on('message', callback);
-
-
 
   socket.on('disconnect', function () {
     io.emit('user disconnected');
@@ -146,7 +135,6 @@ function initData(item, res) {
 
 
 
-port =3001
 // var io = require('socket.io')({}).listen(server.listen(port));
 // console.log("Listening on port " + port);
 // // Handle connections

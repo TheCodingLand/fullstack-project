@@ -10,6 +10,7 @@ services:
     - "3001"
   links:
     - redis
+    - ninx
   working_dir : /usr/src/app
   command: sh -c 'npm start && node run redis.js'
   expose:
