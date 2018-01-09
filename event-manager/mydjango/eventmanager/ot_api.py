@@ -227,14 +227,26 @@ class ot_api_event(object):
         ot_api_event().getTicketFromEvent(call)
 
     def updateEventPhoneNumber(self, call):
+
+        events = Event.objects.filter(call=call)
+        if len(events) > 0:
+            event = events[0]
+        else:
+            log.error("event not found !! %s" % call.ucid)
+            return False
+
         payload = {"Phone Number": "%s" % call.origin}
-        url = '%s/event/%s' % (self.url, id)
+        url = '%s/event/%s' % (self.url, event.ot_id)
         req = execute('put', url, payload)
         if req == False:
             return False
         else:
             log.error("updated event phone number to %s" % call.origin)
             return True
+
+
+
+
 
     def updateEventHistory(self, call):
         payload = {"TransferHistory": "%s" % call.history}
@@ -247,8 +259,15 @@ class ot_api_event(object):
             return True
 
     def updateEventType(self, call):
+        events = Event.objects.filter(call=call)
+        if len(events) > 0:
+            event = events[0]
+        else:
+            log.error("event not found !! %s" % call.ucid)
+            return False
+
         payload = {"Title": "%s" % call.call_type}
-        url = '%s/events/%s' % (self.url, id)
+        url = '%s/events/%s' % (self.url, event.ot_id)
         req = execute('put', url, payload)
         if req == False:
             return False
@@ -257,10 +276,8 @@ class ot_api_event(object):
             return True
 
     def transfer(self, call, agent):
-
         if agent.isQueueLine == False:
             self.checkUserStatus(agent)
-
         events = Event.objects.filter(call=call)
         if len(events) >0:
             event=events[0]
