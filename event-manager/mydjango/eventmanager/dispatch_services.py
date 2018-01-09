@@ -53,7 +53,9 @@ class dispatch(object):
     def set_caller(self, id, timestamp, data):
         redis = Redis().update('agent', id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
-        call.origin = data
+        if call.origin == None:
+            call.origin = data
+
         call.save()
         ot_api_event().updateEventPhoneNumber(call)
         return True
@@ -86,6 +88,13 @@ class dispatch(object):
                 t = Transfer(call=call, torigin=torigin,
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
+            try:
+                agent_orig = Agent.objects.get(current_call=call)
+                agent_orig.current_call=None
+            except ObjectDoesNotExist:
+                pass
+
+
             call.updatehistory()
             call.destination = destination
             call.save()
