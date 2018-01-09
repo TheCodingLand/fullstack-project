@@ -38,7 +38,7 @@ class dispatch(object):
         centrale.ot_userloginname = "Centrale"
         centrale.current_call = None
         centrale.save()
-        centrale.call = call
+        centrale.current_call = call
         centrale.save()
 
         return ot_api_event().create(call)
@@ -95,24 +95,25 @@ class dispatch(object):
                 t = Transfer(call=call, torigin=torigin,
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
-            agents_orig = Agent.objects.filter(current_call=call)
-            for agent in agents_orig:
-                agent.current_call=None
+        agents_orig = Agent.objects.filter(current_call=call)
+        for agent in agents_orig:
+            agent.current_call=None
 
 
 
-            call.updatehistory()
-            call.destination = destination
-            call.save()
+        call.updatehistory()
+        call.destination = destination
+        call.save()
 
-            if len(agents) == 1:
-                agent = agents[0]
-                agent.current_call = call
-                agent.save()
-                ot_api_event().transfer(call, agent)
-            else:
-                log.error("no agents found with ext %s" % destination)
-                # ot_api_event().transfer(call)
+        if len(agents) == 1:
+            agent = agents[0]
+            agent.current_call = call
+            agent.save()
+            ot_api_event().transfer(call, agent)
+        else:
+            log.error("no agents found with ext %s" % destination)
+            # ot_api_event().transfer(call)
+
         return True
 
     def end(self, id, timestamp):
