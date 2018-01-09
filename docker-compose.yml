@@ -64,6 +64,7 @@ services:
   ports:
     - "8099:80"
     - "8098:8001"
+    - "3001:3001"
   volumes_from:
     - event-manager
   links:
