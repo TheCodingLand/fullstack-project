@@ -19,7 +19,7 @@ sub2.select(4);
 
 //SOCKETIO
 var starttime = Date.now();
-var io = require('socket.io')(3002);
+var io = require('socket.io')(3001);
 
 io.on('connection', function (socket) {
   io.emit('this', { will: 'be received by everyone'});
