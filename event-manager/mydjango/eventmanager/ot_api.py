@@ -35,8 +35,8 @@ def execute(method, url, payload):
                 log.error("%s not found %s, %s" % (req.status_code, url, req.text))
             return False
         if req.status_code == 400:
-            log.error("ERROR : 400 !! method :%s, url:%s, payload:%s" % (
-                method, url, json.dumps(payload)))
+            log.error("ERROR : 400 !! method :%s, url:%s, payload:%s, %s" % (
+                method, url, json.dumps(payload), req.text))
             return False
         if req.status_code == 500:
             log.error("ERROR : 500 !! method :%s, url:%s, payload:%s" % (
@@ -258,10 +258,16 @@ class ot_api_event(object):
         if agent.isQueueLine == False:
             self.checkUserStatus(agent)
 
-        id = self.get_ot_id_from_call(call)
+        events = Event.objects.filter(call=call)
+        if len(events) >0:
+            event=events[0]
+        else:
+            log.error("event not found !! %s" % call.ucid)
+            return False
 
-        if agent.ot_userdisplayname != "" and id != None:
+        if agent.ot_userdisplayname != "" and event.ot_id != None:
             if agent.isQueueLine == False:
+                log.error("updating event with applicant %s" % agent.ot_userdisplayname)
 
                 payload = {"Applicant": "%s" % agent.ot_userdisplayname,
                            "TransferHistory": "%s" % call.history}
@@ -269,9 +275,11 @@ class ot_api_event(object):
                 payload = {"Applicant": "Centrale",
                            "TransferHistory": "%s" % call.history}
 
-            url = '%s/event/%s' % (self.url, id)
+            url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
+
             req = execute('put', url, payload)
             if req == False:
+
                 return False
             else:
                 log.error("updated event history to %s" % call.call_type)
