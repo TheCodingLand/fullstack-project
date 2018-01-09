@@ -4,7 +4,6 @@
 
 .example-enter.example-enter-active {
     opacity: 1;
-    background-color: white;
     transition: background-color 2500ms ease-in;
     transition: opacity 2500ms ease-in;
 }
@@ -12,10 +11,8 @@
 .example-leave {
     opacity: 1;
 }
-
 .example-leave.example-leave-active {
     opacity: 0.01;
-    background-color: brown;
     transition: background-color 2500ms ease-in;
     transition: opacity 2500ms ease-in;
 }

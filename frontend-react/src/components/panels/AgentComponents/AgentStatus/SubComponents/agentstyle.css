@@ -1,6 +1,16 @@
 .agentactive {
-    background-color: #cfc;
+    background-color: rgb(190, 255, 190);
+    display : flex;
+    padding : 10px;
+    overflow:hidden;
+    border:1px solid #baf5ba;
   }
-  .agentinactive {
-    background-color: #fcc;
+.agentinactive {
+ background-color:rgb(255, 182, 155);
+ display : flex;
+ padding : 10px;
+ overflow:hidden;
+ border:1px solid #c06565;
   }
+
+
