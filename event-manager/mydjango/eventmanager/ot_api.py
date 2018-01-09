@@ -19,7 +19,7 @@ def execute(method, url, payload):
         if method == 'put':
             req = requests.put(url, json=payload,headers=headers)
             if req.status_code >201:
-                log.error("modification OT : %s, %s --------- > %s" % (payload, req.text, req.status_code))
+                log.error("modification OT : %s, %s --------- > %s : %s" % (payload, req.text, req.status_code, url))
         if method == 'get':
             req = requests.get(url, headers=headers)
 
