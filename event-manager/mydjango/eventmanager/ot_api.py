@@ -236,7 +236,7 @@ class ot_api_event(object):
             return False
 
         payload = {"Phone Number": "%s" % call.origin}
-        url = '%s/event/%s' % (self.url, event.ot_id)
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
         if req == False:
             return False
@@ -249,8 +249,14 @@ class ot_api_event(object):
 
 
     def updateEventHistory(self, call):
+        try:
+            event = Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return False
+
+
         payload = {"TransferHistory": "%s" % call.history}
-        url = '%s/event/%s' % (self.url, id)
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
         if req == False:
             return False
@@ -267,7 +273,7 @@ class ot_api_event(object):
             return False
 
         payload = {"Title": "%s" % call.call_type}
-        url = '%s/events/%s' % (self.url, event.ot_id)
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
         if req == False:
             return False
