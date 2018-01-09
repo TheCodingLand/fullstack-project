@@ -53,11 +53,14 @@ class dispatch(object):
     def set_caller(self, id, timestamp, data):
         redis = Redis().update('agent', id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
-        if call.origin == None:
-            call.origin = data
 
-        call.save()
-        ot_api_event().updateEventPhoneNumber(call)
+        if call.origin == None:
+            try:
+                agent = Agent.objects.get(data)
+            except:
+                call.origin = data
+                call.save()
+                ot_api_event().updateEventPhoneNumber(call)
         return True
 
     def update_details(self, id, timestamp, data):
