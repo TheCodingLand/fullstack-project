@@ -18,8 +18,10 @@ def execute(method, url, payload):
             req = requests.post(url, json=payload,headers=headers)
         if method == 'put':
             req = requests.put(url, json=payload,headers=headers)
+            log.error("modification OT : %s, %s --------- > %s" % payload, req.text, req.status_code)
         if method == 'get':
             req = requests.get(url, headers=headers)
+
 
         if req.status_code == 201:
             log.info(req.status_code)
@@ -49,7 +51,7 @@ def execute(method, url, payload):
             return False
 
     else:
-        log.info('API DISABLED')
+        log.error('API DISABLED')
         return False
 
 class ot_api_event(object):
@@ -101,7 +103,7 @@ class ot_api_event(object):
                 return False
 
         else:
-            log.info('API DISABLED')
+            log.error('API DISABLED')
             return False
 
 
