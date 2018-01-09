@@ -10,7 +10,6 @@ services:
     - "3001"
   links:
     - redis
-    - nginx
   working_dir : /usr/src/app
   command: sh -c 'npm start && node run redis.js'
   expose:
