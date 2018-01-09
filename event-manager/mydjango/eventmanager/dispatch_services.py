@@ -73,6 +73,10 @@ class dispatch(object):
         redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
+        agents_orig = Agent.objects.filter(current_call=call)
+        for agent in agents_orig:
+            agent.current_call = None
+
         agents = Agent.objects.filter(ext=destination)
         if len(agents) > 0:
             if agents[0].isQueueLine:
@@ -88,11 +92,10 @@ class dispatch(object):
                 t = Transfer(call=call, torigin=torigin,
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
-            try:
-                agent_orig = Agent.objects.get(current_call=call)
-                agent_orig.current_call=None
-            except ObjectDoesNotExist:
-                pass
+            agents_orig = Agent.objects.filter(current_call=call)
+            for agent in agents_orig:
+                agent.current_call=None
+
 
 
             call.updatehistory()
