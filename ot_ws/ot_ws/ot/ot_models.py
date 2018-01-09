@@ -45,7 +45,7 @@ class Event(object):
             "State": "StringVal",
             "Subclass": "StringVal",
             "TIGGroup": "NullVal",
-            "Title": "NullVal",
+            "Title": "StringVal",
             "TransferHistory": "StringVal",
             "UCID": "StringVal",
             "UCOnSiteBreachReason": "NullVal",

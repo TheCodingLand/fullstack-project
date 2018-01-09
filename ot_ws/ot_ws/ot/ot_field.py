@@ -40,7 +40,7 @@ class NullVal(ot_field):
         return self.value
 
     def fieldXMLString(self):
-        return false
+        return False
 
 
 class ObjectId(ot_field):
@@ -155,8 +155,8 @@ class ReferenceListVal(ot_field):
 
 
 class TimeStampedMemoVal(ot_field):
-    def __init(TimeStampedMemoVal, name):
-        super(NullVal, self).__init__(name)
+    def __init(self, name):
+        super(TimeStampedMemoVal, self).__init__(name)
         self.fieldtype = "TimeStampedMemoVal"
 
     def getValueFromXML(self, xml):
@@ -164,7 +164,7 @@ class TimeStampedMemoVal(ot_field):
         return self.value
 
     def fieldXMLString(self):
-        return false
+        return False
 
 
 class AttachmentsVal(ot_field):
@@ -177,4 +177,4 @@ class AttachmentsVal(ot_field):
         return self.value
 
     def fieldXMLString(self):
-        return false
+        return False
