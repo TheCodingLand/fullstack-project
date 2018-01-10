@@ -11,7 +11,7 @@ services:
   links:
     - redis
   working_dir : /usr/src/app
-  command: sh -c 'npm start && node redis.js'
+  command: sh -c 'npm start & node redis.js'
  
 
  event-manager-ot:
