@@ -27,6 +27,7 @@ io.on('connection', function (socket) {
   var timeInMs = Date.now();
   var olddata = ""
   var pl = ""
+  
   var callback = function (channel, data) {
     if (data != olddata) {
       olddata = data;
