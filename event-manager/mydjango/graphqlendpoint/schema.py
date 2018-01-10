@@ -30,7 +30,7 @@ class CallNode(DjangoObjectType):
 class EventNode(DjangoObjectType):
     class Meta:
         model = Event
-        filter_fields = ['ot_id', 'applicant']
+        filter_fields = ['ot_id', 'applicant','phone']
         interfaces = (relay.Node,)
 
 
