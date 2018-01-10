@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
       timeInMs = Date.now();
       pl = data
       io.emit('message', { pl })
-      console.log(pl);
+      //console.log(pl);
     }}
   };
 
