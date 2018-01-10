@@ -22,7 +22,7 @@ class App extends React.Component {
     this.state ={ serverData : {} };
     let SOCKET_URL = "148.110.107.15:3001"
     this.socket = io.connect(SOCKET_URL);
-    this.lastUpdate = Date.now() -400;
+    this.lastUpdate = Date.now() -25;
     
     console.log(this.socket)
   };
@@ -43,7 +43,7 @@ class App extends React.Component {
   
    updateData (data) { 
      
-    if (Date.now()- this.lastUpdate > 300){
+    if (Date.now()- this.lastUpdate > 20){
     this.lastUpdate = Date.now()
     this.client.cache.reset(); 
     this.client.query({ query: gql`query {

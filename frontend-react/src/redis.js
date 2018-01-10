@@ -1,9 +1,9 @@
 
 //redis sub channels :
 var redis = require('redis');
-const redis_host = "redis" 
+const redis_host = "redis"
 
-var host= "redis://"+redis_host+":6379";
+var host = "redis://" + redis_host + ":6379";
 
 var sub = redis.createClient(host);
 var sub2 = redis.createClient(host);
@@ -18,27 +18,30 @@ var starttime = Date.now();
 var io = require('socket.io')(3001);
 
 io.on('connection', function (socket) {
-  io.emit('this', { will: 'be received by everyone'});
+  io.emit('this', { will: 'be received by everyone' });
 
   socket.on('message', function (from, msg) {
     console.log('I received a private message by ', from, ' saying ', msg);
   });
 
-sub.subscribe("call");
-sub2.subscribe("agent");
- // Handle receiving messages
-var timeInMs = Date.now();
+  sub.subscribe("call");
+  sub2.subscribe("agent");
+  // Handle receiving messages
+  var timeInMs = Date.now();
+  var olddata = ""
+  var callback = function (channel, data) {
+    if (data != olddata) {
+      if (Date.now() - timeInMs >10 ){
+      olddata = data;
+      timeInMs = Date.now();
+      data = "update recieved on " + channel + " " + data
+      io.emit('message', { data })
+      console.log(data);
+    }}
+  };
 
-var callback = function (channel, data) {
-if (Date.now() - timeInMs >100 ){
-timeInMs = Date.now();
-data = "update recieved on " + channel + " " + data
-io.emit('message', {data})
-console.log(data);
-}};
-
-sub.on('message', callback);
-sub2.on('message', callback);
+  sub.on('message', callback);
+  sub2.on('message', callback);
 
   socket.on('disconnect', function () {
     io.emit('user disconnected');
@@ -87,7 +90,7 @@ function initData(item, res) {
 
 
 // server.get('/agents', function (req, res) {
-    
+
 //     var queries= redis.createClient(host);
 //     queries.select(4);
 //     // Get agents
@@ -101,7 +104,7 @@ function initData(item, res) {
 //           agents.forEach(function (agent, i) {
 //             tod.push(JSON.parse(agent));
 //             console.log(agent)
-            
+
 //           });
 //           res.send({ "todos" : tod });      
 //         }}
@@ -157,4 +160,3 @@ function initData(item, res) {
 // }); 
 
 
- 
