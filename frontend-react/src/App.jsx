@@ -22,7 +22,7 @@ class App extends React.Component {
     this.state ={ serverData : {} };
     let SOCKET_URL = "148.110.107.15:3001"
     this.socket = io.connect(SOCKET_URL);
-    this.lastUpdate = Date.now();
+    this.lastUpdate = Date.now() -400;
     
     console.log(this.socket)
   };
