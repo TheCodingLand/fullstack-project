@@ -11,5 +11,5 @@ class Redis(object):
         pass
 
     def update(self, item, id, data):
-        pub.publish('agent', 'app changed changed %s - %s' % (item, id))
+        pub.publish('agent', 'app changed changed %s - %s - %s' % (item, id, data))
         # push new state data to redis for frontend subscription

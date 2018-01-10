@@ -31,14 +31,23 @@ class AgentDetails extends React.Component {
       //     color: '#fff',
       //   },
       // };
-let hr = <CardHeader
+      
+      let hr = <CardHeader
+      avatar={ <Avatar style={{color: '#fff', backgroundColor : primaryColor}} aria-label="firstname">X</Avatar>}
 
-avatar={ <Avatar style={{color: '#fff', backgroundColor : primaryColor}} aria-label="firstname">{this.props.user.firstname.charAt(0)}</Avatar>}
+      title="Loading"
+      />
 
-  title={this.props.user.firstname}
-  subheader={this.props.user.lastname}
+
+
+      if (this.props.user) { 
+       hr = <CardHeader
+      avatar={ <Avatar style={{color: '#fff', backgroundColor : primaryColor}} aria-label="firstname">{this.props.user.firstname.charAt(0)}</Avatar>}
+
+      title={this.props.user.firstname}
+      subheader={this.props.user.lastname}
 />
-
+      }
 
 
       //let phonecolor = this.props.user.phoneState === "ACDAVAIL" ? red[500] : green[500];

@@ -12,14 +12,18 @@ import Avatar from 'material-ui/Avatar';
 import AccountBox from 'material-ui-icons/AccountBox';
 import { withTheme } from 'material-ui/styles';
 
+
+
 // let defaultStyle = { 
 //     color : '#fff' 
 //   };
 
+
+
 class ClientPanel extends React.Component {
 
     render () {
- 
+      
       
         return(this.props.user.currentCall ?
        <div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
