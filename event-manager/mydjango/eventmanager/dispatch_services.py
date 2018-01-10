@@ -78,6 +78,7 @@ class dispatch(object):
         agents_orig = Agent.objects.filter(current_call=call)
         for agent in agents_orig:
             agent.current_call = None
+            agent.save()
 
         agents = Agent.objects.filter(ext=destination)
         if len(agents) > 0:
@@ -101,6 +102,7 @@ class dispatch(object):
         call.updatehistory()
         call.destination = destination
         call.save()
+
         redis = Redis().update('agent', id, destination)
         if len(agents) == 1:
             agent = agents[0]
