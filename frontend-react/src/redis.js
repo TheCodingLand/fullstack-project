@@ -29,8 +29,8 @@ io.on('connection', function (socket) {
   var pl = ""
   var callback = function (channel, data) {
     if (data != olddata) {
-      if (Date.now() - timeInMs >10 ){
       olddata = data;
+      if (Date.now() - timeInMs >10 ){
       timeInMs = Date.now();
       pl = data
       io.emit('message', { pl })
