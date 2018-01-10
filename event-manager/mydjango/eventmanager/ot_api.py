@@ -175,9 +175,15 @@ class ot_api_event(object):
         # good to have the same date for the event as the start of the call
 
     def updateApplicant(self, call, agent):
+        try:
+            event = Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return False
         payload = {"Applicant": "%s" % agent.ot_userdisplayname}
-        url = '%s/events/%s' % (self.url, id)
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
+        event.applicant=agent
+        event.save()
         if req == False:
             return False
         else:
@@ -190,11 +196,16 @@ class ot_api_event(object):
 
 
     def updateResponsible(self, call, agent):
-
+        try:
+            event = Event.objects.get(call=call)
+        except ObjectDoesNotExist:
+            return False
         payload = {"Responsible": "%s" % agent.ot_userdisplayname}
 
-        url = '%s/event/%s' % (self.url, )
+        url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
+        event.responsible = agent
+        event.save()
         if req == False:
             return False
         else:
@@ -219,7 +230,8 @@ class ot_api_event(object):
         #req = execute('get', url, payload)
 
         req = execute('put', url, payload)
-
+        event.end = call.end
+        event.save()
         if req == False:
             log.error("couldn't do the updates ! ")
             return False
@@ -238,6 +250,8 @@ class ot_api_event(object):
         payload = {"Phone Number": "%s" % call.origin}
         url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
+        event.phone=call.origin
+        event.save()
         if req == False:
             return False
         else:
@@ -258,6 +272,8 @@ class ot_api_event(object):
         payload = {"TransferHistory": "%s" % call.history}
         url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
+        event.transferhistory = call.history
+        event.save()
         if req == False:
             return False
         else:
@@ -275,6 +291,8 @@ class ot_api_event(object):
         payload = {"Title": "%s" % call.call_type}
         url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
         req = execute('put', url, payload)
+
+
         if req == False:
             return False
         else:
@@ -304,6 +322,8 @@ class ot_api_event(object):
             url = 'http://ot-ws:5000/api/ot/event/%s' % event.ot_id
 
             req = execute('put', url, payload)
+            event.applicant = agent
+            event.save()
             if req == False:
 
                 return False

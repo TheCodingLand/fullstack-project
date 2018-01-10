@@ -73,7 +73,6 @@ class dispatch(object):
 
     def transfer_call(self, id, timestamp, destination):
 
-        redis = Redis().update('agent', id, destination)
         call = Call.objects.get_or_create(ucid=id)[0]
 
         agents_orig = Agent.objects.filter(current_call=call)
@@ -95,16 +94,14 @@ class dispatch(object):
                 t = Transfer(call=call, torigin=torigin,
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
-        agents_orig = Agent.objects.filter(current_call=call)
-        for agent in agents_orig:
-            agent.current_call=None
+
 
 
 
         call.updatehistory()
         call.destination = destination
         call.save()
-
+        redis = Redis().update('agent', id, destination)
         if len(agents) == 1:
             agent = agents[0]
             agent.current_call = call
