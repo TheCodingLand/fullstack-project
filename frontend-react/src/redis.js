@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
   var timeInMs = Date.now();
   var olddata = ""
   var pl = ""
-  
+
   var callback = function (channel, data) {
     if (data != olddata) {
       olddata = data;
@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
       timeInMs = Date.now();
       pl = data
       io.emit('message', { pl })
-      console.log(data);
+      console.log(pl);
     }}
   };
 
