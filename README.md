@@ -14,6 +14,8 @@ Planned Features :
   - auto resolution of addresses from phone numbers (WIP)
   - map display of addres from phone numbers (WIP)
   - Dynamic statistics graphs (WIP)  
+  - email integration (planned)
+  - twitter integration (planned)
   
   
   
