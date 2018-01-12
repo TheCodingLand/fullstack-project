@@ -1,7 +1,7 @@
 This is a call center management and monitoring application : 
 
 Planned Features :
-  - Dynamic UI made with materia UI Next and React js for agents and manager (WIP)
+  - Dynamic UI made with material UI Next and React js for agents and manager (WIP)
   - incoming calls display in real time (implemented)
   - a log parser to fetch data if no api is available (done, works with REGEX, easy to adapt to other log systems)
   - redis message queue (done)
