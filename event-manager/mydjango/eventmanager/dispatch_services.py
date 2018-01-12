@@ -116,7 +116,7 @@ class dispatch(object):
         return True
 
     def end(self, id, timestamp):
-        redis = Redis().update('call', 'endcall', id, "endcall")
+
         call = Call.objects.update_or_create(ucid=id)[0]
         call.end = timestamp
         call.state = "ended"
@@ -125,6 +125,7 @@ class dispatch(object):
 
         if len(agents) > 0:
             for agent in agents:
+                redis = Redis().update('call', 'endcall', id, agent.phone_login)
                 agent.current_call = None
                 agent.save()
 
