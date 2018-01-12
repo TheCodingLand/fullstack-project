@@ -16,7 +16,7 @@ class TicketNode(DjangoObjectType):
 class AgentNode(DjangoObjectType):
     class Meta:
         model = Agent
-        filter_fields = ['firstname', 'lastname', 'ext', 'phone_state','phone_active']
+        filter_fields = ['firstname', 'lastname', 'ext', 'phone_state','phone_active', 'phone_login']
         interfaces = (relay.Node,)
 
 
