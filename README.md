@@ -1,31 +1,21 @@
-#(NOT WORKING YET)
+This is a call center management and monitoring application : 
 
-This projects aims to bring together all single services a smb client might ever need in a single docker-compose file
-
-techs :
-- docker
-- docker compose
-- python
-- ubuntu
-- alpine
-- postgres
-- redis
-- rca
-- flask
-- django
-- RESTPlus
-- sqlalchemy
-- phpmyadmin
-- django
-- graphql
-- swagger
-- nginx
-- gunicorn
-- kibana
-- elasticsearch
-- logstash 
-- logspout
-- beats
-
+Planned Features :
+  - Dynamic UI made with materia UI Next and React js for agents and manager (WIP)
+  - incoming calls display in real time (implemented)
+  - a log parser to fetch data if no api is available (done, works with REGEX, easy to adapt to other log systems)
+  - redis message queue (done)
+  - apis example for an external ticketing system (done, full api configured for omnitracker system)
+  - possible to use integrated ticketing system 
+  - nignx proxy (partially done, websockets to fix, networks to isolate from the outside. will be done in the end as it slows down testing)
+  - team management system (WIP)
+  - partial auto-configuration of agents (done)
+  - Tickets creation from inside the tool (WIP)
+  - auto resolution of addresses from phone numbers (WIP)
+  - map display of addres from phone numbers (WIP)
+  - Dynamic statistics graphs (WIP)  
+  
+  
+  
 
 
