@@ -44,14 +44,14 @@ class dispatch(object):
         return ot_api_event().create(call)
 
     def create_call(self, id, timestamp):
-        redis = Redis().update('agent', id, "createcall")
+        redis = Redis().update('call', id, "createcall")
         call = Call.objects.get_or_create(ucid=id)[0]
         call.start = timestamp
         call.save()
         return True
 
     def set_caller(self, id, timestamp, data):
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('call', id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
 
         if call.origin == None:
@@ -64,7 +64,7 @@ class dispatch(object):
         return True
 
     def update_details(self, id, timestamp, data):
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('call', id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
         call.call_type = data
         call.save()
@@ -103,7 +103,7 @@ class dispatch(object):
         call.destination = destination
         call.save()
 
-        redis = Redis().update('agent', id, destination)
+        redis = Redis().update('call', id, destination)
         if len(agents) == 1:
             agent = agents[0]
             agent.current_call = call
@@ -116,7 +116,7 @@ class dispatch(object):
         return True
 
     def end(self, id, timestamp):
-        redis = Redis().update('agent', id, "endcall")
+        redis = Redis().update('call', id, "endcall")
         call = Call.objects.update_or_create(ucid=id)[0]
         call.end = timestamp
         call.state = "ended"
