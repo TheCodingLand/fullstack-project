@@ -44,14 +44,14 @@ class dispatch(object):
         return ot_api_event().create(call)
 
     def create_call(self, id, timestamp):
-        redis = Redis().update('call', id, "createcall")
+        redis = Redis().update('call', 'newcall', id, "createcall")
         call = Call.objects.get_or_create(ucid=id)[0]
         call.start = timestamp
         call.save()
         return True
 
     def set_caller(self, id, timestamp, data):
-        redis = Redis().update('call', id, data)
+        redis = Redis().update('call', 'phonenumber',id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
 
         if call.origin == None:
@@ -64,7 +64,7 @@ class dispatch(object):
         return True
 
     def update_details(self, id, timestamp, data):
-        redis = Redis().update('call', id, data)
+        redis = Redis().update('call', 'calltype', id, data)
         call = Call.objects.get_or_create(ucid=id)[0]
         call.call_type = data
         call.save()
@@ -103,7 +103,7 @@ class dispatch(object):
         call.destination = destination
         call.save()
 
-        redis = Redis().update('call', id, destination)
+        redis = Redis().update('call', 'transfer', id, destination)
         if len(agents) == 1:
             agent = agents[0]
             agent.current_call = call
@@ -116,7 +116,7 @@ class dispatch(object):
         return True
 
     def end(self, id, timestamp):
-        redis = Redis().update('call', id, "endcall")
+        redis = Redis().update('call', 'endcall', id, "endcall")
         call = Call.objects.update_or_create(ucid=id)[0]
         call.end = timestamp
         call.state = "ended"
@@ -153,7 +153,7 @@ class dispatch(object):
     # agents
     def login(self, id, data):
         log.info("agent login received,%s" % id)
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('agent', 'login', id, data)
         agent = Agent.objects.get_or_create(phone_login=id)[0]
         agent.phone_active = True
 
@@ -178,7 +178,7 @@ class dispatch(object):
 
     def changeACDstate(self, id, data):
         log.info("agent state change received,%s : %s" % (id, data))
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('agent', 'changestate', id, data)
         try:
             agent = Agent.objects.get(phone_login=id)
             agent.phone_state = data
@@ -192,12 +192,12 @@ class dispatch(object):
     def linkcall(self, id, data):
         #print ("linkCall agent : %s, call %s" % (id, data))
 
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('agent', 'linkcall', id, data)
         return True
 
     def changeDeviceState(self, id, data):
         log.info("device state change received,%s : %s" % (id, data))
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('agent', 'changestate', id, data)
         try:
             agent = Agent.objects.get(phone_login=id)
             agent.device_state = data
@@ -210,7 +210,7 @@ class dispatch(object):
 
     def logoff(self, id, data):
         log.info("agent logoff received,%s" % id)
-        redis = Redis().update('agent', id, data)
+        redis = Redis().update('agent', 'logoff', id, data)
         try:
             agent = Agent.objects.get(phone_login=id)
             agent.phone_active = False

@@ -10,7 +10,7 @@ class Redis(object):
     def __ini__(self):
         pass
 
-    def update(self, item, id, data):
+    def update(self, item, action, id, data):
 
-        pub.publish('agent', '{ "item" : "%s", "id" : "%s", "data" : "%s" }' % (item, id, data))
+        pub.publish('agent', '{ "item" : "%s", "action" : "%s", "id" : "%s", "data" : "%s" }' % (item, action, id, data))
         # push new state data to redis for frontend subscription
