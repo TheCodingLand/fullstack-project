@@ -11,21 +11,27 @@ import CardHeader from 'material-ui/Card/CardHeader';
 import Avatar from 'material-ui/Avatar';
 import AccountBox from 'material-ui-icons/AccountBox';
 import { withTheme } from 'material-ui/styles';
+import { observer } from "mobx-react";
+import yellow from 'material-ui/colors/yellow';
 
-
+@observer
 class AgentStats extends React.Component {
     
     render () {
       let phone_icon = this.props.user.currentCall ? <PhoneInTalk style={{color: green[500]}} /> :<Phone style={{color: red[500]}}/> ;
-      let user_icon = <AccountBox style={{ width: 10, height: 10, color: deepOrange[500]}} />
+      let user_icon = <AccountBox style={{ width: 25, height: 25, color: deepOrange[500]}} />
 
       if (this.props.user.phoneState === "ACDAVAIL")
       {
-       user_icon = <AccountBox style={{ width: 10, height: 10, color: green[500]}} />
+       user_icon = <AccountBox style={{ width: 25, height: 25, color: green[500]}} />
       } 
+      else if (this.props.user.phoneState  == "Talking")
+      {
+        user_icon = <AccountBox style={{ width: 25, height: 25, color: yellow[500]}} />
+      }
       else
       {
-        user_icon = <AccountBox style={{ width: 10, height: 10, color: deepOrange[500]}} />
+        user_icon = <AccountBox style={{ width: 25, height: 25, color: deepOrange[500]}} />
       }
       const { theme } = this.props;
       const primaryText = theme.palette.text.primary;

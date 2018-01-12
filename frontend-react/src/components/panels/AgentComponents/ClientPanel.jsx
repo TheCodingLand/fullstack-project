@@ -19,12 +19,8 @@ import { withTheme } from 'material-ui/styles';
 //   };
 
 
-
 class ClientPanel extends React.Component {
-
     render () {
-      
-      
         return(this.props.user.currentCall ?
        <div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
         <div><Typography>{this.props.user.currentCall.origin}</Typography></div><Divider />

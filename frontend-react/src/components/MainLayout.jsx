@@ -5,6 +5,9 @@ import MapPanel from './panels/MapPanel';
 import MainAgentPanelLayout from './panels/MainAgentPanelLayout';
 import { CSSTransitionGroup } from 'react-transition-group';
 import "./MainLayout.css"
+import { observer } from "mobx-react";
+
+
 
 var letterStyle = {
     padding: 10,
@@ -14,6 +17,7 @@ var letterStyle = {
     textAlign: "center"
   };
 
+  @observer
 export default class MainLayout extends React.Component {
     render() { 
 
@@ -22,7 +26,7 @@ export default class MainLayout extends React.Component {
             
             <Cell width={3}>
                 <CSSTransitionGroup transitionName="example" transitionEnterTimeout={2500} transitionLeaveTimeout={2500}>
-                    {this.props.users && this.props.users.map((user) => ( <MainAgentPanelLayout key={user.ext} user={user}></MainAgentPanelLayout>))}
+                    {this.props.store.agentStore.agents && this.props.store.agentStore.agents.map((user) => ( <MainAgentPanelLayout key={user.phoneLogin} user={user}></MainAgentPanelLayout>))}
                 </CSSTransitionGroup>
             </Cell>
             <Cell width={1} height={2}>

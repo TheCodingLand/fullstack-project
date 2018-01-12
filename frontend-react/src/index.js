@@ -5,7 +5,6 @@ import 'typeface-roboto'
 //MUI
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
-
 import registerServiceWorker from './registerServiceWorker';
 
 import App from './App';
