@@ -432,7 +432,8 @@ class ot_api_event(object):
 
 
     def updateTickets(self):
-        calls = Call.objects.filter(start=datetime.datetime.today())
+        d = datetime.timedelta(day=1)
+        calls = Call.objects.filter(start__gt= datetime.datetime.today()-d)
         for call in calls:
             self.getTicketFromEvent(call)
 
