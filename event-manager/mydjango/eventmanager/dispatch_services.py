@@ -84,13 +84,10 @@ class dispatch(object):
             agent.save()
 
     def retrieved(self, id, timestamp, destination):
+
         call = Call.objects.get_or_create(ucid=id)[0]
         agents = Agent.objects.filter(ext=destination)
-        for agent in agents:
-            agent.current_call = call
-            agent.save()
-        ot_api_event().transfer(call, agent)
-
+        self.transfer_call(id,timestamp,destination)
 
     def transfer_call(self, id, timestamp, destination):
 
