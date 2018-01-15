@@ -6,7 +6,6 @@ import CallsListModel from './CallsListModel'
 import DataProvider from './../DataProvider'
 
 export default class RootStore {
-    
     constructor() {
     this.lastUpdate = Date.now(); 
     this.lastRedisUpdate = {}
@@ -25,30 +24,22 @@ export default class RootStore {
         data = data.pl.replace('\\\"', '\"')
         data = JSON.parse(data)
         if (data.action === this.lastRedisUpdate.action && data.data === this.lastRedisUpdate.data) {
-            if (Date.now() - this.lastUpdate > 100) {
+            if (Date.now() - this.lastUpdate > 2000) {
                 
                 this.agentStore.handleMessage(data)
                 this.lastUpdate = Date.now()
                 this.lastRedisUpdate = data
-                
             }
         }
         else {
-            if (Date.now() - this.lastUpdate) {
-            
             this.lastRedisUpdate = data
             this.lastUpdate = Date.now()
             this.agentStore.handleMessage(data)
-            console.log(data)
             
-
         }
-    }
-        
-       
+     } 
         }
 
-    }
 
 
 

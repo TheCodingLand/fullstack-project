@@ -34,7 +34,7 @@ export default class AgentListModel {
         }
 
         if (data.action==="login") {
-          console.log("login agent " + data.id )
+         
           this.GetAgent(data.id)}
         
         if (data.action==="changestate") {
@@ -57,6 +57,7 @@ export default class AgentListModel {
          
           for (let i = 0; i < this.agents.length; i++) {
             if (data.data === this.agents[i].phoneLogin) {
+            
               this.agents[i].removeCall()
             }
           }
@@ -105,8 +106,6 @@ export default class AgentListModel {
     listofusers.map((user) => this.addAgent(user))
     //this.setState( { serverData : { users : users.users } }
   }
-
-
 
 
   @action

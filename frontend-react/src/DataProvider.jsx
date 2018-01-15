@@ -7,26 +7,25 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 
 
-  
-  
+
+
 
 export default class DataProvider {
-    constructor() {
-        
+  constructor() {
+
 
     this.client = new ApolloClient({
-    link: new HttpLink({ uri: 'http://148.110.107.15:8099/graphql' }),
-    cache: new InMemoryCache()
-});
-   
-    }
+      link: new HttpLink({ uri: 'http://148.110.107.15:8099/graphql' }),
+      cache: new InMemoryCache()
+    });
 
-async ListAgents() {
-   
-    console.log("retrieving agents from server")
-    this.client.cache.reset(); 
-    
-    let data = await this.client.query({ query: gql`query {
+  }
+
+  async ListAgents() {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {
       allAgents(phoneActive: true) {
         edges {
           node {
@@ -49,17 +48,16 @@ async ListAgents() {
       }
     
         ` })
-        return data
-       }
+    return data
+  }
 
 
 
-async GetAgent(login) {
-   
-    console.log("retrieving agents from server")
-    this.client.cache.reset(); 
-    
-    let data = await this.client.query({ query: gql`query {
+  async GetAgent(login) {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {
           allAgents(phoneLogin: "${login}") {
             edges {
               node {
@@ -74,28 +72,59 @@ async GetAgent(login) {
           }
         }
         ` })
-        return data
-       }
+    return data
+  }
 
   async GetCall(ucid) {
-        console.log("retrieving agents from server")
-        this.client.cache.reset(); 
-        
-        let data = await this.client.query({ query: gql`query {
-              allCalls(ucid: "${ucid}") {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {
+            allCalls (ucid:"${ucid}") {
+              edges {
+                node {
+                  ucid
+                  origin
+                  start
+                  destination
+                  callType
+                }
+              }
+            }
+            }
+         ` })
+    return data
+    console.log(data)
+  }
+
+
+
+  async getTicketbyPhone(phone) {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {  
+              allEvents(phone:"${phone}") {
                 edges {
                   node {
-                    ucid
-                    origin
-                    start
-                    destination
-                    callType
+                    id
+                    phone
+                    ticket{
+                      id
+                      title
+                    }
                   }
                 }
               }
             }
-            ` })
-            return data
-           }
+          `
+    })
+    return data
+  }
+
+
+
+
 
 }
+

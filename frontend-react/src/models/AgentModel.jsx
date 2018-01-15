@@ -21,7 +21,16 @@ export default class AgentModel {
     this.phoneLogin = agent.phoneLogin;
     this.ext = agent.ext;
     this.phoneState = agent.phoneState;
-    this.currentCall = agent.currentCall;
+    this.currentCall = { ucid : "", origin : "", start : "", destination : "", callType : "", tickets :[]}
+    
+    if (agent.currentCall) {
+      if (agent.currentCall.ucid) {
+      
+      this.currentCall = { ucid : agent.currentCall.ucid, origin : agent.currentCall.origin, start : agent.currentCall.start, destination : agent.currentCall.destination, callType: agent.currentCall.callType, tickets : []}
+      this.ds.getTicketbyPhone(agent.currentCall.origin).then((data) => this.onTicketsRecieved(data))
+  } 
+}
+    
     
   }
 
@@ -33,35 +42,74 @@ export default class AgentModel {
   @action
   removeCall()
   {
-    this.currentCall = {}
+    this.currentCall.ucid=""
+    this.currentCall.origin = ""
+    this.currentCall.start = ""
+    this.currentCall.destination = ""
+    this.currentCall.callType =""
+    this.currentCall.tickets= null
+    
   }
   
   @action
   setCall(call){
-    this.currentCall=call
-    console.log(call)
+  
+    this.currentCall.ucid = call.ucid
+    
+    this.currentCall.start = call.start
+    this.currentCall.destination = call.destination
+    this.currentCall.callType = call.callType
+    if (call.origin != "False") {
+      this.currentCall.origin = call.origin
+      this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
+    }
+    else{
+      this.currentCall.origin = "hidden"
+    }
+    
+
+    //this.currentCall = call;
+    
+  }
+  
+  @action
+  onTicketsRecieved(data){
+    this.currentCall.tickets = data.data.allEvents.edges.map((edge) =>  { 
+      
+      if (edge.node.ticket){
+        console.log(edge)
+        
+      return edge.node.ticket.title}})
+    
+
+    
   }
 
   @action
   updateCall(ucid) {
     this.ds.GetCall(ucid).then((data) => this.onCallRecieved(data))
+    
+ 
+   }
+
+  @action
+  ticketByPhone(phonenumber) {
+
   }
 
   onCallRecieved(data) {
-    let currentCall= {}
+    
     let listofcalls = [];
     if (data.data.allCalls) { listofcalls = data.data.allCalls.edges.map((edge) => { return edge.node })}
-    if (listofcalls.length ==1) {
-       currentCall = { 
-        ucid : listofcalls[0].ucid,
-        origin : listofcalls[0].origin,
-        start : listofcalls[0].start,
-        call_type : listofcalls[0].callType,
-        destination : listofcalls[0].destination
+    
+    if (listofcalls.length >0) {
+     
+      this.setCall(listofcalls[0])
+
       
-    }
+
   }
-  this.setCall(currentCall)
+  
 }
  
  
