@@ -15,15 +15,15 @@ django.setup()
 
 b = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 logging.warning("Connected to Redis, Database 2, port 6379")
-
-ot_api.updateTickets()
+ot=ot_api()
+ot.updateTickets()
 batch = datetime.now()
 d = timedelta(minutes=15)
 
 while True:
 
     if batch - d > datetime.now():
-        ot_api.updateTickets()
+        ot.updateTickets()
         batch = datetime.now()
 
 
