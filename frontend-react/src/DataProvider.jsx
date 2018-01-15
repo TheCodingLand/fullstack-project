@@ -1,5 +1,4 @@
 
-import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
@@ -93,8 +92,9 @@ export default class DataProvider {
             }
             }
          ` })
-    return data
-    console.log(data)
+         console.log(data)
+         return data
+   
   }
 
 

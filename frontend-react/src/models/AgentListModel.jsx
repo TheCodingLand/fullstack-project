@@ -1,8 +1,7 @@
-import { observable, computed, action, async, autorun } from "mobx";
-import DataProvider from './../DataProvider'
+import { observable, computed, action } from "mobx";
 import AgentModel from "./AgentModel";
-import Websocket from 'react-websocket';
-import io from 'socket.io-client';
+
+
 
 
 //actions:
@@ -101,7 +100,6 @@ export default class AgentListModel {
   onListRecieved(data) {
     var listofusers = [];
     if (data.data.allAgents) { listofusers = data.data.allAgents.edges.map((edge) => { return edge.node })}
-    var users = { users : listofusers }
     this.agents = []
     listofusers.map((user) => this.addAgent(user))
     //this.setState( { serverData : { users : users.users } }
@@ -119,7 +117,7 @@ export default class AgentListModel {
     var listofusers = [];
     if (data.data.allAgents) { listofusers = data.data.allAgents.edges.map((edge) => { return edge.node })}
     //var users = { users : listofusers }
-    if (listofusers.length ==1)
+    if (listofusers.length ===1)
     {
     let found = false;
     for (let i = 0; i < this.agents.length; i++) {
@@ -128,7 +126,7 @@ export default class AgentListModel {
         this.agents[i] = agent
         found = true;
       }
-      if (found == false) {
+      if (found === false) {
         this.addAgent(new AgentModel(listofusers[0]))
       }
     }

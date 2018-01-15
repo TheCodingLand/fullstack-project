@@ -1,11 +1,6 @@
 import * as React from 'react';
 import Typography from 'material-ui/Typography';
-import Card, { CardContent, CardMedia } from 'material-ui/Card';
-import PhoneInTalk from 'material-ui-icons/PhoneInTalk';
-import Phone from 'material-ui-icons/Phone';
-import {deepPurple, red, green } from 'material-ui/colors';
-import { withStyles } from 'material-ui/styles';
-import Divider from 'material-ui/Divider/Divider';
+import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import Avatar from 'material-ui/Avatar';
 import { withTheme } from 'material-ui/styles';
@@ -16,7 +11,7 @@ import { withTheme } from 'material-ui/styles';
 class AgentDetails extends React.Component {
     render () {
       const { theme } = this.props;
-      const primaryText = theme.palette.text.primary;
+    
       const primaryColor = theme.palette.primary[500];
     
       // const styles = {
@@ -41,6 +36,7 @@ class AgentDetails extends React.Component {
 
 
       if (this.props.user) { 
+        if (this.props.user.firstname) {
        hr = <CardHeader
       avatar={ <Avatar style={{color: '#fff', backgroundColor : primaryColor}} aria-label="firstname">{this.props.user.firstname.charAt(0)}</Avatar>}
 
@@ -48,10 +44,10 @@ class AgentDetails extends React.Component {
       subheader={this.props.user.lastname}
 />
       }
-
+    }
 
       //let phonecolor = this.props.user.phoneState === "ACDAVAIL" ? red[500] : green[500];
-      let phonecolor = this.props.user.currentCall ? red[500] : green[500];
+    
       
       
       return(this.props.user ?

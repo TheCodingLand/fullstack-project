@@ -1,6 +1,6 @@
 
 import AgentItem from './AgentStatus/AgentItem';
-import { Grid, Cell } from 'styled-css-grid';
+import { Cell } from 'styled-css-grid';
 import React from "react";
 
 export default class AgentPanel extends React.Component {

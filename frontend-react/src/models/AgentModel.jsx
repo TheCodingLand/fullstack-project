@@ -1,4 +1,4 @@
-import { observable, extendObservable, action } from "mobx";
+import { observable, action } from "mobx";
 import DataProvider from './../DataProvider'
 
 
@@ -59,7 +59,7 @@ export default class AgentModel {
     this.currentCall.start = call.start
     this.currentCall.destination = call.destination
     this.currentCall.callType = call.callType
-    if (call.origin != "False") {
+    if (call.origin !== "False") {
       this.currentCall.origin = call.origin
       this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
     }
@@ -79,7 +79,13 @@ export default class AgentModel {
       if (edge.node.ticket){
         console.log(edge)
         
-      return edge.node.ticket.title}})
+      return edge.node.ticket.title}
+    else {
+      return ""
+    }
+  }
+    )
+      
     
 
     

@@ -1,5 +1,4 @@
 import AgentListModel from './AgentListModel'
-import Websocket from 'react-websocket';
 import io from 'socket.io-client';
 import CallsListModel from './CallsListModel'
 
@@ -21,7 +20,7 @@ export default class RootStore {
     }
 
     handleRedisMessage(data){
-        data = data.pl.replace('\\\"', '\"')
+        data = data.pl.replace('\\"', '"')
         data = JSON.parse(data)
         if (data.action === this.lastRedisUpdate.action && data.data === this.lastRedisUpdate.data) {
             if (Date.now() - this.lastUpdate > 2000) {
