@@ -45,6 +45,12 @@ class Services(object):
         if self.action == "remove":
             self.done = dispatch().end(self.id, self.timestamp)
 
+        if self.action == "consulting":
+            self.done = dispatch().consulting(self.id, self.timestamp,self.data)
+
+        if self.action == "retrieved":
+            self.done = dispatch().retrieved(self.id, self.timestamp,self.data)
+
         # AGENTS
         if self.action == "login":
             self.done = dispatch().login(self.id, self.data)

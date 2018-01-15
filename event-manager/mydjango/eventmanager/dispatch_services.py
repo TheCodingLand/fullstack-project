@@ -70,6 +70,27 @@ class dispatch(object):
         call.save()
         ot_api_event().updateEventType(call)
         return True
+    def consulting(self, id, timestamp, destination):
+        call = Call.objects.get_or_create(ucid=id)[0]
+
+        agents= Agent.objects.filter(current_call=call)
+        for agent in agents:
+            agent.phone_state = "Consulting"
+            agent.save()
+
+        agents = Agent.objects.filter(ext=destination)
+        for agent in agents:
+            agent.phone_state = "Being Consulted"
+            agent.save()
+
+    def retrieved(self, id, timestamp, destination):
+        call = Call.objects.get_or_create(ucid=id)[0]
+        agents = Agent.objects.filter(ext=destination)
+        for agent in agents:
+            agent.current_call = call
+            agent.save()
+        ot_api_event().transfer(call, agent)
+
 
     def transfer_call(self, id, timestamp, destination):
 
