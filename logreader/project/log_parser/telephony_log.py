@@ -12,7 +12,7 @@ class TelephonyLog(LogLine):
         self.getDetails()
         self.getTransfers()
         self.manageEnd()
-        self.manageRetrived()
+        self.manageRetrieved()
         self.manageConsulting()
 
     def manageConsulting(self):
