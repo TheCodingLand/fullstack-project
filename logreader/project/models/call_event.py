@@ -52,3 +52,15 @@ class CallEvent(object):
         data = {'action': 'remove',
                 'timestamp': "%s" % self.timestamp, 'id': self.id}
         conn.hmset(hash, data)
+
+    def retrieved(self, ext):
+        hash = "%s-%s-%s-%s" % (self.timestamp, 'retrieved', self.id, ext)
+        data = {'action': 'retrieved',
+                'timestamp': "%s" % self.timestamp, 'id': self.id, 'data': ext}
+        conn.hmset(hash, data)
+
+    def consulting(self, ext):
+        hash = "%s-%s-%s-%s" % (self.timestamp, 'consulting', self.id, ext)
+        data = {'action': 'consulting',
+                'timestamp': "%s" % self.timestamp, 'id': self.id, 'data': ext}
+        conn.hmset(hash, data)

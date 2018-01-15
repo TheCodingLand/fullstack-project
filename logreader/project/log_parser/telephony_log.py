@@ -12,6 +12,13 @@ class TelephonyLog(LogLine):
         self.getDetails()
         self.getTransfers()
         self.manageEnd()
+        self.manageRetrived()
+        self.manageConsulting()
+
+    def manageConsulting(self):
+        if self.consulting():
+            ev = CallEvent(self.getUcid(), self.date)
+            ev.setDetails(self.consulting(self.getCalledDid()))
 
     def check_createNew(self):
         if self.getNewCallUcid():
@@ -40,6 +47,20 @@ class TelephonyLog(LogLine):
         if "DivertDestination" in self.line and "DIVERT_IVR_DISTRIBUTION" in self.line:
             ev = CallEvent(self.getUcid(), self.date)
             ev.newCentraleCall(self.getCentaleNumber())
+
+    def manageRetrieved(self):
+        if self.getRetrieved():
+            ev = CallEvent(self.getUcid(), self.date)
+            ev.retrieved(self.getRetreiving())
+
+    def getSubjectDID(self):
+        return self.search(r"SubjectDID: (.*?)\(S\)")
+
+    def getCalledDid(self):
+        return self.search(r"CalledDID: (.*?)\(S\)")
+
+    def getRetreiving(self):
+        return self.search(r"RetrievingDID:(.*?)\(S\)")
 
     def getCentaleNumber(self):
         return self.search(r"DivertDestination: (.*?),")
@@ -73,3 +94,10 @@ class TelephonyLog(LogLine):
 
     def getTerminated(self):
         return "Remove UCID<" in self.line
+
+    def getRetrieved(self):
+        return "Retrieved Event, UCID <" in self.line
+
+    def consulting(self):
+        return ", LCS: Connected, Cause: Consultation, Trunk:" in self.line
+
