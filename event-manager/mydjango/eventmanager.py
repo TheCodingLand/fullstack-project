@@ -4,6 +4,8 @@ import redis
 from eventmanager import services
 import time
 import django
+from eventmanager import ot_api
+from datetime import timedelta, datetime
 
 
 
@@ -15,7 +17,18 @@ b = redis.StrictRedis(host='redis', decode_responses=True, port=6379, db=2)
 logging.warning("Connected to Redis, Database 2, port 6379")
 
 
+
+batch = datetime.now()
+d = timedelta(minutes=15)
+
 while True:
+
+    if batch - d > datetime.now():
+        ot_api.updateTickets()
+        batch = datetime.now()
+
+
+
     keys = b.keys('*')
     if len(keys) == 0:
         #easier on CPU usage

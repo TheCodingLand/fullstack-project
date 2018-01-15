@@ -2,6 +2,7 @@ import os
 import requests
 from graphqlendpoint.models import Agent, Event, Call, Transfer, Ticket, Category
 from django.core.exceptions import ObjectDoesNotExist
+import datetime
 import logging
 log = logging.Logger("EventToOTService")
 log.setLevel(logging.INFO)
@@ -430,4 +431,8 @@ class ot_api_event(object):
         return cat
 
 
+    def updateTickets(self):
+        calls = Call.objects.filter(datetime_start=datetime.datetime.date())
+        for call in calls:
+            self.getTicketFromEvent(call)
 
