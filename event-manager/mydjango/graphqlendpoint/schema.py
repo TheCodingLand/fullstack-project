@@ -30,7 +30,7 @@ class AgentNode(DjangoObjectType):
 class CallNode(DjangoObjectType):
     class Meta:
         model = Call
-        filter_fields = ['ucid', 'origin','destination','state', 'start', 'end', 'isContactCenterCall']
+        filter_fields = ['ucid', 'origin','destination','state', 'start', 'end']
         interfaces = (relay.Node,)
 
 
