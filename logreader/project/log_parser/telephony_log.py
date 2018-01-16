@@ -1,6 +1,6 @@
 from project.models.call_event import CallEvent
 from project.log_parser.log_line import LogLine
-
+import logging
 
 class TelephonyLog(LogLine):
     def __init__(self, line):
@@ -51,6 +51,7 @@ class TelephonyLog(LogLine):
     def manageRetrieved(self):
         if self.getRetrieved():
             ev = CallEvent(self.getUcid(), self.date)
+            logging.error("RETRIEVING ext %s" % self.getRetrieving())
             ev.retrieved(self.getRetreiving())
 
     def getSubjectDID(self):

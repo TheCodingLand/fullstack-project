@@ -312,7 +312,7 @@ class ot_api_event(object):
 
         if agent.ot_userdisplayname != "" and event.ot_id != None:
             if agent.isQueueLine == False:
-                log.error("updating event with applicant %s" % agent.ot_userdisplayname)
+                #log.error("updating event with applicant %s" % agent.ot_userdisplayname)
 
                 payload = {"Applicant": "%s" % agent.ot_userdisplayname,
                            "TransferHistory": "%s" % call.history}
@@ -382,7 +382,7 @@ class ot_api_event(object):
         ticket_id = data['data']['RelatedIncident']
         if ticket_id =="":
             return False
-        log.error("Ticket id : %s" % ticket_id)
+        #log.error("Ticket id : %s" % ticket_id)
         ticket = Ticket.objects.get_or_create(ot_id=ticket_id)[0]
         event.ticket = ticket
         event.save()
@@ -392,7 +392,7 @@ class ot_api_event(object):
         req = execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
 
         data = req.json()
-        log.error(data)
+        #log.error(data)
         ticket.title = data['data']['Title']
         ticket.creationdate = data['data']['CreationDate']
         ticket.category = self.getCategory(data['data']['AssociatedCategory'])
@@ -423,7 +423,7 @@ class ot_api_event(object):
                 log.error(req)
                 return None
             data = req.json()
-            log.error(data)
+            #log.error(data)
             cat.title = data['data']['Title']
             cat.seachcode= data['data']['SearchCode']
             cat.predecessor= data['data']['Predecessor']

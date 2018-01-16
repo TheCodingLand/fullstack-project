@@ -1,7 +1,7 @@
 import json
 import redis
 conn = redis.StrictRedis(host="redis", port=6379, db=2)
-
+import logging
 
 class CallEvent(object):
 
@@ -57,6 +57,7 @@ class CallEvent(object):
         hash = "%s-%s-%s-%s" % (self.timestamp, 'retrieved', self.id, ext)
         data = {'action': 'retrieved',
                 'timestamp': "%s" % self.timestamp, 'id': self.id, 'data': ext}
+        logging.error("RETRIEVING ext %s" % self.getRetrieving())
         conn.hmset(hash, data)
 
     def consulting(self, ext):

@@ -84,6 +84,7 @@ class dispatch(object):
             agent.save()
 
     def retrieved(self, id, timestamp, destination):
+        logging.error("retrieved, making transfer %s" % destination)
         self.transfer_call(id,timestamp,destination)
 
     def transfer_call(self, id, timestamp, destination):
