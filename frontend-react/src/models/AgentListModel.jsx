@@ -1,14 +1,9 @@
 import { observable, computed, action } from "mobx";
 import AgentModel from "./AgentModel";
 
-
-
-
 //actions:
 //calls : newcall, phonenumber, calltype, transfer, endcall
 //agents : login, logoff, changestate, linkcall
-
-
 
 export default class AgentListModel {
   constructor(rootStore) {
@@ -44,11 +39,11 @@ export default class AgentListModel {
             }
           }
         }
-        if (data.action==="linkcall") {
+        if (data.action==="transfer") {
          
           for (let i = 0; i < this.agents.length; i++) {
-            if (data.id === this.agents[i].phoneLogin) {
-              this.agents[i].updateCall(data.data)
+            if (data.data === this.agents[i].phoneLogin) {
+              this.agents[i].updateCall(data.id)
             }
           }
         }

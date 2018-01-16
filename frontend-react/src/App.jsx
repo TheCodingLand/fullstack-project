@@ -5,7 +5,7 @@ import RootStore from "./models/RootStore";
 import MainLayout from './components/MainLayout'
 //<MainLayout users={this.state.serverData.users}/> 
 
-
+import DevTools from 'mobx-react-devtools';
 
 
 
@@ -20,7 +20,9 @@ class App extends React.Component {
 render() {
     return(
       <div>
+        <DevTools />
      <Reboot />
+     
       
       <MainLayout store={this.store}/> 
       </div>

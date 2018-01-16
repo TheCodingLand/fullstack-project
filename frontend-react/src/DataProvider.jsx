@@ -110,8 +110,13 @@ export default class DataProvider {
                     id
                     phone
                     ticket{
-                      id
+                      otId
                       title
+                      solution
+                      category {
+                        otId
+                        title
+                      }           
                     }
                   }
                 }

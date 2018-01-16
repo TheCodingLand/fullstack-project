@@ -21,7 +21,8 @@ export default class AgentModel {
     this.phoneLogin = agent.phoneLogin;
     this.ext = agent.ext;
     this.phoneState = agent.phoneState;
-    this.currentCall = { ucid : "", origin : "", start : "", destination : "", callType : "", tickets :[]}
+  
+    this.currentCall = { ucid : "", origin : "", start : "", destination : "", callType : "", tickets: [] }
     
     if (agent.currentCall) {
       if (agent.currentCall.ucid) {
@@ -30,8 +31,6 @@ export default class AgentModel {
       this.ds.getTicketbyPhone(agent.currentCall.origin).then((data) => this.onTicketsRecieved(data))
   } 
 }
-    
-    
   }
 
   @action
@@ -78,8 +77,9 @@ export default class AgentModel {
       
       if (edge.node.ticket){
         console.log(edge)
+        console.log(edge.node.ticket.title)
         
-      return edge.node.ticket.title}
+      return edge.node.ticket}
     else {
       return ""
     }
