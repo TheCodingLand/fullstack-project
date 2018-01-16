@@ -51,7 +51,7 @@ class TelephonyLog(LogLine):
     def manageRetrieved(self):
         if self.getRetrieved():
             ev = CallEvent(self.getUcid(), self.date)
-            logging.error("RETRIEVING ext %s" % self.getRetrieving())
+            logging.error("RETRIEVING ext %s" % self.getRetreiving())
             ev.retrieved(self.getRetreiving())
 
     def getSubjectDID(self):
