@@ -120,12 +120,13 @@ class dispatch(object):
         call.destination = destination
         call.save()
 
-        redis = Redis().update('call', 'transfer', id, destination)
+        #redis = Redis().update('call', 'transfer', id, destination)
         if len(agents) == 1:
             agent = agents[0]
             agent.current_call = call
             agent.save()
             ot_api_event().transfer(call, agent)
+            redis = Redis().update('call', 'transfer', id, agent.phone_login)
         else:
             log.error("no agents found with ext %s" % destination)
             # ot_api_event().transfer(call)
