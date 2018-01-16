@@ -30,7 +30,7 @@ class AgentNode(DjangoObjectType):
 class CallNode(DjangoObjectType):
     class Meta:
         model = Call
-        filter_fields = ['ucid', 'origin','destination','state', 'start', 'end']
+        filter_fields = ['ucid', 'origin','destination','state', 'start', 'end', 'isContactCenterCall']
         interfaces = (relay.Node,)
 
 
@@ -46,7 +46,7 @@ class QueryCalls(object):
     all_calls = DjangoFilterConnectionField(CallNode)
     def resolve_today(self):
         today = datetime.datetime.today()
-        calls = Call.objects.filter(start__gte=today)
+        calls = Call.objects.filter(start__gte=today).filter(isContactCenterCall=True)
         return calls
 
 
