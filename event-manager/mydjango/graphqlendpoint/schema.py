@@ -59,7 +59,6 @@ class QueryEvents(object):
     agents = graphene.List(EventNode)
     all_events = DjangoFilterConnectionField(EventNode)
 
-    
 
 
 class QueryTickets(object):
