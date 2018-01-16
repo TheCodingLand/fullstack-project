@@ -57,7 +57,7 @@ class CallEvent(object):
         hash = "%s-%s-%s-%s" % (self.timestamp, 'retrieved', self.id, ext)
         data = {'action': 'retrieved',
                 'timestamp': "%s" % self.timestamp, 'id': self.id, 'data': ext}
-        logging.error("RETRIEVING ext %s" % self.getRetrieving())
+        logging.error("RETRIEVING ext %s" % ext)
         conn.hmset(hash, data)
 
     def consulting(self, ext):
