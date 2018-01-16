@@ -37,7 +37,7 @@ while True:
         try:
             c = b.hgetall(key)
         except redis.exceptions.ResponseError:
-            logging.error('Faild to deal with key %s' % key)
+            logging.error('Failed to deal with key %s' % key)
             b.delete(key)
             continue
         s = services.Services(c)

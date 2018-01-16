@@ -86,6 +86,7 @@ class dispatch(object):
     def retrieved(self, id, timestamp, destination):
         logging.error("retrieved, making transfer %s" % destination)
         self.transfer_call(id,timestamp,destination)
+        return True
 
     def transfer_call(self, id, timestamp, destination):
 
