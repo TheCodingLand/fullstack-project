@@ -60,7 +60,7 @@ class TelephonyLog(LogLine):
         return self.search(r"CalledDID: (.*?)\(S\)")
 
     def getRetreiving(self):
-        return self.search(r"RetrievingDID: (.*?)\(S\)")
+        return self.search(r"RetrievingDID:(.*?)\(S\)")
 
     def getCentaleNumber(self):
         return self.search(r"DivertDestination: (.*?),")
