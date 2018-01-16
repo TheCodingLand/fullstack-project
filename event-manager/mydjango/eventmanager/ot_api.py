@@ -278,7 +278,7 @@ class ot_api_event(object):
         if req == False:
             return False
         else:
-            log.error("updated event history to %s" % call.history)
+            #log.error("updated event history to %s" % call.history)
             return True
 
     def updateEventType(self, call):
@@ -297,7 +297,7 @@ class ot_api_event(object):
         if req == False:
             return False
         else:
-            log.error("updated event type to %s" % call.call_type)
+            #log.error("updated event type to %s" % call.call_type)
             return True
 
     def transfer(self, call, agent):
@@ -329,7 +329,7 @@ class ot_api_event(object):
 
                 return False
             else:
-                log.error("updated event history to %s" % call.call_type)
+                #log.error("updated event history to %s" % call.call_type)
                 return True
             return False
 
