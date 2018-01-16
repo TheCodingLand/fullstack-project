@@ -97,7 +97,7 @@ class TelephonyLog(LogLine):
         return "Remove UCID<" in self.line
 
     def getRetrieved(self):
-        return "Retrieved Event, UCID <" in self.line
+        return "Retrieved Event," in self.line
 
     def consulting(self):
         return ", LCS: Connected, Cause: Consultation, Trunk:" in self.line
