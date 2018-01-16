@@ -46,7 +46,7 @@ class QueryCalls(object):
     all_calls = DjangoFilterConnectionField(CallNode)
     def resolve_today(self):
         today = datetime.datetime.today()
-        calls = Call.objects.filter(start__gte=today).filter(isContactCenterCall=True)
+        calls = Call.objects.filter(start__gte=today)
         return calls
 
 
