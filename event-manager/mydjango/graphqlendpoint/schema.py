@@ -2,6 +2,7 @@ import graphene
 from graphene import relay, ObjectType, AbstractType
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+import datetime
 
 from .models import Call, Agent, Event, Ticket, Category
 
@@ -43,6 +44,10 @@ class EventNode(DjangoObjectType):
 class QueryCalls(object):
     calls = relay.Node.Field(CallNode)
     all_calls = DjangoFilterConnectionField(CallNode)
+    def resolve_today(self):
+        today = datetime.datetime.today()
+        calls = Call.objects.filter(start__gte=today).filter(isContactCenterCall=True)
+        return calls
 
 
 class QueryCategorys(object):
