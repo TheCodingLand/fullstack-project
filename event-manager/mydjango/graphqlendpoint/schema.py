@@ -33,8 +33,8 @@ class CallNode(DjangoObjectType):
         filter_fields = { 'ucid':['exact'],
                           'origin':['exact'],
                           'destination':['exact'],
-                          'state':['exact'],
-                          'start':['exact','icontains','istartwith'],
+                          'state':['exact','contains','gte','lte'],
+                          'start':['exact','contains','gte','lte'],
                           'end':['exact'],
                           'isContactCenterCall':['exact']}
         interfaces = (relay.Node,)
