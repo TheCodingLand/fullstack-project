@@ -26,7 +26,7 @@ class Category(models.Model):
 
 class Call(models.Model):
     ucid = models.CharField(max_length=200, unique=True)
-    state = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True, default="new")
     origin = models.CharField(max_length=200, null=True)
     destination = models.CharField(max_length=200, null=True)
     call_type = models.CharField(max_length=200, null=True)
@@ -104,7 +104,7 @@ class Event(models.Model):
         Agent, related_name='events_applicant', on_delete=models.CASCADE, null=True, blank=True)
     responsible = models.ForeignKey(
         Agent, related_name='events_responsible', on_delete=models.CASCADE, null=True, blank=True)
-    state = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, default="new", null=True, blank=True)
     transferhistory = models.CharField(max_length=200, null=True, blank=True)
     phone = models.CharField(max_length=200, null=True, blank=True)
     ticket = models.ForeignKey(
