@@ -46,6 +46,7 @@ class QueryCalls(object):
     all_calls = DjangoFilterConnectionField(CallNode)
 
 class QueryTodayCalls(object):
+    calls = relay.Node.Field(CallNode)
 
     def resolve_today(self, info, **kwargs):
         today = Call.objects.filter(start__gte=datetime.datetime.today() - datetime.timedelta(hours=12)).filter(

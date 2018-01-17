@@ -89,7 +89,8 @@ class Ticket(models.Model):
     responsible = models.ForeignKey(
         Agent, related_name='tickets_responsible', on_delete=models.CASCADE, null=True)
     state = models.CharField(max_length=200, null=True)
-    solution = models.CharField(max_length=2000, null=True)
+    solution = models.TextField(null=True, default="")
+    description = models.TextField(null=True, default="")
     ot_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
