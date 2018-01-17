@@ -44,10 +44,23 @@ class EventNode(DjangoObjectType):
 class QueryCalls(object):
     calls = relay.Node.Field(CallNode)
     all_calls = DjangoFilterConnectionField(CallNode)
-    def resolve_today(self):
-        today = datetime.datetime.today()
-        calls = Call.objects.filter(start__gte=today).filter(isContactCenterCall=True)
-        return calls
+
+class QueryTodayCalls(object):
+
+    today = Call.objects.filter(start__gte=datetime.datetime.today()-datetime.timedelta(hours=12)).filter(isContactCenterCall=True)
+
+    def resolve_today(self, info, **kwargs):
+        id = kwargs.get('id')
+        name = kwargs.get('name')
+
+        if id is not None:
+            return Call.objects.get(pk=id)
+
+        if name is not None:
+            return Call.objects.get(name=name)
+
+        return None
+
 
 
 class QueryCategorys(object):

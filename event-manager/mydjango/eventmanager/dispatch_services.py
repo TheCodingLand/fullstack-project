@@ -113,13 +113,11 @@ class dispatch(object):
                              tdestination=destination, ttimestamp=timestamp)
                 t.save()
 
-
-
-
         call.updatehistory()
         call.destination = destination
         call.save()
 
+        agents = Agent.objects.filter(ext=destination)
         #redis = Redis().update('call', 'transfer', id, destination)
         if len(agents) == 1:
             agent = agents[0]
