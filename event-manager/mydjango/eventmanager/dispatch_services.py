@@ -139,13 +139,25 @@ class dispatch(object):
         call.end = timestamp
         call.state = "ended"
 
-        agents = Agent.objects.filter(current_call=call)
 
+        agents = Agent.object.filter(ext=call.origin)
+        for agent in agents:
+            agent.current_call = None
+
+        agents = Agent.object.filter(ext=call.destination)
+        for agent in agents:
+            agent.current_call = None
+
+        agents = Agent.objects.filter(current_call=call)
         if len(agents) > 0:
             for agent in agents:
                 redis = Redis().update('call', 'endcall', id, agent.phone_login)
                 agent.current_call = None
                 agent.save()
+
+
+
+
 
         call.save()
 
