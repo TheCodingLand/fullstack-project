@@ -47,19 +47,12 @@ class QueryCalls(object):
 
 class QueryTodayCalls(object):
 
-    today = Call.objects.filter(start__gte=datetime.datetime.today()-datetime.timedelta(hours=12)).filter(isContactCenterCall=True)
-
     def resolve_today(self, info, **kwargs):
-        id = kwargs.get('id')
-        name = kwargs.get('name')
+        today = Call.objects.filter(start__gte=datetime.datetime.today() - datetime.timedelta(hours=12)).filter(
+            isContactCenterCall=True)
+        return today
 
-        if id is not None:
-            return Call.objects.get(pk=id)
 
-        if name is not None:
-            return Call.objects.get(name=name)
-
-        return None
 
 
 
