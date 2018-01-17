@@ -34,7 +34,8 @@ export default class AgentListModel {
          
           for (let i = 0; i < this.agents.length; i++) {
             if (data.id === this.agents[i].phoneLogin) {
-              this.agents[i].updateState(data.data)      
+              this.agents[i].updateState(data.data)  
+          
             }
           }
         }
@@ -47,16 +48,18 @@ export default class AgentListModel {
           }
         }
         if (data.action==="endcall") {
-         
+          this.GetQueuesUpdates()
           for (let i = 0; i < this.agents.length; i++) {
             if (data.data === this.agents[i].phoneLogin) {
             
               this.agents[i].removeCall()
+              
             }
           }
         }
         if (data.action === "create" ) {
           this.GetQueuesUpdates()
+          console.log("updating queue")
         }
       
       
@@ -87,6 +90,7 @@ export default class AgentListModel {
     //this.ds.ListAgents().then((data) => console.log(data))    
     this.rootStore.ds.ListAgents().then((data) => this.onListRecieved(data))
   }
+
   @action
   async GetQueuesUpdates(){
   this.rootStore.ds.getQueueLines().then((data) => this.onQueuesRecieved(data))
