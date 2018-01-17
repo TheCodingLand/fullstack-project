@@ -14,7 +14,4 @@ constructor(call) {
     this.call_type=call.call_type
     this.destination=call.destination
 
-}
-
-
-}
+}}

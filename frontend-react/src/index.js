@@ -11,6 +11,12 @@ import App from './App';
 
 
 const theme = createMuiTheme({
+  typography: {
+    fontWeightLight: 200,
+ fontWeightRegular: 200,
+ fontWeightMedium: 300},
+
+
   palette: {
     type: 'dark',
     primary: purple, // Purple and green play nicely together.

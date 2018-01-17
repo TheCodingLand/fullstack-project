@@ -92,11 +92,55 @@ export default class DataProvider {
             }
             }
          ` })
-         console.log(data)
-         return data
-   
+    console.log(data)
+    return data
+
   }
 
+  async getQueueLines(line) {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`{allAgents(isQueueLine:true){
+        edges {
+          node {
+            id
+            lastname
+            firstname
+            ext
+            phoneLogin
+            phoneState
+            currentCall{
+              ucid
+              origin
+              start
+              destination
+              callType 
+            }
+            }
+          }
+        }
+      }`})
+  return data
+}
+
+  async getIncomingCallByLine(line) {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {
+    allCalls (destination:"${line}",state:"new") {
+edges{
+node{
+  callType
+  state
+  origin
+}
+}     
+}
+}`})
+    return data
+  }
 
 
   async getTicketbyPhone(phone) {

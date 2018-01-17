@@ -12,8 +12,8 @@ export default class AgentListModel {
     }
     
 //    this.GetAgentList()
- 
-
+ @observable queues = [];
+ @observable incomingCalls= [];
  @observable agents = [];
 
  handleMessage(data){
@@ -26,7 +26,6 @@ export default class AgentListModel {
             }
           }
         }
-
         if (data.action==="login") {
          
           this.GetAgent(data.id)}
@@ -56,17 +55,14 @@ export default class AgentListModel {
             }
           }
         }
-        
-
-
-
-      //this.GetAgent(data.id)
-      //console.log(data.id)
-      }
+        if (data.action === "create" ) {
+          this.GetQueuesUpdates()
+        }
       
-      //this.GetAgentList()
-  
-  
+      
+      }
+    
+
   @computed
   get loggedInAgentsCount() {
     return this.agents.filter(agent => agent.state).length;
@@ -91,6 +87,10 @@ export default class AgentListModel {
     //this.ds.ListAgents().then((data) => console.log(data))    
     this.rootStore.ds.ListAgents().then((data) => this.onListRecieved(data))
   }
+  @action
+  async GetQueuesUpdates(){
+  this.rootStore.ds.getQueueLines().then((data) => this.onQueuesRecieved(data))
+  }
 
   onListRecieved(data) {
     var listofusers = [];
@@ -99,6 +99,22 @@ export default class AgentListModel {
     listofusers.map((user) => this.addAgent(user))
     //this.setState( { serverData : { users : users.users } }
   }
+
+  
+
+  onQueuesRecieved(data) {
+    var listofqueues = [];
+    if (data.data.allAgents) { listofqueues = data.data.allAgents.edges.map((edge) => { return edge.node })}
+    this.queues = []
+    listofqueues.map((queue) => this.addQueue(queue))
+  //this.setState( { serverData : { users : users.users } }
+ }
+
+ @action
+ addQueue(queue) {
+   //console.log(agent)
+   this.queues.push(new AgentModel(queue))
+ }
 
 
   @action
