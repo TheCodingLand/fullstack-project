@@ -14,6 +14,7 @@ class App extends React.Component {
     super();
     this.store = new RootStore();
     this.store.agentStore.GetAgentList()
+    this.store.agentStore.GetQueuesUpdates()
 
   }
 
