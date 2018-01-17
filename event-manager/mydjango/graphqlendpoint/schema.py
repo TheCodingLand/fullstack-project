@@ -30,7 +30,13 @@ class AgentNode(DjangoObjectType):
 class CallNode(DjangoObjectType):
     class Meta:
         model = Call
-        filter_fields = ['ucid', 'origin','destination','state', 'start', 'end', 'isContactCenterCall']
+        filter_fields = { 'ucid':['exact'],
+                          'origin':['exact'],
+                          'destination':['exact'],
+                          'state':['exact'],
+                          'start':['exact','icontains','istartwith'],
+                          'end':['exact'],
+                          'isContactCenterCall':['exact']}
         interfaces = (relay.Node,)
 
 
@@ -39,21 +45,6 @@ class EventNode(DjangoObjectType):
         model = Event
         filter_fields = ['ot_id', 'applicant','phone', 'end']
         interfaces = (relay.Node,)
-
-
-class QueryCalls(object):
-    calls = relay.Node.Field(CallNode)
-    all_calls = DjangoFilterConnectionField(CallNode)
-
-class QueryTodayCalls(object):
-    calls = relay.Node.Field(CallNode)
-
-    def resolve_today(self, info, **kwargs):
-        today = Call.objects.filter(start__gte=datetime.datetime.today() - datetime.timedelta(hours=12)).filter(
-            isContactCenterCall=True)
-        return today
-
-
 
 
 
@@ -76,5 +67,6 @@ class QueryEvents(object):
 class QueryTickets(object):
     agents = graphene.List(TicketNode)
     all_agents = DjangoFilterConnectionField(TicketNode)
+
 
 
