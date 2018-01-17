@@ -3,7 +3,8 @@ import Typography from 'material-ui/Typography';
 import Card from 'material-ui/Card'
 import { withTheme } from 'material-ui/styles';
 import { observer } from "mobx-react";
-
+import MailIcon from 'material-ui-icons/Mail';
+import Badge from 'material-ui/Badge';
 
 // let defaultStyle = { 
 //     color : '#fff' 
@@ -13,30 +14,52 @@ import { observer } from "mobx-react";
 class TicketsPanel extends React.Component {
     render () {
       if (this.props.user.currentCall.tickets) {
-        console.log(this.props.user.currentCall)
-        if (this.props.user.currentCall.tickets.length > 0){
-          console.log(this.props.user.currentCall.tickets)
+        //console.log(this.props.user.currentCall)
+        if (this.props.user.currentCall.tickets.length>0){
+          
+          //console.log(this.props.user.currentCall.tickets[0].category.title)
+          let tickets =[]
+          for (let i = 0; i < this.props.user.currentCall.tickets.length; i++) 
+          {
+            let t
+            if (this.props.user.currentCall.tickets[i]) {
+            let ticket = this.props.user.currentCall.tickets[i]
+            console.log (ticket.title)
+            if (ticket.title) {
+              console.log (ticket)
+               tickets.push(ticket)
+            }
+          }
+          }
           
         return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-       <Typography>Tickets precedents de ce client :</Typography>
-       {this.props.user.currentCall.tickets.map((ticket) => ( function (){ if (ticket.category.title) { <Typography key={ticket.otId}>{ticket.title}, category :{ticket.category.title} </Typography>}}))}
+      
+       
+       {tickets.map((ticket) => ( <Typography key={ticket.otId}>{ticket.title}</Typography>))}
         </Card></div> )
-        } 
-          else
+        
+        }
+        else
           {
             return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-            <Typography></Typography>
+           <Typography>your current stats :</Typography><p></p><Badge badgeContent={4} color="accent"><MailIcon style={{ width: 10, height:10}} /></Badge>
             </Card></div>)
           }
         }
+
         else{
           return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-          <Typography></Typography>
+          <Typography>your current stats :</Typography><p></p><Badge badgeContent={4} color="accent"><MailIcon style={{ width: 10, height:10}} /></Badge>
+
+          
           </Card></div>)
 
-        }}
+        }
+      
+      
+    }
         
-      }
+}
     
 
 

@@ -26,7 +26,6 @@ class AgentStats extends React.Component {
       else if (this.props.user.phoneState  === "Talking")
       {
         user_icon = <Tooltip title="Talking"><AccountBox style={{ width: 25, height: 25, color: cyan[500]}} /></Tooltip>
-
       }
       else if (this.props.user.phoneState  === "Ringing")
       {

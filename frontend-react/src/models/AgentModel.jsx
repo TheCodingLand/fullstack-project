@@ -11,7 +11,7 @@ export default class AgentModel {
   @observable phoneState;
   @observable phoneState;
   @observable currentCall;
-
+  @observable totalcalls;
   constructor(agent) {
     
     this.ds = new DataProvider();  
@@ -21,7 +21,7 @@ export default class AgentModel {
     this.phoneLogin = agent.phoneLogin;
     this.ext = agent.ext;
     this.phoneState = agent.phoneState;
-  
+    this.totalcalls = "";
     this.currentCall = { ucid : "", origin : "", start : "", destination : "", callType : "", tickets: [] }
     
     if (agent.currentCall) {

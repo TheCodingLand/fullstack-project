@@ -4,8 +4,7 @@ import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import Avatar from 'material-ui/Avatar';
 import { withTheme } from 'material-ui/styles';
-import MailIcon from 'material-ui-icons/Mail';
-import Badge from 'material-ui/Badge';
+
 // let defaultStyle = { 
 //     color : '#fff' 
 //   };
@@ -53,9 +52,7 @@ class AgentDetails extends React.Component {
       
       
       return(this.props.user ?
-      <div><Card style={{ flex: 'auto', height: "90px" }}> {hr}<Badge style={{ top: "-51px", left: "135px"}} badgeContent={4} color="accent">
-      <MailIcon style={{ width: 10, height:10}} />
-    </Badge></Card></div>  :
+      <div><Card style={{ flex: 'auto', height: "90px" }}> {hr}</Card></div>  :
       <Typography>loading Agent</Typography>
       ); 
     }
