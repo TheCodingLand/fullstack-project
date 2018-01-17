@@ -40,6 +40,11 @@ class CallNode(DjangoObjectType):
         interfaces = (relay.Node,)
 
 
+class QueryCalls(object):
+    calls = relay.Node.Field(CallNode)
+    all_calls = DjangoFilterConnectionField(CallNode)
+
+
 class EventNode(DjangoObjectType):
     class Meta:
         model = Event
