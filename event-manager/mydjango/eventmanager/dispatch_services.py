@@ -39,7 +39,9 @@ class dispatch(object):
         centrale.current_call = None
         centrale.save()
         centrale.current_call = call
+
         centrale.save()
+        Redis().update('call', 'create', id, ext)
 
         return ot_api_event().create(call)
 
