@@ -14,7 +14,7 @@ class CallAdmin(admin.ModelAdmin):
     list_filter = ('end', 'state','current_agent')
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('ot_id', 'applicant', 'ticket')
+    list_display = ('ot_id', 'applicant', 'ticket', 'call')
     list_filter = ('creationdate', 'applicant')
 
 class TicketAdmin(admin.ModelAdmin):
