@@ -140,11 +140,11 @@ class dispatch(object):
         call.state = "ended"
 
 
-        agents = Agent.object.filter(ext=call.origin)
+        agents = Agent.objects.filter(ext=call.origin)
         for agent in agents:
             agent.current_call = None
 
-        agents = Agent.object.filter(ext=call.destination)
+        agents = Agent.objects.filter(ext=call.destination)
         for agent in agents:
             agent.current_call = None
 
