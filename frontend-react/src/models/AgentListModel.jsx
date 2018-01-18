@@ -46,7 +46,17 @@ export default class AgentListModel {
               this.agents[i].updateCall(data.id)
             }
           }
+
         }
+        if (data.action==="transferring") {
+          for (let i = 0; i < this.agents.length; i++) {
+            if (data.data === this.agents[i].phoneLogin) {
+              this.agents[i].removeCall()
+            }
+          }
+
+        }
+        
         if (data.action==="endcall") {
           this.GetQueuesUpdates()
           for (let i = 0; i < this.agents.length; i++) {

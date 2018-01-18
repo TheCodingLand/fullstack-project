@@ -100,6 +100,7 @@ class dispatch(object):
         for agent in agents_orig:
             agent.current_call = None
             agent.save()
+            Redis().update('call', 'transferring', id, agent.phone_login)
 
         agents = Agent.objects.filter(ext=destination)
         if len(agents) > 0:
