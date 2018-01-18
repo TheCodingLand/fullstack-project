@@ -71,7 +71,9 @@ class dispatch(object):
         call.call_type = data
         call.save()
         ot_api_event().updateEventType(call)
+        Redis().update('call', 'calltype', id, data)
         return True
+
     def consulting(self, id, timestamp, destination):
         call = Call.objects.get_or_create(ucid=id)[0]
 

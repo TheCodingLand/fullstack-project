@@ -40,7 +40,7 @@ export default class AgentListModel {
           }
         }
         if (data.action==="transfer") {
-         
+          this.GetQueuesUpdates()
           for (let i = 0; i < this.agents.length; i++) {
             if (data.data === this.agents[i].phoneLogin) {
               this.agents[i].updateCall(data.id)
@@ -61,7 +61,11 @@ export default class AgentListModel {
           this.GetQueuesUpdates()
           console.log("updating queue")
         }
-      
+        if (data.action === "calltype" ) {
+          this.GetQueuesUpdates()
+          console.log("updating queue")
+        }
+       
       
       }
     
