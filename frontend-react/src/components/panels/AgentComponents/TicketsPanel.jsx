@@ -12,60 +12,58 @@ import Badge from 'material-ui/Badge';
 
 @observer
 class TicketsPanel extends React.Component {
-    render () {
-      if (this.props.user.currentCall.tickets) {
-        //console.log(this.props.user.currentCall)
-        if (this.props.user.currentCall.tickets.length>0){
-          
-          //console.log(this.props.user.currentCall.tickets[0].category.title)
-          let tickets =[]
-          for (let i = 0; i < this.props.user.currentCall.tickets.length; i++) 
-          {
-            let t
-            if (this.props.user.currentCall.tickets[i]) {
+  render() {
+    if (this.props.user.currentCall.tickets) {
+      //console.log(this.props.user.currentCall)
+      if (this.props.user.currentCall.tickets.length > 0) {
+
+        //console.log(this.props.user.currentCall.tickets[0].category.title)
+        let tickets = []
+        for (let i = 0; i < this.props.user.currentCall.tickets.length; i++) {
+          let t
+          if (this.props.user.currentCall.tickets[i]) {
             let ticket = this.props.user.currentCall.tickets[i]
-            console.log (ticket.title)
+            console.log(ticket.title)
             if (ticket.title) {
-              console.log (ticket)
-               tickets.push(ticket)
+              console.log(ticket)
+              tickets.push(ticket)
             }
           }
-          }
+        }
         tickets.slice(-3)
-        return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-      
-      
-       {tickets.map((ticket) => ( <Typography key={ticket.otId}>{ticket.title}</Typography>))}
-        </Card></div> )
-        
-        }
-        else
-          {
-            return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-           <Typography>your current stats :</Typography><p></p><Badge badgeContent={4} color="accent"><MailIcon style={{ width: 10, height:10}} /></Badge>
-            </Card></div>)
-          }
-        }
+        return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
 
-        else{
-          return(<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width:"100%" }}> 
-          <Typography>your current stats :</Typography><p></p><Badge badgeContent={4} color="accent"><MailIcon style={{ width: 10, height:10}} /></Badge>
 
-          
-          </Card></div>)
+          {tickets.map((ticket) => (<Typography key={ticket.otId}>{ticket.title}</Typography>))}
+        </Card></div>)
 
-        }
-      
-      
+      }
+      else {
+        return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
+          <Typography>your current stats :</Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
+        </Card></div>)
+      }
     }
-        
+
+    else {
+      return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
+        <Typography>your current stats :</Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
+
+
+      </Card></div>)
+
+    }
+
+
+  }
+
 }
-    
 
 
 
-  
 
-    
 
-  export default withTheme()(TicketsPanel);
+
+
+
+export default withTheme()(TicketsPanel);

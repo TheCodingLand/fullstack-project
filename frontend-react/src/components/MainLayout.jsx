@@ -31,8 +31,10 @@ export default class MainLayout extends React.Component {
             </Cell>
             <Cell width={1} height={2}>
                 <Grid columns={1}>
-                    <Cell width={1} height={1}><StatsPanel/></Cell>
-                    <Cell width={1} height={1}><MapPanel/></Cell>
+                    {//<Cell width={1} height={1}><StatsPanel/></Cell>}
+                    }
+                    {//<Cell width={1} height={1}><MapPanel/></Cell>
+                    }
                 </Grid>
             </Cell>
         </Grid>

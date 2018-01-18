@@ -28,16 +28,18 @@ io.on('connection', function (socket) {
   var pl = ""
 
   var callback = function (channel, data) {
-    if (data != olddata) {
-      olddata = data;
-      if (Date.now() - timeInMs >10 ){
-      timeInMs = Date.now();
-      pl = data
-      io.emit('message', { pl })
-      //console.log(pl);
-    }}
-  };
-
+    if (Date.now() - starttime > 120000) { //Waiting 2 minutes after start of the service because a lot of messages can crash the browser. this can happen when parsing an old log, pushing a lot of events to the frontend
+      if (data != olddata) {
+        olddata = data;
+        if (Date.now() - timeInMs > 1000) { //Same Data can still be relevant, so treated twice. but not too fast.
+          timeInMs = Date.now();
+          pl = data
+          io.emit('message', { pl })
+          //console.log(pl);
+        }
+      }
+    };
+  }
   sub.on('message', callback);
   sub2.on('message', callback);
 
