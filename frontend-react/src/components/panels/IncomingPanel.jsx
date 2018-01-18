@@ -26,6 +26,10 @@ export default class IncomingPanel extends React.Component {
 
           if (queue.queue.currentCall.ucid){
             activestep = 1
+
+
+
+            
           
           }}
 
