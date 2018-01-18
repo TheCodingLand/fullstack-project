@@ -30,11 +30,11 @@ class TicketsPanel extends React.Component {
             }
           }
         }
-        tickets.slice(-3)
+        tickets = tickets.slice(-3)
         return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
 
 
-          {tickets.map((ticket) => (<Typography key={ticket.otId}>{ticket.title}</Typography>))}
+          {tickets.map((ticket) => (<Typography key={ticket.otId}><b>Ticket : </b>{ticket.title}</Typography>))}
         </Card></div>)
 
       }

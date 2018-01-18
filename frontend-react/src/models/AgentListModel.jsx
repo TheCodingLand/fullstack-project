@@ -52,7 +52,9 @@ export default class AgentListModel {
     if (data.action === "transferring") {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.data === this.agents[i].phoneLogin) {
-          this.agents[i].removeCall()
+          //this.agents[i].removeCall()
+          this.GetAgent(data.data)
+          
         }
       }
 
@@ -64,6 +66,7 @@ export default class AgentListModel {
         if (data.data === this.agents[i].phoneLogin) {
 
           this.agents[i].removeCall()
+          this.agents[i].updateState(data.data)
 
         }
       }

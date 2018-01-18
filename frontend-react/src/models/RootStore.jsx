@@ -4,6 +4,7 @@ import CallsListModel from './CallsListModel'
 
 import DataProvider from './../DataProvider'
 
+
 export default class RootStore {
     constructor() {
     this.lastUpdate = Date.now(); 
@@ -38,7 +39,7 @@ export default class RootStore {
         }
      } 
         }
-
+         
 
 
 

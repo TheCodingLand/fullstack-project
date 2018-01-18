@@ -21,7 +21,7 @@ export default class IncomingPanel extends React.Component {
 
           if (queue.queue.currentCall.ucid){
             activestep = 0
-            steps.push(<Step><StepLabel>Contact Phone : {queue.queue.currentCall.origin}</StepLabel></Step>)
+            steps.push(<Step><StepLabel>Call In Menus : {queue.queue.currentCall.origin}</StepLabel></Step>)
 
           if (queue.queue.currentCall.callType) {
             activestep = 1
@@ -45,7 +45,7 @@ export default class IncomingPanel extends React.Component {
       return(<div><Grid container spacing={24}>
         
         { this.props.queues && this.props.queues.map((queue) => { return (
-          <Grid item xs>
+          <Grid key={queue.ext} item xs>
           <GetStepper queue={queue} />
         </Grid>)})}
       </Grid>

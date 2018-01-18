@@ -38,6 +38,7 @@
         "eject": "react-scripts eject"
     },
     "devDependencies": {
+        "mobx-delorean": "^1.1.0",
         "mobx-react-devtools": "^4.2.15"
     }
 }
