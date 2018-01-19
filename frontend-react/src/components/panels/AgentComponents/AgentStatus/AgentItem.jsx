@@ -15,7 +15,7 @@ export default class AgentItem extends React.Component {
       <Grid container style={{ flexGrow: 1 }}>
         <Grid item xs={12}>
           <Grid container direction='row' justify='flex-start' >
-            <Grid item style={{ flex: 'auto', height: "100px", width: "75%" }}>
+            <Grid item style={{ flex: 'auto', height: "100px", width: "75%", paddingRight: "0px"  }}>
               <AgentDetails user={this.props.user} />
             </Grid>
             <Grid item style={{ flex: 'auto', height: "100px", width: "25%" }}>

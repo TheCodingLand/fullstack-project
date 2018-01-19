@@ -60,7 +60,7 @@ services:
   build: ./nginx/
   ports:
     - "8099:80"
-    - "8098:8001"
+    - "80:8001"
   volumes_from:
     - event-manager
   links:

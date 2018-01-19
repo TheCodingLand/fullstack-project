@@ -5,6 +5,7 @@ import { withTheme } from 'material-ui/styles';
 import { observer } from "mobx-react";
 import MailIcon from 'material-ui-icons/Mail';
 import Badge from 'material-ui/Badge';
+import { X_OK } from 'constants';
 
 // let defaultStyle = { 
 //     color : '#fff' 
@@ -13,6 +14,15 @@ import Badge from 'material-ui/Badge';
 @observer
 class TicketsPanel extends React.Component {
   render() {
+   
+      if (this.props.user.currentCall.origin ==="False"){
+      return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
+          <Typography>Unknown client call. Your stats : </Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
+        </Card></div>)
+      
+    }
+      else
+    {
     if (this.props.user.currentCall.tickets) {
       //console.log(this.props.user.currentCall)
       if (this.props.user.currentCall.tickets.length > 0) {
@@ -36,7 +46,7 @@ class TicketsPanel extends React.Component {
 
           {tickets.map((ticket) => (<Typography key={ticket.otId}><b>Ticket : </b>{ticket.title}</Typography>))}
         </Card></div>)
-
+      
       }
       else {
         return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
@@ -53,7 +63,7 @@ class TicketsPanel extends React.Component {
       </Card></div>)
 
     }
-
+  }
 
   }
 
