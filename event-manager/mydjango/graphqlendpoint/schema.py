@@ -48,7 +48,16 @@ class QueryCalls(object):
 class EventNode(DjangoObjectType):
     class Meta:
         model = Event
-        filter_fields = ['ot_id', 'applicant','phone', 'end']
+       
+
+        filter_fields = {'ot_id': ['exact'],
+                         'applicant': ['exact'],
+                         'phone': ['exact'],
+                         'creationdate': ['exact', 'contains', 'gte', 'lte'],
+                         'end': ['exact', 'contains', 'gte', 'lte'],
+                         }
+
+
         interfaces = (relay.Node,)
 
 
