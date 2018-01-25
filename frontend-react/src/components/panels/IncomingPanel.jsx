@@ -6,6 +6,9 @@ import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 import Grid from 'material-ui/Grid';
 import { observer } from "mobx-react";
 import CardHeader from 'material-ui/Card/CardHeader';
+import TicketDrawer from './EditTicket/TicketDrawer';
+
+
 let activestep= 2
   
 @observer
@@ -42,7 +45,7 @@ export default class IncomingPanel extends React.Component {
     }
 
       return(<div><Grid container spacing={24} style={{ flexGrow: 1 }} >
-        <Grid style={{ flex: 'auto', width:"15%", height: "135px", paddingRight:"0px", paddingLeft:"0px", paddingBottom:"10px"}} item xs><Card style={{ flex: 'auto', height: "135px" }}><CardHeader title="Queues Status"/></Card></Grid>
+        <Grid style={{ flex: 'auto', width:"15%", height: "135px", paddingRight:"0px", paddingLeft:"0px", paddingBottom:"10px"}} item xs><Card style={{ flex: 'auto', height: "135px" }}><CardHeader title="Queues Status"/><TicketDrawer /></Card></Grid>
         { this.props.queues && this.props.queues.map((queue) => { return (
           <Grid style={{ flex: 'auto', height: "145px" ,width:"25%",paddingRight:"0px", paddingLeft:"0px"}} key={queue.ext} item xs>
           <GetStepper queue={queue} />

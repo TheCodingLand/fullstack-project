@@ -16,7 +16,7 @@ RUN npm install
 
 # copy app source to destination container
 COPY . /usr/src/app/
-
+COPY ./webpack.config/* /usr/src/app/node_modules/react-scripts/config/
 
 # expose container port
 EXPOSE 3000

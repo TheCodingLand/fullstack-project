@@ -1,6 +1,6 @@
 
 import AgentItem from './AgentStatus/AgentItem';
-import { Grid, Cell } from 'styled-css-grid';
+import { Cell } from 'styled-css-grid';
 import React from "react";
 
 export default class AgentPanel extends React.Component {
@@ -9,7 +9,7 @@ export default class AgentPanel extends React.Component {
   
     render () {
     
-    console.log(this.props);
+    //console.log(this.props);
    
     return(
     <Cell  width={12}>
