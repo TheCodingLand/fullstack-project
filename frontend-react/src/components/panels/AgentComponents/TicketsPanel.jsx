@@ -1,79 +1,15 @@
 import * as React from 'react';
-import Typography from 'material-ui/Typography';
-import Card from 'material-ui/Card'
-import { withTheme } from 'material-ui/styles';
-import { observer } from "mobx-react";
-import MailIcon from 'material-ui-icons/Mail';
-import Badge from 'material-ui/Badge';
-import { X_OK } from 'constants';
 
 // let defaultStyle = { 
 //     color : '#fff' 
 //   };
-
-@observer
-class TicketsPanel extends React.Component {
-  render() {
-   
-      if (this.props.user.currentCall.origin ==="False"){
-      return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
-          <Typography>Unknown client call. Your stats : </Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
-        </Card></div>)
-      
-    }
-      else
-    {
-    if (this.props.user.currentCall.tickets) {
-      //console.log(this.props.user.currentCall)
-      if (this.props.user.currentCall.tickets.length > 0) {
-
-        //console.log(this.props.user.currentCall.tickets[0].category.title)
-        let tickets = []
-        for (let i = 0; i < this.props.user.currentCall.tickets.length; i++) {
-          let t
-          if (this.props.user.currentCall.tickets[i]) {
-            let ticket = this.props.user.currentCall.tickets[i]
-            console.log(ticket.title)
-            if (ticket.title) {
-              console.log(ticket)
-              tickets.push(ticket)
-            }
-          }
-        }
-        tickets = tickets.slice(-3)
-        return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
-
-
-          {tickets.map((ticket) => (<Typography key={ticket.otId}><b>Ticket : </b>{ticket.title}</Typography>))}
-        </Card></div>)
-      
-      }
-      else {
-        return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
-          <Typography>your current stats :</Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
-        </Card></div>)
-      }
-    }
-
-    else {
-      return (<div><Card style={{ overflowX: 'hidden', flex: 'auto', height: "90px", width: "100%" }}>
-        <Typography>your current stats :</Typography><p></p><Badge badgeContent={this.props.user.totalcalls} color="accent"><MailIcon style={{ width: 10, height: 10 }} /></Badge>
-
-
-      </Card></div>)
-
+export default class TicketsPanel extends React.Component {
+    render () {
+      return(
+        <div className="panel">
+        <h3>ticket</h3>
+        
+        </div>
+      ); 
     }
   }
-
-  }
-
-}
-
-
-
-
-
-
-
-
-export default withTheme()(TicketsPanel);

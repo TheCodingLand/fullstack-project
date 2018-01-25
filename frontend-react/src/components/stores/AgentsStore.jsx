@@ -37,6 +37,10 @@ class RootStore {
 
 
 
+class Store {
+    @observable githubProjects = []
+    @observable state = "pending" // "pending" / "done" / "error"
+
 
 
 class Store {
