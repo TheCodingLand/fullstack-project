@@ -482,7 +482,7 @@ class ObjectMod(Resource):
                 response_object = {
                     'status': 'success',
                     'message': 'object was modified!',
-                    'ticket': result
+                    'object': result
                 }
                 return response_object, 201
 
