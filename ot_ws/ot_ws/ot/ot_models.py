@@ -268,3 +268,39 @@ class Category(object):
             "Successors": "ReferenceListVal",
             "Title": "StringVal"
         }
+class Email(object):
+    def __init__(self):
+        self.folder = r'E-Mails\Incoming'
+        self.requiredfields = ["Subject", ]
+        self.fields = {
+        "Attachments": "AttachmentsVal",
+        "Bcc-Recipients": "NullVal",
+        "Body HTML Text": "StringVal",
+        "Body Plain Text": "StringVal",
+        "Cc-Recipients": "NullVal",
+        "Creation Date": "DateTimeVal",
+        "Direction": "StringVal",
+        "Internet Header": "StringVal",
+        "Last Change": "DateTimeVal",
+        "Message ID": "StringVal",
+        "Message Type": "StringVal",
+        "MsgTemplate CRC": "NullVal",
+        "MsgTemplate ID": "NullVal",
+        "Number": "LongIntVal",
+        "PredictedCategory": "NullVal",
+        "Priority": "StringVal",
+        "Received": "DateTimeVal",
+        "ReferencedTicket": "NullVal",
+        "RefListRelatedMessages": "ReferenceListVal",
+        "Reply-To": "NullVal",
+        "ReportingCompany": "NullVal",
+        "ReportingCostcenter": "NullVal",
+        "ReportingLocation": "NullVal",
+        "ReportingPerson": "NullVal",
+        "Send Date": "DateTimeVal",
+        "Sender": "StringVal",
+        "State": "NullVal",
+        "Subject": "StringVal",
+        "To-Recipients": "StringVal",
+        "Workflow": "StringVal"
+        }
