@@ -460,7 +460,7 @@ class TicketMod(Resource):
 generic_model = Generic()
 
 @api.response(400, 'failed.')
-@ns.route('/object/<int:object_id>')
+@ns.route('/objectmod/<int:object_id>')
 class ObjectMod(Resource):
     @api.response(201, 'object successfully modified.')
     def put(self, object_id):
