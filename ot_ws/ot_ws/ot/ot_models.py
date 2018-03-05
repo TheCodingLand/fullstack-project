@@ -307,7 +307,7 @@ class Email(object):
 
 class Generic(object):
     def __init__(self):
-        self.folder = r'\'
+        self.folder = r''
         self.requiredfields = [ ]
         self.fields = {
         "Attachments": "AttachmentsVal",
