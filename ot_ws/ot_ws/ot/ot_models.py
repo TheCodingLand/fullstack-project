@@ -324,7 +324,7 @@ class Generic(object):
         "MsgTemplate CRC": "NullVal",
         "MsgTemplate ID": "NullVal",
         "Number": "LongIntVal",
-        "PredictedCategory": "NullVal",
+        "PredictedCategory": "StringVal",
         "Priority": "StringVal",
         "Received": "DateTimeVal",
         "ReferencedTicket": "NullVal",
