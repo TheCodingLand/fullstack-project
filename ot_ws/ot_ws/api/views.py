@@ -1,6 +1,6 @@
 # project/api/views.py
 from flask_restplus import Namespace, Resource, fields
-from ot_ws.api.models.apimodels import event, ticket, genericfilter, GetWithFields
+from ot_ws.api.models.apimodels import event, ticket, genericfilter, GetWithFields, ot_object
 import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
@@ -463,6 +463,7 @@ generic_model = Generic()
 @ns.route('/objectmod/<int:object_id>')
 class ObjectMod(Resource):
     @api.response(201, 'object successfully modified.')
+    @api.expect(ot_object)
     def put(self, object_id):
 
         post_data = request.get_json()

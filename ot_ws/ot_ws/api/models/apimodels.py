@@ -12,6 +12,11 @@ event = api.model('Event:', {
     'RelatedIncident': fields.Integer(description='id from a ticket'),
 })
 
+ot_object = api.model('Object:', {
+    'fieldname': fields.String(description='data'),
+})
+
+
 ticket = api.model('Ticket:', {
     'Title': fields.String(description='ticket title'),
     'Description': fields.String(),
@@ -51,3 +56,5 @@ genericfilter = api.model('GenericFilter:', {
 GetWithFields = api.model('GetWithFields:', {
     'requiredfields': fields.List(fields.String(description='fields to return')),
 })
+
+
