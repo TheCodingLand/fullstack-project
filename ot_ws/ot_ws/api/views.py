@@ -9,7 +9,7 @@ from flask import request
 
 from ot_ws.api.restplus import api
 from ot_ws.ot.query_ot import query_ot
-from ot_ws.ot.ot_models import Event, Ticket, Category
+from ot_ws.ot.ot_models import Event, Ticket, Category, Generic
 from ot_ws.ot.serialize import serialize, test
 # these hold our data model folder, fields list, required fields
 import time
@@ -422,6 +422,7 @@ class EventMod(Resource):
         return response_object, 500
 
 
+
 @api.response(400, 'failed.')
 @ns.route('/ticket/<int:ticket_id>')
 class TicketMod(Resource):
@@ -455,6 +456,40 @@ class TicketMod(Resource):
         }
         return response_object, 500
 
+
+generic_model = Generic()
+
+@api.response(400, 'failed.')
+@ns.route('/object/<int:object_id>')
+class ObjectMod(Resource):
+    @api.response(201, 'object successfully modified.')
+    def put(self, object_id):
+
+        post_data = request.get_json()
+        # log.info(post_data)
+        if not post_data:
+            response_object = {
+                'status': 'fail',
+                'message': 'Invalid payload.'
+            }
+        else:
+            id = object_id
+            fields = getFields(generic_model, post_data)
+            r = query_ot()
+            result = r.modifyObjet(id, fields)
+            if result:
+                response_object = {
+                    'status': 'success',
+                    'message': 'object was modified!',
+                    'ticket': result
+                }
+                return response_object, 201
+
+        response_object = {
+            'status': 'fail',
+            'message': 'Internal server error.'
+        }
+        return response_object, 500
 
 @api.response(400, 'failed.')
 @ns.route('/object/<int:objectid>')

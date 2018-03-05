@@ -48,7 +48,7 @@ class QueryCalls(object):
 class EventNode(DjangoObjectType):
     class Meta:
         model = Event
-       
+
 
         filter_fields = {'ot_id': ['exact'],
                          'applicant': ['exact'],
