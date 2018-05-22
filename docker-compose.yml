@@ -107,6 +107,7 @@ services:
   env_file:
      - prod_env
   container_name: logreader-tel
+  restart: always
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
@@ -120,6 +121,7 @@ services:
   env_file:
      - prod_env
   container_name: logreader-agent
+  restart: always
   build: ./logreader
   volumes:
    - './logreader:/usr/src/app'
