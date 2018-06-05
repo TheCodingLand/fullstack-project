@@ -1,16 +1,11 @@
 
 import * as React from 'react';
-import Typography from 'material-ui/Typography';
-import Card from 'material-ui/Card';
-import Divider from 'material-ui/Divider/Divider';
-import { withTheme } from 'material-ui/styles';
-import { withStyles } from 'material-ui/styles';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import Divider from '@material-ui/core/Divider';
 import { observer } from "mobx-react";
-import ProgressBar from './ProgressBar/ProgressBar'
-import { Tooltip } from 'material-ui/Tooltip';
-// let defaultStyle = { 
-//     color : '#fff' 
-//   };
+import Pbar from './ProgressBar/ProgressBar'
+
 
 @observer
 class ClientPanel extends React.Component {
@@ -23,7 +18,7 @@ class ClientPanel extends React.Component {
         
         <div><Typography>{this.props.user.currentCall.callType}</Typography></div>
       
-          <ProgressBar starttime={this.props.user.currentCall.starttime} />
+        <Pbar starttime={this.props.user.currentCall.starttime} />
           
           </Card></div>
           :
@@ -34,9 +29,4 @@ class ClientPanel extends React.Component {
       }
     }
 
-
-
-    
-    
-
-  export default withTheme()(ClientPanel);
+  export default ClientPanel;

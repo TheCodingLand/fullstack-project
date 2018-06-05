@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Typography from 'material-ui/Typography';
-import Card from 'material-ui/Card';
-import CardHeader from 'material-ui/Card/CardHeader';
-import Avatar from 'material-ui/Avatar';
-import { withTheme } from 'material-ui/styles';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import { withTheme } from '@material-ui/core/styles';
 
 
 class AgentDetails extends React.Component {

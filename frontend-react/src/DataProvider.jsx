@@ -34,6 +34,7 @@ export default class DataProvider {
             ext
             phoneLogin
             phoneState
+            otUserdisplayname
             currentCall{
               ucid
               origin
@@ -66,6 +67,7 @@ export default class DataProvider {
                 ext
                 phoneLogin
                 phoneState
+                otUserdisplayname
               }
             }
           }
@@ -92,7 +94,6 @@ export default class DataProvider {
             }
             }
          ` })
-    console.log(data)
     return data
 
   }
@@ -143,10 +144,12 @@ node{
   }
   async getTicketbyPhone(phone) {
     this.client.cache.reset();
-
+    let datestart = new Date(Date.now()).toISOString()
+    let start = datestart.slice(0,10)
     let data = await this.client.query({
+
       query: gql`query {  
-              allEvents(phone:"${phone}") {
+              allEvents(phone:"${phone}", end_Gte:"${start}") {
                 edges {
                   node {
                     id
@@ -187,8 +190,60 @@ node{
     }`
     })
     return data
+  } 
+
+  async getActiveCalls(phone) {
+    this.client.cache.reset();
+    let data = await this.client.query({
+      query: gql`query
+  {
+    allCalls(state: "new") {
+      edges {
+        node {
+          ucid
+          start
+          origin
+          destination
+          callType
+        }
+      }
+    }
+  }`
+})
+return data
   }
 
   
+  async getEventsbyAgentExt(phone) {
+    this.client.cache.reset();
+    let datestart = new Date(Date.now()).toISOString()
+
+    let start = datestart.slice(0,10)
+    let data = await this.client.query({
+      query: gql`query {  
+          allCalls(start_Gte:"${start}",destination:"${phone}") {
+            edges {
+              node {
+                ucid
+                start
+                origin
+                event {
+                  edges {
+                    node {
+                      otId
+                      ticket {
+                        otId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        `
+    })
+    return data
+  }
 }
 

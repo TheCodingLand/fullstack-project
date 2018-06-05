@@ -1,38 +1,43 @@
 import { observable, computed, action } from "mobx";
 import AgentModel from "./AgentModel";
+import CallModel from "./CallsModel";
 
 //actions:
 //calls : newcall, phonenumber, calltype, transfer, endcall
 //agents : login, logoff, changestate, linkcall
 
 export default class AgentListModel {
-  constructor(rootStore) {
+  constructor(ds) {
+    this.ds = ds
+    
+  }
+  @observable calls= []
+  @observable queues = []
+  @observable agents = []
 
-    this.rootStore = rootStore
+  currentUser = {}
+
+  getActiveCalls(){
+    this.ds.getActiveCalls().then((calls) => {calls.data.allCalls.edges.map(call => { return new CallModel(call.node, this) })}).then(calls => this.calls = calls)
   }
 
-  //    this.GetAgentList()
-  @observable queues = [];
-  @observable incomingCalls = [];
-  @observable agents = [];
-
-  handleMessage(data) {
-
+  async handleMessage(data) {
     if (data.action === "logoff") {
+      console.log(`logoff detected for ${data.id}`)
       for (let i = 0; i < this.agents.length; i++) {
         if (data.id === this.agents[i].phoneLogin) {
-
           this.removeAgent(this.agents[i])
         }
       }
     }
-    if (data.action === "login") {
 
+    if (data.action === "login") {
+      console.log(`login detected for ${data.id}`)
       this.GetAgent(data.id)
     }
 
     if (data.action === "changestate") {
-
+      console.log(`State change detected for ${data.id}, into ${data.data}`)
       for (let i = 0; i < this.agents.length; i++) {
         if (data.id === this.agents[i].phoneLogin) {
           this.agents[i].updateState(data.data)
@@ -40,49 +45,47 @@ export default class AgentListModel {
         }
       }
     }
+
     if (data.action === "transfer") {
-      this.GetQueuesUpdates()
+      console.log(`transfer detected for ${data.data}, call : ${data.id}`)
+      this.GetQueuesUpdates().then(() => {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.data === this.agents[i].phoneLogin) {
           this.agents[i].updateCall(data.id)
         }
-      }
-
+      }})
     }
-    if (data.action === "transferring") {
+
+ /*    if (data.action === "transferring") {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.data === this.agents[i].phoneLogin) {
-          //this.agents[i].removeCall()
           this.GetAgent(data.data)
-          
+          data.
         }
       }
-
-    }
+    } */
 
     if (data.action === "endcall") {
-      this.GetQueuesUpdates()
+      console.log(`call end detected for ${data.data}, call : ${data.id}`)
+      this.GetQueuesUpdates().then(() => {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.data === this.agents[i].phoneLogin) {
-
           this.agents[i].removeCall()
           this.agents[i].updateState(data.data)
-
         }
       }
     }
+  )
+    }
+
     if (data.action === "create") {
+      console.log(`detected create call ${data.id}`)
       this.GetQueuesUpdates()
-      console.log("updating queue")
     }
     if (data.action === "calltype") {
       this.GetQueuesUpdates()
-      console.log("updating queue")
     }
-
-
   }
-
 
   @computed
   get loggedInAgentsCount() {
@@ -94,24 +97,61 @@ export default class AgentListModel {
     this.agents.remove(agent)
   }
 
-
+  @action
+  setCurrentUser(agent) {
+    console.log(`current user SET ! : ${agent.ext}`)
+    agent.getCallsWithoutTickets()
+    this.currentUser=agent
+    agent.currentUser=true
+    
+  }
 
   @action
   addAgent(agent) {
-    //console.log(agent)
-    this.agents.push(new AgentModel(agent))
+
+    this.agents.push(new AgentModel(agent, this))
   }
 
   @action
   async GetAgentList() {
-
-    //this.ds.ListAgents().then((data) => console.log(data))    
-    this.rootStore.ds.ListAgents().then((data) => this.onListRecieved(data))
+    this.ds.ListAgents().then((data) => this.onListRecieved(data))
   }
 
   @action
+  async GetQueuesList() {
+    this.ds.getQueueLines().then((data) => this.onQueuesRecieved(data))
+  }
+  @action
   async GetQueuesUpdates() {
-    this.rootStore.ds.getQueueLines().then((data) => this.onQueuesRecieved(data))
+    this.ds.getQueueLines().then((data) => this.onQueuesUpdateRecieved(data))
+  }
+
+
+  onQueuesUpdateRecieved(data) {
+
+    var listofqueues = [];
+    if (data.data.allAgents) { listofqueues = data.data.allAgents.edges.map((edge) => { return edge.node }) }
+    for (let i = 0; i < this.queues.length; i++) {
+      listofqueues.forEach((queue) => {
+        if (queue.ext === this.queues[i].ext) {
+
+
+          if (queue.currentCall) {
+            //this.queues[i].updateCall(queue.currentCall.ucid)
+            this.queues[i].currentCall = { callType: queue.currentCall.callType, origin: queue.currentCall.origin, start: queue.currentCall.start, ucid: queue.currentCall.ucid }
+
+
+           // console.log(this.queues[i])
+
+          } else {
+            this.queues[i].removeCall()
+          }
+
+        }
+      })
+
+
+    }
   }
 
   onListRecieved(data) {
@@ -134,17 +174,18 @@ export default class AgentListModel {
 
   @action
   addQueue(queue) {
-    //console.log(agent)
-    this.queues.push(new AgentModel(queue))
+
+    this.queues.push(new AgentModel(queue, this))
   }
 
 
   @action
   async GetAgent(login) {
-    //this.ds.ListAgents().then((data) => console.log(data))    
-    this.rootStore.ds.GetAgent(login).then((data) => this.onAgentRecieved(data))
+    this.ds.GetAgent(login).then((data) => this.onAgentRecieved(data))
 
   }
+
+
 
   onAgentRecieved(data) {
     var listofusers = [];
@@ -154,16 +195,18 @@ export default class AgentListModel {
       let found = false;
       for (let i = 0; i < this.agents.length; i++) {
         if (listofusers[0].phoneLogin === this.agents[i].phoneLogin) {
-          let agent = new AgentModel(listofusers[0])
+          let agent = new AgentModel(listofusers[0], this)
           this.agents[i] = agent
           found = true;
         }
+      }
         if (found === false) {
-          this.addAgent(new AgentModel(listofusers[0]))
-        }
+          this.addAgent(new AgentModel(listofusers[0],this))
+       
       }
     }
     //this.setState( { serverData : { users : users.users } }
   }
+
 
 }

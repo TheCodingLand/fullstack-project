@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import { LinearProgress } from 'material-ui/Progress';
+
+import { withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const styles = {
@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-class ProgressBar extends React.Component {
+class Pbar extends React.Component {
   state = {
     completed: 0,
   };
@@ -41,9 +41,7 @@ class ProgressBar extends React.Component {
     return (
         
       <div className={classes.root}>
-        
-        
-        <LinearProgress color="accent" mode="determinate" value={this.state.completed} />
+        <LinearProgress color="secondary" mode="determinate" value={this.state.completed} />
         
       </div>
     
@@ -51,8 +49,8 @@ class ProgressBar extends React.Component {
   }
 }
 
-ProgressBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+//ProgressBar.propTypes = {
+//  classes: PropTypes.object.isRequired,
+//};
 
-export default withStyles(styles)(ProgressBar);
+export default withStyles(styles)(Pbar);
