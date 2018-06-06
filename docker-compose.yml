@@ -58,7 +58,7 @@ services:
   volumes:
     - ./event-manager:/data/event-manager
   #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
-  command: sh -c 'python3 manage.py migrate --fake && manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8888'
+  command: sh -c 'python3 manage.py migrate --fake && python3 manage.py makemigrations && python3 manage.py migrate && python3 createsuperuser.py && python3 eventmanager.py & gunicorn mydjango.wsgi:application -w 2 -b :8888'
   depends_on:
    - redis
    - postgres
