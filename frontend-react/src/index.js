@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { green, purple, red } from 'material-ui/colors';
+//import { green, purple, red } from '@material-ui/core/colors/green';
+import green from '@material-ui/core/colors/green';
+import purple from '@material-ui/core/colors/purple';
+import red from '@material-ui/core/colors/red';
 import 'typeface-roboto'
 //MUI
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import registerServiceWorker from './registerServiceWorker';
+
 
 import App from './App';
 
@@ -31,5 +34,4 @@ const theme = createMuiTheme({
 
 
 ReactDOM.render(<MuiThemeProvider theme={theme}><App /></MuiThemeProvider>, document.getElementById('root'));
-registerServiceWorker();
 

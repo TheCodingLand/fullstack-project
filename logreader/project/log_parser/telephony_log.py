@@ -18,7 +18,7 @@ class TelephonyLog(LogLine):
     def manageConsulting(self):
         if self.consulting():
             ev = CallEvent(self.getUcid(), self.date)
-            ev.setDetails(self.consulting(self.getCalledDid()))
+            ev.setDetails(self.getCalledDid())
 
     def check_createNew(self):
         if self.getNewCallUcid():

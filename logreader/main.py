@@ -6,6 +6,7 @@ import time
 import redis
 import threading
 import sys
+import logging
 
 if os.getenv('LOGFILE'):
     logfile = '%s' % os.environ['LOGFILE']
@@ -38,15 +39,20 @@ class parseLog(threading.Thread):
 
     def run(self):
         self.f = open(self.LogFile)
-        sys.stdout.write("opened file %s" % (self.LogFile))
+        logging.warning("opened file %s" % (self.LogFile))
 
         self.num_lines = sum(1 for line in self.f)
         self.f.close()
         self.f = open(self.LogFile)
         self.filesize = os.stat(self.LogFile).st_size
         self.oldfilesize = self.filesize
-        sys.stdout.write("Starting Parsing of log...")
+        logging.warning("Starting Parsing of log...")
+        i=0
         while not self.kill_received:
+            if i>100:
+                logging.warning(f"log still running {self.LogFile}")
+                i=0
+            
             self.filesize = os.stat(self.LogFile).st_size
             if self.filesize < self.oldfilesize:  # check if file has been rotated
                 self.f.close()

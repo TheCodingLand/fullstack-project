@@ -18,7 +18,7 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('creationdate', 'applicant')
 
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'state')
+    list_display = ('creationdate','title', 'category', 'state')
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'searchcode', 'ot_id')

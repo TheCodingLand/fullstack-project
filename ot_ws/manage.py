@@ -15,7 +15,6 @@ log.setLevel(logging.ERROR)
 app = create_app()
 manager = Manager(app)
 
-
 @manager.command
 def test():
     """Runs the unit tests without test coverage."""

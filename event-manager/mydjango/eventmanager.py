@@ -19,27 +19,33 @@ ot=ot_api.ot_api_event()
 ot.updateTickets()
 batch = datetime.now()
 d = timedelta(minutes=15)
-
+logging.warning("Starting watching events")
 while True:
 
     if batch - d > datetime.now():
         ot.updateTickets()
         batch = datetime.now()
 
-
-
     keys = b.keys('*')
     if len(keys) == 0:
         #easier on CPU usage
         time.sleep(0.1)
     for key in keys:
-
         try:
             c = b.hgetall(key)
+            
         except redis.exceptions.ResponseError:
             logging.error('Failed to deal with key %s' % key)
             b.delete(key)
             continue
+
+        if c.get('action') == 'updatetickets':
+            logging.error("reloading ticket link")
+            id = c.get('id')
+            ot.updateTicketLink(id)
+            b.delete(key)
+            continue
+        
         s = services.Services(c)
         if s.done == True:
             b.delete(key)

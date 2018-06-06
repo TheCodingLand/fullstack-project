@@ -378,7 +378,10 @@ class ot_api_event(object):
             pass
 
         event.phone=data['data']['Phone Number']
-        event.end =data['data']['Call Finished Date']
+        if data['data']['Call Finished Date'] !='':
+            event.end =data['data']['Call Finished Date']
+        else:
+            event.end=None
         ticket_id = data['data']['RelatedIncident']
         if ticket_id =="":
             return False
@@ -433,7 +436,29 @@ class ot_api_event(object):
 
     def updateTickets(self):
         d = datetime.timedelta(days=1)
-        calls = Call.objects.filter(start__gt= datetime.datetime.today()-d)
+        calls = Call.objects.filter(start__gt=datetime.datetime.today()-d)
         for call in calls:
             self.getTicketFromEvent(call)
+    
+   
 
+    def updateTicketLink(self, id):
+        logging.warning('http://ot-ws:5000/api/ot/events/%s' % id)
+        req = execute(
+            'get', 'http://ot-ws:5000/api/ot/events/%s' % id, {})
+        if req == False:
+            return False
+        data = req.json()
+        ticket_id = data['data']['RelatedIncident']
+        if ticket_id == "":
+            return False
+        ticket = Ticket.objects.get_or_create(ot_id=ticket_id)[0]
+        event=Event.objects.get(ot_id=id)
+
+        event.ticket = ticket
+        
+        event.save()
+
+
+
+    

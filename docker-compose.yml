@@ -1,17 +1,47 @@
-version: '2.1'
+version: '3'
 
 services:
+ websocket:
+  env_file:
+     - prod_env
+  build: ./frontend-react/
+  labels:
+      - "traefik.backend=ws"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=3001"
+      - "traefik.frontend.rule=Host:ws.lbr.lu"
+      - "traefik.frontend.entryPoints=http"
+  expose:
+    - "3001"
+  links:
+    - redis
+  networks:
+    - web
+
+  working_dir : /usr/src/app
+  command: sh -c 'node ./src/redis.js'
+
  web:
   env_file:
      - prod_env
   build: ./frontend-react/
-  ports:
-    - "3000"
-    - "3001:3001"
+  labels:
+      - "traefik.backend=web"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:tickets.lbr.lu"
+      - "traefik.frontend.entryPoints=http"
+  expose:
+    - "8080"
+  networks:
+    - web
+    
   links:
     - redis
-  working_dir : /usr/src/app
-  command: sh -c 'node ./src/redis.js & npm start'
+  
+  
  
 
  event-manager-ot:
@@ -32,6 +62,8 @@ services:
   depends_on:
    - redis
    - postgres
+  networks:
+   - web
 
  event-manager:
   env_file:
@@ -52,6 +84,9 @@ services:
    - redis
    - postgres
    - event-manager-ot
+
+  networks:
+   - web
   
  nginx:
   restart: always
@@ -60,12 +95,12 @@ services:
   build: ./nginx/
   ports:
     - "8099:80"
-    - "80:8001"
-  volumes_from:
-    - event-manager
+    - "8081:8001"
   links:
     - event-manager:event-manager
     - web:web
+  networks:
+    - web
 
  postgres:
   restart: always
@@ -77,6 +112,8 @@ services:
     - ./backups/postgresql:/backup
   expose:
     - "5432"
+  networks:
+    - web
 
  php-redis-admin:
   env_file:
@@ -89,6 +126,8 @@ services:
    - "8093:80"
   depends_on:
    - redis
+  networks:
+   - web
     
  redis:
   env_file:
@@ -101,6 +140,8 @@ services:
     - "6379:6379"
   volumes:
    - ./redis:/data
+  networks:
+    - web
  
 
  logreader-tel:
@@ -116,6 +157,8 @@ services:
    - LOGFILE=/media/callcenter/DIAGS/TelephonyServer_ccrcsl02.000
   depends_on:
    - redis
+  networks:
+    - web
 
  logreader-agent:
   env_file:
@@ -130,6 +173,8 @@ services:
    - LOGFILE=/media/callcenter/DIAGS/PresenceServer_ccrcsl02.000
   depends_on:
    - redis
+  networks:
+    - web
    
  ot-ws:
   env_file:
@@ -140,6 +185,9 @@ services:
    - './ot_ws:/usr/src/app'
   ports:
    - 5001:5000 # expose ports - HOST:CONTAINER
+   
+  networks:
+    - web
       
  swagger:
   env_file:
@@ -151,5 +199,12 @@ services:
   environment:
    - API_URL=http://148.110.107.15:5001/api/ot/schema
   depends_on:
-   ot-ws:
-    condition: service_started
+   - ot-ws
+  
+  networks:
+    - web
+    
+
+networks:
+  web:
+    external: true
