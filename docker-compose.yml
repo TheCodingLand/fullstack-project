@@ -4,7 +4,7 @@ services:
  websocket:
   env_file:
      - prod_env
-  build: ./frontend-react/
+  build: ./websocket/
   labels:
       - "traefik.backend=ws"
       - "traefik.docker.network=web"
