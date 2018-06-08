@@ -169,6 +169,7 @@ class ot_api_event(object):
         if id:
             event = Event.objects.get_or_create(ot_id=id)[0]
             event.call = call
+            event.creationdate = call.start
             #log.error("updated call to %s" % event.ot_id)
             event.save()
         return True
