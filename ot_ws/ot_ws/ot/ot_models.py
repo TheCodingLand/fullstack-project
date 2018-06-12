@@ -374,7 +374,7 @@ class Generic(object):
 
 class Client(object):
     def __init__(self):
-        self.folder = r'00. MasterData\05. People'
+        self.folder = r'00. MasterData\05. People\05.1 Persons'
         self.requiredfields = ["FirstName",
                                "LastName", "Login Name", "displayname"]
         self.fields = {

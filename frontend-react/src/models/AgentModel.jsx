@@ -17,14 +17,14 @@ export default class AgentModel {
     console.log("Loading New Agent")
     //console.log"Agent Constructor")
     this.ds = rootstore.ds;
-
+    
     this.firstname = agent.firstname;
     this.lastname = agent.lastname;
     this.phoneLogin = agent.phoneLogin;
     this.ext = agent.ext;
     this.phoneState = agent.phoneState;
     this.totalcalls = "";
-    this.currentCall = { ucid: "", origin: "", start: "", destination: "", callType: "", tickets: [] }
+    this.currentCall = { }
     this.totalcalls = []
     this.getCallsCount() 
     this.callsWithoutTickets = []
@@ -36,14 +36,14 @@ export default class AgentModel {
     }
     
 
-    if (agent.currentCall) {
-      if (agent.currentCall.ucid) {
-        this.currentCall = { ucid: agent.currentCall.ucid, origin: agent.currentCall.origin, start: agent.currentCall.start, destination: agent.currentCall.destination, callType: agent.currentCall.callType, tickets: [] }
-        if (agent.currentCall.origin !== "False") {
-          this.ds.getTicketbyPhone(agent.currentCall.origin).then((data) => this.onTicketsRecieved(data))
-        }
-      }
-    }
+    // if (agent.currentCall) {
+    //   if (agent.currentCall.ucid) {
+    //     this.currentCall = { ucid: agent.currentCall.ucid, origin: agent.currentCall.origin, start: agent.currentCall.start, destination: agent.currentCall.destination, callType: agent.currentCall.callType, tickets: [] }
+    //     if (agent.currentCall.origin !== "False") {
+    //       this.ds.getTicketbyPhone(agent.currentCall.origin).then((data) => this.onTicketsRecieved(data))
+    //     }
+    //   }
+    // }
   }
 
   @action
@@ -111,11 +111,13 @@ export default class AgentModel {
 
   @action
   setCall(call) {
-    //console.log"SetCall" + call.ucid)
-    this.currentCall.ucid = call.ucid
-    this.currentCall.start = call.start
-    this.currentCall.destination = call.destination
-    this.currentCall.callType = call.callType
+    console.log("SetCall" + call.ucid + " " + call.destination + " " + call.origin )
+    this.currentCall = call
+
+    //this.currentCall.ucid = call.ucid
+    //this.currentCall.start = call.start
+    //this.currentCall.destination = call.destination
+    //this.currentCall.callType = call.callType
     if (call.origin !== "False") {
       this.currentCall.origin = call.origin
       
@@ -158,11 +160,16 @@ export default class AgentModel {
   }
 
   @action
-  updateCall(ucid) {
-    //console.log"UpdateCall")
-    this.ds.GetCall(ucid).then((data) => this.onCallRecieved(data))
+  updateCall(call) {
+    
+    
+      this.setCall(call)
+      console.log("found call " + call)
+      
+    }
+    //this.ds.GetCall(ucid).then((data) => this.onCallRecieved(data))
 
-  }
+  
 
   
   onCallRecieved(data) {

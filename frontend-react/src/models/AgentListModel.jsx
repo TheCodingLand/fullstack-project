@@ -9,17 +9,13 @@ import CallModel from "./CallsModel";
 export default class AgentListModel {
   constructor(ds) {
     this.ds = ds
-    
   }
-  @observable calls= []
+
+  @observable calls = []
   @observable queues = []
   @observable agents = []
 
-  currentUser = {}
-
-  getActiveCalls(){
-    this.ds.getActiveCalls().then((calls) => {calls.data.allCalls.edges.map(call => { return new CallModel(call.node, this) })}).then(calls => this.calls = calls)
-  }
+  currentUser = { }
 
   async handleMessage(data) {
     if (data.action === "logoff") {
@@ -41,22 +37,44 @@ export default class AgentListModel {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.id === this.agents[i].phoneLogin) {
           this.agents[i].updateState(data.data)
-
         }
       }
     }
 
     if (data.action === "transfer") {
+      this.getActiveCalls()
+      
       console.log(`transfer detected for ${data.data}, call : ${data.id}`)
-      this.GetQueuesUpdates().then(() => {
-      for (let i = 0; i < this.agents.length; i++) {
-        if (data.data === this.agents[i].phoneLogin) {
-          this.agents[i].updateCall(data.id)
+
+      this.queues.forEach((queue) => {
+        if (queue.currentCall.ucid === data.id) {
+          queue.currentCall = {}
         }
-      }})
+      })
+      this.agents.forEach((agent) => {
+        if (agent.currentCall.ucid === data.id) {
+          agent.currentCall = {}
+        }
+      })
+
+      this.agents.forEach(agent => { if (agent.login === data.data) {
+        this.calls.forEach(call => { if (call.ucid === data.id) { 
+
+          console.log("transfering call " + data.id)
+          call.destination = agent.ext 
+          agent.updateCall(call)
+
+        } })
+          
+      }
+    }
+  )
+
+    
+
     }
 
- /*    if (data.action === "transferring") {
+    /* if (data.action === "transferring") {
       for (let i = 0; i < this.agents.length; i++) {
         if (data.data === this.agents[i].phoneLogin) {
           this.GetAgent(data.data)
@@ -66,24 +84,37 @@ export default class AgentListModel {
     } */
 
     if (data.action === "endcall") {
+
       console.log(`call end detected for ${data.data}, call : ${data.id}`)
-      this.GetQueuesUpdates().then(() => {
-      for (let i = 0; i < this.agents.length; i++) {
-        if (data.data === this.agents[i].phoneLogin) {
-          this.agents[i].removeCall()
-          this.agents[i].updateState(data.data)
+      this.calls.forEach(call => { if (call.ucid === data.id) { 
+        console.log("removing call " + data.id)
+        this.calls.remove(call) } })
+      for (let i = 0; i < this.queues.length; i++) {
+        if (this.queues[i].currentCall) {
+          if (data.id === this.queues[i].currentCall.ucid) {
+            this.queues[i].currentCall= {}
+          }
         }
       }
+      
+      for (let i = 0; i < this.agents.length; i++) {
+        if (data.data === this.agents[i].phoneLogin) {
+          this.agents[i].currentCall= {}
+          this.agents[i].updateState(data.data)
+        
+      }
     }
-  )
+  
     }
 
     if (data.action === "create") {
       console.log(`detected create call ${data.id}`)
-      this.GetQueuesUpdates()
+      this.getActiveCalls()
+      
     }
     if (data.action === "calltype") {
-      this.GetQueuesUpdates()
+      this.getActiveCalls()
+     
     }
   }
 
@@ -108,8 +139,58 @@ export default class AgentListModel {
 
   @action
   addAgent(agent) {
-
     this.agents.push(new AgentModel(agent, this))
+  }
+
+  getActiveCalls(){
+    this.ds.getActiveCalls().then((calls) => {calls.data.allCalls.edges.map(call => { return this.updateCalls(call) } ) })
+    //.then(      calls => this.onCallsRecieved(calls)) 
+  }
+  
+ 
+  updateQueue(call){
+    this.queues.forEach((queue) => { 
+    
+      if (call.destination === queue.ext) {
+      queue.currentCall = call
+
+    }})
+  }
+
+  updateAgent(call){
+    this.agents.forEach((agent) => { 
+      if (call.destination === agent.ext) {
+      
+      agent.currentCall = call
+
+    }})
+  }
+  
+  @action
+  updateCalls(call) {
+    let found = false
+    this.calls.forEach(c => { 
+      if (c.ucid===call.node.ucid) {
+      c.update(call.node)
+      //c = new CallModel(call.node, this)
+      
+      this.updateQueue(c)
+      this.updateAgent(c)
+
+    }
+  })
+
+  if (found === false) {
+    this.calls.push(new CallModel(call.node, this))
+    
+
+  this.updateQueue(call.node)
+  this.updateAgent(call.node)
+}
+//this.updateQueue(call.node)
+//  this.updateAgent(call.node)
+  return true
+
   }
 
   @action
@@ -123,9 +204,11 @@ export default class AgentListModel {
   }
   @action
   async GetQueuesUpdates() {
-    this.ds.getQueueLines().then((data) => this.onQueuesUpdateRecieved(data))
+    this.getActiveCalls()
+    //this.ds.getQueueLines().then((data) => this.onQueuesUpdateRecieved(data))
   }
 
+  
 
   onQueuesUpdateRecieved(data) {
 

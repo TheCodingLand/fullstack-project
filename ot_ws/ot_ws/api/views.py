@@ -352,40 +352,45 @@ class ObjectFilter(Resource):
 
         post_data = request.get_json()
         # log.info(request.get_json())
-        try:
-            r = query_ot()
-            # log.info(post_data)
+        
+        r = query_ot()
+        # log.info(post_data)
 
-            objectlist = r.getObjectList(post_data.get(
-                'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
+        objectlist = r.getObjectList(post_data.get(
+            'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
+        res = r.xml_result.decode("utf-8")
+        #msg, success = getOtMsg(res)
+    
+        
 
-            items = serialize(r.xml_result.decode("utf-8")).results
-            results = []
-            for result in items:
-                d = {}
-                d.update({'id': result.id})
-                d.update({'data': result.res})
-                results.append(d)
+        
+            
 
-            if results:
-                response_object = {
-                    'status': 'success',
-                    'message': 'object list :',
-                    '%s' % post_data.get('objectclass'): results
-                }
-                return response_object, 201
-            else:
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Sorry. failed.'
-                }
-                return response_object, 400
-        except:
+        items = serialize(res).results
+        results = []
+        for result in items:
+            d = {}
+            d.update({'id': result.id})
+            d.update({'data': result.res})
+            results.append(d)
+
+        if results:
+            
+            response_object = {
+                'status': 'success',
+                'message': 'object list :',
+                '%s' % post_data.get('objectclass'): results
+            }
+            return response_object, 201
+        else:
             response_object = {
                 'status': 'fail',
-                'message': 'Invalid payload.'
+                'message': res
             }
             return response_object, 400
+
+
+
 
 
 @api.response(400, 'failed.')
