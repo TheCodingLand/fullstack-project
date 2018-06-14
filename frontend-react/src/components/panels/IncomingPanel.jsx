@@ -43,13 +43,31 @@ class IncomingPanel extends React.Component {
     }
   }
 
-return (<Stepper key={queue.ext} activeStep = {activestep} alternativeLabel>{steps}</Stepper>)
-}
-    render () {
-        
-        
+    return (<Stepper key={queue.ext} activeStep={activestep} alternativeLabel>{steps}</Stepper>)
+  }
+  render() {
 
-      return(<div><GridMaterial container spacing={24} style={{ flexGrow: 1 }} >
+    return (<div><GridMaterial container spacing={24} style={{ flexGrow: 1 }}>
+      <GridMaterial style={{ justifyContent: "flexend", display: "flex" }} item xs>
+        <Card style={{width:"100%"}}>
+          <CardHeader title="Queues Status" />
+          {this.props.agents.length > 0 ? 
+          <TicketDrawer store={this.props.store} categories={this.props.categories} agents={this.props.agents} /> : <div></div>}</Card>
+        </GridMaterial>
+      {this.props.store.agentStore.queues && this.props.store.agentStore.queues.map((queue) => {
+        return (
+
+          <GridMaterial key={queue.ext} item xs><Card>
+            <CardHeader title={queue.ext} />
+            {this.GetStepper(queue)}</Card>
+          </GridMaterial>)
+      })}
+    </GridMaterial>
+    </div>
+    );
+  }
+
+    /*   return(<div><GridMaterial container spacing={24} style={{ flexGrow: 1 }} >
         <GridMaterial style={{ flex: 'auto', width:"15%", maxHeight: "130px", paddingRight:"0px", paddingLeft:"10px", paddingBottom:"10px"}} item xs><Card style={{ flex: 'auto', maxHeight: "130px" }}><CardHeader title="Queues Status"/>
       { this.props.agents.length >0 ? <TicketDrawer store={this.props.store} categories={this.props.categories} agents={this.props.agents} />:<div></div>}</Card></GridMaterial>
         {  this.props.store.agentStore.queues &&  this.props.store.agentStore.queues.map((queue) => { return (
@@ -59,6 +77,6 @@ return (<Stepper key={queue.ext} activeStep = {activestep} alternativeLabel>{ste
       </GridMaterial>
         </div>
       ); 
-    }
-  }
+    }*/
+  } 
   export default IncomingPanel

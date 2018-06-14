@@ -78,8 +78,8 @@ class App extends React.Component {
     categories : [],
     loaded:false,
     
-    themeName:"dark",
-    theme:themeDark
+    themeName:"light",
+    theme:themeLight
 
   }
   setTheme = () => () => {
