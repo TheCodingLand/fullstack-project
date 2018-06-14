@@ -1,6 +1,6 @@
 # project/api/views.py
 from flask_restplus import Namespace, Resource, fields
-from ot_ws.api.models.apimodels import event, ticket, genericfilter, GetWithFields, ot_object
+from ot_ws.api.models.apimodels import event, ticket, genericfilter, GetWithFields, ot_object, client
 import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
@@ -9,7 +9,7 @@ from flask import request
 
 from ot_ws.api.restplus import api
 from ot_ws.ot.query_ot import query_ot
-from ot_ws.ot.ot_models import Event, Ticket, Category, Generic
+from ot_ws.ot.ot_models import Event, Ticket, Category, Generic, Client
 from ot_ws.ot.serialize import serialize, test
 # these hold our data model folder, fields list, required fields
 import time
@@ -18,6 +18,10 @@ from ot_ws.ot.ot_field import *
 
 ns = api.namespace('ot/', description='Operations related to OT events')
 
+event_model = Event()
+ticket_model = Ticket()
+generic_model = Generic()
+client_model = Client()
 
 @ns.route('/schema')
 class Swagger(Resource):
@@ -62,7 +66,7 @@ class ObjectsMetadata(Resource):
                     'data': ot_object
                 }
                 return response_object, 200
-        except ValueError:
+        except:
             return response_object, 404
 
 
@@ -91,7 +95,7 @@ class ObjectsMetadata(Resource):
                     'data': ot_object
                 }
                 return response_object, 200
-        except ValueError:
+        except:
             return response_object, 404
 
 
@@ -112,7 +116,6 @@ def getFields(object_model, data):
     return fields
 
 
-event_model = Event()
 
 
 @api.response(400, 'failed.')
@@ -241,11 +244,10 @@ class EventItemUCID(Resource):
                     'data': event
                 }
                 return response_object, 200
-        except ValueError:
+        except:
             return response_object, 404
 
 
-ticket_model = Ticket()
 
 
 @ns.route('/tickets/<int:ticket_id>', methods=['GET'])
@@ -283,11 +285,50 @@ class TicketItem(Resource):
                     'data': ticket
                 }
                 return response_object, 200
-        except ValueError:
+        except:
             return response_object, 404
 
 
-ticket_model = Ticket()
+@api.response(400, 'failed.')
+@ns.route('/clients')
+class TicketAdd(Resource):
+    @api.response(201, 'Client successfully created.')
+    @api.expect(client)
+    def put(self):
+        response_object = {
+                    'status': 'fail',
+                    'message': 'Internal server error.'
+                }
+        try:
+            post_data = request.get_json()
+
+            # log.info(post_data)
+
+            if not post_data:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'Invalid payload.'
+                }
+            else:
+
+                fields = getFields(client_model, post_data)
+
+                r = query_ot()
+                result = r.add(client_model, fields)
+                if result:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'client was added!',
+                        'ticket': result
+                    }
+                    return response_object, 201
+        
+        except:
+            return response_object, 500
+
+
+
+
 
 
 @api.response(400, 'failed.')
@@ -296,50 +337,35 @@ class TicketAdd(Resource):
     @api.response(201, 'Ticket successfully created.')
     @api.expect(ticket)
     def put(self):
-
-        post_data = request.get_json()
-
-        # log.info(post_data)
-
-        if not post_data:
-            response_object = {
-                'status': 'fail',
-                'message': 'Invalid payload.'
-            }
-        else:
-
-            fields = getFields(ticket_model, post_data)
-
-            r = query_ot()
-            result = r.add(ticket_model, fields)
-            if result:
-                response_object = {
-                    'status': 'success',
-                    'message': 'ticket was added!',
-                    'ticket': result
+        response_object = {
+                    'status': 'fail',
+                    'message': 'Internal server error.'
                 }
-                return response_object, 201
         try:
-            r = query_ot()
-            result = r.add(ticket_model, post_data)
-            if result:
-                response_object = {
-                    'status': 'success',
-                    'message': 'ticket was added!',
-                    'ticket': result
-                }
-                return response_object, 201
-            else:
+            post_data = request.get_json()
+
+            # log.info(post_data)
+
+            if not post_data:
                 response_object = {
                     'status': 'fail',
-                    'message': 'Sorry. failed.'
+                    'message': 'Invalid payload.'
                 }
-                return response_object, 400
+            else:
+
+                fields = getFields(ticket_model, post_data)
+
+                r = query_ot()
+                result = r.add(ticket_model, fields)
+                if result:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'ticket was added!',
+                        'ticket': result
+                    }
+                    return response_object, 201
+            
         except:
-            response_object = {
-                'status': 'fail',
-                'message': 'Internal server error.'
-            }
             return response_object, 500
 
 
@@ -352,45 +378,40 @@ class ObjectFilter(Resource):
 
         post_data = request.get_json()
         # log.info(request.get_json())
-        
-        r = query_ot()
-        # log.info(post_data)
+        try:
+            r = query_ot()
+            # log.info(post_data)
 
-        objectlist = r.getObjectList(post_data.get(
-            'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
-        res = r.xml_result.decode("utf-8")
-        #msg, success = getOtMsg(res)
-    
-        
+            r.getObjectList(post_data.get(
+                'objectclass'), post_data.get('filter'), post_data.get('variables'), post_data.get('requiredfields'))
 
-        
-            
+            items = serialize(r.xml_result.decode("utf-8")).results
+            results = []
+            for result in items:
+                d = {}
+                d.update({'id': result.id})
+                d.update({'data': result.res})
+                results.append(d)
 
-        items = serialize(res).results
-        results = []
-        for result in items:
-            d = {}
-            d.update({'id': result.id})
-            d.update({'data': result.res})
-            results.append(d)
-
-        if results:
-            
-            response_object = {
-                'status': 'success',
-                'message': 'object list :',
-                '%s' % post_data.get('objectclass'): results
-            }
-            return response_object, 201
-        else:
+            if results:
+                response_object = {
+                    'status': 'success',
+                    'message': 'object list :',
+                    '%s' % post_data.get('objectclass'): results
+                }
+                return response_object, 201
+            else:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'Sorry. failed.'
+                }
+                return response_object, 400
+        except:
             response_object = {
                 'status': 'fail',
-                'message': res
+                'message': 'Invalid payload.'
             }
             return response_object, 400
-
-
-
 
 
 @api.response(400, 'failed.')
@@ -399,32 +420,38 @@ class EventMod(Resource):
     @api.response(201, 'object successfully modified.')
     @api.expect(event)
     def put(self, event_id):
+        response_object = {
+                    'status': 'fail',
+                    'message': 'Internal server error.'
+                }
+        try:
 
-        post_data = request.get_json()
-        # log.info(post_data)
-        if not post_data:
+            post_data = request.get_json()
+            # log.info(post_data)
+            if not post_data:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'Invalid payload.'
+                }
+            else:
+                id = event_id
+                fields = getFields(event_model, post_data)
+                r = query_ot()
+                result = r.modifyObjet(id, fields)
+                if result:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'ticket was added!',
+                        'ticket': result
+                    }
+                    return response_object, 201
+
             response_object = {
                 'status': 'fail',
-                'message': 'Invalid payload.'
+                'message': 'Internal server error.'
             }
-        else:
-            id = event_id
-            fields = getFields(event_model, post_data)
-            r = query_ot()
-            result = r.modifyObjet(id, fields)
-            if result:
-                response_object = {
-                    'status': 'success',
-                    'message': 'ticket was added!',
-                    'ticket': result
-                }
-                return response_object, 201
-
-        response_object = {
-            'status': 'fail',
-            'message': 'Internal server error.'
-        }
-        return response_object, 500
+        except:
+            return response_object, 500
 
 
 
@@ -434,35 +461,41 @@ class TicketMod(Resource):
     @api.response(201, 'object successfully modified.')
     @api.expect(ticket)
     def put(self, ticket_id):
-
-        post_data = request.get_json()
-        # log.info(post_data)
-        if not post_data:
-            response_object = {
+        response_object = {
                 'status': 'fail',
                 'message': 'Invalid payload.'
             }
-        else:
-            id = ticket_id
-            fields = getFields(ticket_model, post_data)
-            r = query_ot()
-            result = r.modifyObjet(id, fields)
-            if result:
+        try:
+
+            post_data = request.get_json()
+            # log.info(post_data)
+            if not post_data:
                 response_object = {
-                    'status': 'success',
-                    'message': 'ticket was added!',
-                    'ticket': result
+                    'status': 'fail',
+                    'message': 'Invalid payload.'
                 }
-                return response_object, 201
+            else:
+                id = ticket_id
+                fields = getFields(ticket_model, post_data)
+                r = query_ot()
+                result = r.modifyObjet(id, fields)
+                if result:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'ticket was added!',
+                        'ticket': result
+                    }
+                    return response_object, 201
 
-        response_object = {
-            'status': 'fail',
-            'message': 'Internal server error.'
-        }
-        return response_object, 500
+            response_object = {
+                'status': 'fail',
+                'message': 'Internal server error.'
+            }
+        except:
+            return response_object, 500
 
 
-generic_model = Generic()
+
 
 @api.response(400, 'failed.')
 @ns.route('/objectmod/<int:object_id>')
@@ -470,32 +503,38 @@ class ObjectMod(Resource):
     @api.response(201, 'object successfully modified.')
     @api.expect(ot_object)
     def put(self, object_id):
-
-        post_data = request.get_json()
-        # log.info(post_data)
-        if not post_data:
-            response_object = {
-                'status': 'fail',
-                'message': 'Invalid payload.'
-            }
-        else:
-            id = object_id
-            fields = getFields(generic_model, post_data)
-            r = query_ot()
-            result = r.modifyObjet(id, fields)
-            if result:
-                response_object = {
-                    'status': 'success',
-                    'message': 'object was modified!',
-                    'object': result
-                }
-                return response_object, 201
-
         response_object = {
             'status': 'fail',
             'message': 'Internal server error.'
         }
-        return response_object, 500
+        try:
+
+            post_data = request.get_json()
+            # log.info(post_data)
+            if not post_data:
+                response_object = {
+                    'status': 'fail',
+                    'message': 'Invalid payload.'
+                }
+            else:
+                id = object_id
+                fields = getFields(generic_model, post_data)
+                r = query_ot()
+                result = r.modifyObjet(id, fields)
+                if result:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'object was modified!',
+                        'object': result
+                    }
+                    return response_object, 201
+
+            response_object = {
+                'status': 'fail',
+                'message': 'Internal server error.'
+            }
+        except:
+            return response_object, 500
 
 @api.response(400, 'failed.')
 @ns.route('/object/<int:objectid>')
@@ -503,42 +542,49 @@ class ObjectFields(Resource):
     @api.response(201, 'object found')
     @api.expect(GetWithFields)
     def post(self, objectid):
-
-        post_data = request.get_json()
-        log.error("pulling object %s with field %s" %
-                  (objectid, post_data.get('requiredfields')))
-        # log.info(request.get_json())
-        if True:
-            r = query_ot()
-            # log.info(post_data)
-
-            objectlist = r.getWithFields(
-                objectid, post_data.get('requiredfields'))
-
-            items = serialize(r.xml_result.decode("utf-8"))
-
-            if items.results == []:
-                return response_object, 404
-            log.error("pulling object %s with field %s" %
-                      (objectid, post_data.get('requiredfields')))
-            id = items.results[0].id
-            data = items.results[0].res
-
-            if data:
-                response_object = {
-                    'status': 'success',
-                    'message': 'object :',
-                    'id': id,
-                    'data': data
-                }
-                return response_object, 201
-            else:
-                response_object = {
+        response_object = {
                     'status': 'fail',
                     'message': 'Sorry. failed.'
                 }
-                return response_object, 400
-        # except:
+        try:
+            post_data = request.get_json()
+            log.error("pulling object %s with field %s" %
+                    (objectid, post_data.get('requiredfields')))
+            # log.info(request.get_json())
+            if True:
+                r = query_ot()
+                
+                r.getWithFields(objectid, post_data.get('requiredfields'))
+
+                logging.error(r.xml_result)
+
+                items = serialize(r.xml_result.decode("utf-8"))
+                
+                if items.results == []:
+                    return response_object, 404
+                log.error("pulling object %s with field %s" %
+                        (objectid, post_data.get('requiredfields')))
+                
+                id = items.results[0].id
+                data = items.results[0].res
+
+                if data:
+                    response_object = {
+                        'status': 'success',
+                        'message': 'object :',
+                        'id': id,
+                        'data': data
+                    }
+                    return response_object, 201
+                else:
+                    response_object = {
+                        'status': 'fail',
+                        'message': 'Sorry. failed.'
+                    }
+                    return response_object, 400
+        except:
+            return response_object, 500
+            # except:
         #     response_object = {
         #         'status': 'fail',
         #         'message': 'Invalid payload.'

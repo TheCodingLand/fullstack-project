@@ -394,7 +394,7 @@ class ot_api_event(object):
         requiredfields= { 'requiredfields': ['CreationDate', 'Title', 'SolutionDescription', 'AssociatedCategory' , 'Applicant',  'Responsible', 'State'] }
 
         req = execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
-
+        
         data = req.json()
         #log.error(data)
         ticket.title = data['data']['Title']

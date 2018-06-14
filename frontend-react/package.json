@@ -31,6 +31,7 @@
         "react-scripts": "^1.1.4",
         "react-simple-maps": "^0.10.1",
         "react-spinner-material": "^1.0.17",
+        "react-spinners": "^0.3.2",
         "react-transition-group": "^1.2.1",
         "react-websocket": "^2.0.0",
         "redis": "^2.8.0",

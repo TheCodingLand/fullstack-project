@@ -20,7 +20,7 @@ export default class DataProvider {
 
   }
 
-  async ListAgents() {
+  /* async ListAgents() {
     this.client.cache.reset();
 
     let data = await this.client.query({
@@ -42,6 +42,31 @@ export default class DataProvider {
               destination
               callType 
             }
+            }
+          }
+        }
+      }
+    
+        ` })
+    return data
+  } */
+
+  async ListAgents() {
+    this.client.cache.reset();
+
+    let data = await this.client.query({
+      query: gql`query {
+      allAgents(phoneActive: true) {
+        edges {
+          node {
+            id
+            lastname
+            firstname
+            ext
+            phoneLogin
+            phoneState
+            otUserdisplayname
+          
             }
           }
         }
@@ -98,7 +123,7 @@ export default class DataProvider {
 
   }
 
-  async getQueueLines(line) {
+ /*  async getQueueLines(line) {
     this.client.cache.reset();
 
     let data = await this.client.query({
@@ -123,7 +148,30 @@ export default class DataProvider {
         }
       }`})
   return data
+} */
+
+async getQueueLines(line) {
+  this.client.cache.reset();
+
+  let data = await this.client.query({
+    query: gql`{allAgents(isQueueLine:true){
+      edges {
+        node {
+          id
+          lastname
+          firstname
+          ext
+          phoneLogin
+          phoneState
+         
+          }
+        }
+      }
+    }`})
+    
+return data
 }
+
 
   async getIncomingCallByLine(line) {
     this.client.cache.reset();
@@ -140,6 +188,7 @@ node{
 }     
 }
 }`})
+
     return data
   }
   async getTicketbyPhone(phone) {
@@ -169,6 +218,7 @@ node{
             }
           `
     })
+  
     return data
   }
 
@@ -189,7 +239,9 @@ node{
       }
     }`
     })
+    
     return data
+    
   } 
 
   async getActiveCalls(phone) {

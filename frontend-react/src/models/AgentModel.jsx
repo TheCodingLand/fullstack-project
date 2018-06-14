@@ -61,13 +61,14 @@ export default class AgentModel {
 
   @action
   removeCall() {
+    this.currentCall = {}
     //console.log"removeCall")
-    this.currentCall.ucid = ""
-    this.currentCall.origin = ""
-    this.currentCall.start = ""
-    this.currentCall.destination = ""
-    this.currentCall.callType = ""
-    this.currentCall.tickets = null
+    //this.currentCall.ucid = ""
+    //this.currentCall.origin = ""
+    //this.currentCall.start = ""
+    //this.currentCall.destination = ""
+    //this.currentCall.callType = ""
+    //this.currentCall.tickets = null
     this.getCallsCount()
   }
 
@@ -118,19 +119,20 @@ export default class AgentModel {
     //this.currentCall.start = call.start
     //this.currentCall.destination = call.destination
     //this.currentCall.callType = call.callType
-    if (call.origin !== "False") {
-      this.currentCall.origin = call.origin
+    //if (call.origin !== "False") {
+      //this.currentCall.origin = call.origin
       
-      console.log(`getting tickets for phone number ${call.origin}`)
-      this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
-    }
-    else {
-      this.currentCall.origin = "hidden"
-    }
-    if (this.currentUser) {
+    //console.log(`getting tickets for phone number ${call.origin}`)
+
+    this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
+    
+    //if (call.origin == "False") {
+    //  this.currentCall.origin = "hidden"
+    //}
+    //if (this.currentUser) {
     
     this.getCallsWithoutTickets()
-    }
+    
 
   }
 
@@ -161,11 +163,7 @@ export default class AgentModel {
 
   @action
   updateCall(call) {
-    
-    
       this.setCall(call)
-      console.log("found call " + call)
-      
     }
     //this.ds.GetCall(ucid).then((data) => this.onCallRecieved(data))
 
@@ -173,7 +171,7 @@ export default class AgentModel {
 
   
   onCallRecieved(data) {
-    //console.log"onCallRecieved")
+    console.log("onCallRecieved")
 
 
     let listofcalls = [];

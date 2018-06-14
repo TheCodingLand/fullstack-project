@@ -55,7 +55,8 @@ export default class AgentListModel {
         if (agent.currentCall.ucid === data.id) {
           agent.currentCall = {}
         }
-      })
+      }
+    )
 
       this.agents.forEach(agent => { if (agent.login === data.data) {
         this.calls.forEach(call => { if (call.ucid === data.id) { 
@@ -68,10 +69,7 @@ export default class AgentListModel {
           
       }
     }
-  )
-
-    
-
+    )
     }
 
     /* if (data.action === "transferring") {
@@ -113,10 +111,11 @@ export default class AgentListModel {
       
     }
     if (data.action === "calltype") {
-      this.getActiveCalls()
-     
+      this.calls.forEach(call => { if (call.ucid === data.id) { call.callType = data.data}})
     }
   }
+
+
 
   @computed
   get loggedInAgentsCount() {
@@ -147,7 +146,7 @@ export default class AgentListModel {
     //.then(      calls => this.onCallsRecieved(calls)) 
   }
   
- 
+  @action
   updateQueue(call){
     this.queues.forEach((queue) => { 
     
@@ -157,6 +156,7 @@ export default class AgentListModel {
     }})
   }
 
+  @action
   updateAgent(call){
     this.agents.forEach((agent) => { 
       if (call.destination === agent.ext) {
@@ -171,21 +171,24 @@ export default class AgentListModel {
     let found = false
     this.calls.forEach(c => { 
       if (c.ucid===call.node.ucid) {
+      
       c.update(call.node)
       //c = new CallModel(call.node, this)
       
       this.updateQueue(c)
       this.updateAgent(c)
+      found = true
 
     }
   })
 
   if (found === false) {
-    this.calls.push(new CallModel(call.node, this))
+    let c = new CallModel(call.node, this)
+    this.calls.push(c)
     
 
-  this.updateQueue(call.node)
-  this.updateAgent(call.node)
+  this.updateQueue(c)
+  this.updateAgent(c)
 }
 //this.updateQueue(call.node)
 //  this.updateAgent(call.node)
@@ -220,8 +223,10 @@ export default class AgentListModel {
 
 
           if (queue.currentCall) {
+            
             //this.queues[i].updateCall(queue.currentCall.ucid)
-            this.queues[i].currentCall = { callType: queue.currentCall.callType, origin: queue.currentCall.origin, start: queue.currentCall.start, ucid: queue.currentCall.ucid }
+            this.queues[i].currentCall.update(queue.currentCall)
+            //this.queues[i].currentCall = { callType: queue.currentCall.callType, origin: queue.currentCall.origin, start: queue.currentCall.start, ucid: queue.currentCall.ucid }
 
 
            // console.log(this.queues[i])

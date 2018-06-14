@@ -11,7 +11,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import CategoriesSelect from './CategoriesSelect';
+import ClientForm from './ClientForm';
 import purple from '@material-ui/core/colors/purple';
+import Client from '../../../models/ClientModel'
+import { RingLoader } from 'react-spinners';
 
 const styles = theme => ({
   container: {
@@ -32,6 +35,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: '90%',
   },
+ 
   categoryField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -64,7 +68,10 @@ class TicketForm extends React.Component {
     events: this.props.agent.callsWithoutTickets,
     selectedEvent: {},
     response: {},
-
+    possibleClients:[],
+    selectedClient:{ otId:"", FirstName: "", LastName:""},
+    clientsLoaded : false,
+    savedClientID:""
 
   }
 
@@ -117,6 +124,14 @@ class TicketForm extends React.Component {
         }))
   }
 
+  selectClient = name => client => {
+    this.setState({selectedClient: client})
+    console.log(client)
+  }
+    
+  
+
+
   handleChangeCategory = name => title => {
     this.props.categories.forEach((category) => {
       if (category.title === title) {
@@ -126,18 +141,103 @@ class TicketForm extends React.Component {
   }
 
 
-  handleTicketSubmit = (e) => {
+/*   makeTicketSolved(response) {
+  
 
 
-    let ticket = {
-      Title: this.state.title,
-      Description: this.state.description,
-      SolutionDescription: this.state.solution,
-      AssociatedCategory: this.state.category,
-      Applicant: this.props.agent.otUserdisplayname,
-      Responsible: this.props.agent.otUserdisplayname
+    let query = {
+      State: "Solved"
     }
 
+    return fetch('http://148.110.107.15:5001/api/ot/ticket/' + response.ticket, {
+      method: 'PUT',
+      body: JSON.stringify(query),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json()).then(() => this.linkEventToTicket(response.ticket, this.state.selectedEvent.otId))
+
+  } */
+
+  
+  saveClient(){
+    
+    
+
+
+    return fetch('http://148.110.107.15:5001/api/ot/clients', {
+      method: 'PUT',
+      body: JSON.stringify({FirstName:this.state.selectedClient.FirstName, LastName:this.state.selectedClient.LastName}),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json()).then(response => {
+        if (response.status === 'success') {
+          this.setState({savedClientID:response.ticket})
+      
+        }
+        else{
+          this.setState({savedClientID:""})
+        }
+      
+      })
+  
+
+
+}
+
+
+
+
+  
+    
+    
+  
+ 
+
+  
+  handleTicketSubmit = (e) => {
+    console.log(this.state.selectedClient)
+    if (this.state.selectedClient.otId === "" && this.state.selectedClient.LastName!=="") {
+       
+      this.saveClient().then(() => this.saveTicket())
+      }
+    
+    else
+    {
+    this.saveTicket()
+    }
+  }
+
+    saveTicket = () => {
+    {
+
+      let ticket = {
+        Title: this.state.title,
+        Description: this.state.description,
+        SolutionDescription: this.state.solution,
+        AssociatedCategory: this.state.category,
+        Applicant: this.props.agent.otUserdisplayname,
+        Responsible: this.props.agent.otUserdisplayname,
+      }
+
+    if (this.state.savedClientID !== ""){
+
+      ticket.ReportingPerson = this.state.savedClientID 
+      console.log(ticket.ReportingPerson)
+    
+    }
+    else if (this.state.client.otId !=="")
+    {
+
+      ticket.ReportingPerson = this.state.selectedClient.otId
+    
+    }
+  
     return fetch('http://148.110.107.15:5001/api/ot/tickets', {
       method: 'PUT',
       body: JSON.stringify(ticket),
@@ -147,6 +247,7 @@ class TicketForm extends React.Component {
       }
     })
       .then(response => response.json()).then(response => { if (response.status ==='success') { this.makeTicketSolved(response)} else {this.setState({response:response})}})
+    }
   }
 
   //getEvents() {
@@ -164,19 +265,78 @@ class TicketForm extends React.Component {
     }
     )
   }
+  
 
   handleEventChange = name => event => {
+    
     this.setState({
       [name]: event.target.value,
     });
     this.state.events.forEach((e) => {
       if (e) {
         if (e.id === event.target.value) {
+          if (e.origin) {
+            if (e.origin.charAt(0) === '0') {
+                e.origin = e.origin.substr(1);
+            }
+            
+        }
           this.setState({ selectedEvent: e, origin: e.origin })
+          this.setState({clientsLoaded:false})
+          this.getPossibleClients(e.origin).then(() => this.setState({clientsLoaded:true}))
         }
       }
-    })
-  };
+    })}
+
+  
+
+  getPossibleClients(phone) {
+    if (phone.length > 3){
+
+        let query = {
+    
+            objectclass: "Client",
+            filter: "ClientFromPhone",
+            variables: [
+                {
+                    name: "phone",
+                    value: phone,
+                    //value: "4634637941"
+                }
+            ],
+            requiredfields: [
+    
+            ]
+        }
+        //console.log(query)
+        return fetch('http://148.110.107.15:5001/api/ot/objects', {
+            method: 'POST',
+            body: JSON.stringify(query),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }
+        ).then(response => response.json()
+        ).then(
+            (response) => {
+                if (response.status === "success") {
+                    //console.log(response.Client)
+    
+                    let clients = response.Client.map((client) => { return new Client(client) })
+                    this.setState({possibleClients : clients})
+                }
+                else {
+                   this.setState({possibleClients : [ ]})
+                }
+            }
+        )
+    }
+    else {
+        this.setState({possibleClients : [ ]})
+    }
+}
+  
   render() {
     let menuitems = []
     if (this.state.events.length > 0) {
@@ -215,6 +375,17 @@ class TicketForm extends React.Component {
           onChange={this.handleEventChange('origin')}
           value={this.state.origin}
         />
+        {this.state.clientsLoaded?
+        <ClientForm selectedClient={this.state.selectedClient} onClientSelect={this.selectClient('client')} possibleClients={this.state.possibleClients}/>
+        :
+        <div className='sweet-loading'>
+        <RingLoader
+          color={'#123abc'} 
+          
+        />
+      </div>
+        }
+
        
         <TextField
           required
@@ -224,6 +395,8 @@ class TicketForm extends React.Component {
           margin="normal"
           onChange={this.handleEventChange('title')}
         />
+
+        
 
         <TextField
           required

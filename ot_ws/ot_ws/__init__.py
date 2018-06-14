@@ -13,7 +13,7 @@ from flask_cors import CORS
 import logging
 log = logging.getLogger('werkzeug')
 
-log.setLevel(logging.ERROR)
+log.setLevel(logging.WARNING)
 
 
 def create_app():

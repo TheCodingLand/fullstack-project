@@ -27,6 +27,12 @@ ticket = api.model('Ticket:', {
     'SolutionDescription': fields.String('a solution')
 })
 
+client = api.model('Client:', {
+    'LastName': fields.String(description='lastname'),
+    
+})
+
+
 user = api.model('User:', {
     'FirstName': fields.String(),
     'LastName': fields.String(),
