@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import { observer } from "mobx-react";
-import Pbar from './ProgressBar/ProgressBar'
+
 
 
 @observer
@@ -27,7 +27,7 @@ class ClientPanel extends React.Component {
         
         <div><Typography>{this.props.user.currentCall.callType}</Typography></div>
       
-        <Pbar starttime={this.props.user.currentCall.starttime} />
+        
           
           </Card></div>
           :

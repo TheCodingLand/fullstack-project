@@ -111,10 +111,14 @@ export default class AgentListModel {
       
     }
     if (data.action === "calltype") {
-      this.calls.forEach(call => { if (call.ucid === data.id) { call.callType = data.data}})
+      this.calls.forEach(call => { if (call.ucid === data.id) { this.setCallType(call, data.data)}})
     }
   }
-
+  
+  @action
+  setCallType(call, calltype) {
+    call.callType = calltype
+  }
 
 
   @computed

@@ -3,8 +3,9 @@ import { action } from 'mobx';
 import { observable } from "mobx";
 
 export default class CallModel {
-    @observable possibleClients;
-    @observable destination;
+    @observable possibleClients
+    @observable destination
+    @observable callType
     constructor(call, rootstore) {
         if (call.origin) {
             if (call.origin.charAt(0) === '0') {
