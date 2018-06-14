@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { dark } from '@material-ui/core/styles/createPalette';
+import { Typography } from '@material-ui/core';
 
 const themeDark = createMuiTheme({
   typography: {
@@ -138,10 +139,12 @@ render() {
     return(
       <MuiThemeProvider theme={this.state.theme}>
       <div>
-      <Button onClick={this.setTheme('light')} > changetheme </Button>
+        <div style={{display:"flex", justifyContent: "space-between"}}>
+      <Button onClick={this.setTheme('light')} > Change Theme </Button> <Typography>LBR CallTracking</Typography> <Version version ={this.version}/>
+      </div>
        
      <CssBaseline  />
-     <Version version ={this.version}/>
+     
      {this.state.categories!==[]?<MainLayout categories={this.state.categories} store={this.store}/>:<Loader /> 
     }
     

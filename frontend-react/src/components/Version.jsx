@@ -4,7 +4,8 @@ export default class Version extends React.Component {
 
     render() { 
     
-    return (<div style={{position:'absolute', right:0,bottom:0}}><Typography>version {this.props.version}</Typography></div>)
+    //return (<div style={{position:'absolute', right:0,bottom:0}}><Typography>version {this.props.version}</Typography></div>)
+    return (<div style={{padding:10}}><Typography>version {this.props.version}</Typography></div>)
     }
 
 
