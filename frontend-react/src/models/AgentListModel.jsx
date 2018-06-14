@@ -7,8 +7,9 @@ import CallModel from "./CallsModel";
 //agents : login, logoff, changestate, linkcall
 
 export default class AgentListModel {
-  constructor(ds) {
+  constructor(ds, socket) {
     this.ds = ds
+    this.socket=socket
   }
 
   @observable calls = []
@@ -134,9 +135,11 @@ export default class AgentListModel {
   @action
   setCurrentUser(agent) {
     console.log(`current user SET ! : ${agent.ext}`)
+    
     agent.getCallsWithoutTickets()
     this.currentUser=agent
     agent.currentUser=true
+    agent.updateTickets(this.socket)
     
   }
 

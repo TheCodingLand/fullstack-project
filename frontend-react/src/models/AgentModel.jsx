@@ -34,17 +34,10 @@ export default class AgentModel {
     if (rootstore.currentUser.ext === this.ext) {
     this.getCallsWithoutTickets()
     this.currentUser=true
+    this.socket={}
+  
     }
     
-
-    // if (agent.currentCall) {
-    //   if (agent.currentCall.ucid) {
-    //     this.currentCall = { ucid: agent.currentCall.ucid, origin: agent.currentCall.origin, start: agent.currentCall.start, destination: agent.currentCall.destination, callType: agent.currentCall.callType, tickets: [] }
-    //     if (agent.currentCall.origin !== "False") {
-    //       this.ds.getTicketbyPhone(agent.currentCall.origin).then((data) => this.onTicketsRecieved(data))
-    //     }
-    //   }
-    // }
   }
 
   @action
@@ -63,13 +56,7 @@ export default class AgentModel {
   @action
   removeCall() {
     this.currentCall = {}
-    //console.log"removeCall")
-    //this.currentCall.ucid = ""
-    //this.currentCall.origin = ""
-    //this.currentCall.start = ""
-    //this.currentCall.destination = ""
-    //this.currentCall.callType = ""
-    //this.currentCall.tickets = null
+
     this.getCallsCount()
   }
 
@@ -93,15 +80,31 @@ export default class AgentModel {
         }
       }
       return filtered
-
-
     },[])
- 
-
     this.callsWithoutTickets = events
-
-
   }
+
+  updateTickets(socket) {
+    this.socket=socket
+    this.ds.getEventsbyAgentExt(this.ext).then((data) => { this.onCallsWithoutTicketsRecievedUpdate(data) })
+  }
+
+  onCallsWithoutTicketsRecievedUpdate(data) {
+    
+    
+    data.data.allCalls.edges.forEach((data) => {
+      if (data.node.event.edges[0]) {
+        if (data.node.event.edges[0].node.otId)
+        {
+          this.socket.send("updatetickets:"+data.node.event.edges[0].node.otId)
+        }
+      
+    
+    }
+    
+  })
+
+}
 
   
   getCallsWithoutTickets() {
@@ -116,21 +119,9 @@ export default class AgentModel {
     console.log("SetCall" + call.ucid + " " + call.destination + " " + call.origin )
     this.currentCall = call
 
-    //this.currentCall.ucid = call.ucid
-    //this.currentCall.start = call.start
-    //this.currentCall.destination = call.destination
-    //this.currentCall.callType = call.callType
-    //if (call.origin !== "False") {
-      //this.currentCall.origin = call.origin
-      
-    //console.log(`getting tickets for phone number ${call.origin}`)
-
     this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
     
-    //if (call.origin == "False") {
-    //  this.currentCall.origin = "hidden"
-    //}
-    //if (this.currentUser) {
+   
     
     this.getCallsWithoutTickets()
     
@@ -139,7 +130,7 @@ export default class AgentModel {
 
 
   onTicketsRecieved(data) {
-    //console.log"OnTicketsRecieved")
+    
     this.currentCall.tickets = data.data.allEvents.edges.reduce((filtered,edge) => {
       if (edge.node.ticket) {
          filtered.push(edge.node.ticket)
@@ -147,26 +138,14 @@ export default class AgentModel {
       return filtered}
     ,[])
 
-    
-    
-    
-  /*   this.currentCall.tickets = data.data.allEvents.edges.map((edge) => {
-      if (edge.node.ticket) {
-        return edge.node.ticket
-      }
-      else {
-        return ""
-      }
-    }
-    ) */
-
+ 
   }
 
   @action
   updateCall(call) {
       this.setCall(call)
     }
-    //this.ds.GetCall(ucid).then((data) => this.onCallRecieved(data))
+
 
   
 

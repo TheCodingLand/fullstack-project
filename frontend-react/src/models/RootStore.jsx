@@ -9,12 +9,13 @@ export default class RootStore {
     console.log("Loading root store")
     let SOCKET_URL = "ws.lbr.lu"
     this.ds = new DataProvider();  
-    this.agentStore = new AgentListModel(this.ds)
+    this.socket = io.connect(SOCKET_URL);
+    this.agentStore = new AgentListModel(this.ds, this.socket)
     this.pendingUpdates=[]
     this.lastupdate = {}
     
-    this.socket = io.connect(SOCKET_URL);
-    this.updatePendingTickets('553')
+   
+    
 
     this.socket.on('message',((data) =>  { this.handleRedisMessage(data)  }))  
         

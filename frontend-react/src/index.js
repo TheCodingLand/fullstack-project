@@ -12,11 +12,12 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import App from './App';
 
 
-const theme = createMuiTheme({
+const themeDark = createMuiTheme({
   typography: {
     fontWeightLight: 200,
- fontWeightRegular: 200,
- fontWeightMedium: 300},
+    fontWeightRegular: 200,
+    fontWeightMedium: 300
+  },
 
 
   palette: {
@@ -30,7 +31,36 @@ const theme = createMuiTheme({
   },
 });
 
+const themeLight = createMuiTheme({
+  typography: {
+    fontWeightLight: 500,
+    fontWeightRegular: 600,
+    fontWeightMedium: 800
+  },
 
 
-ReactDOM.render(<MuiThemeProvider theme={theme}><App /></MuiThemeProvider>, document.getElementById('root'));
+  palette: {
+    type: 'light',
+    primary: purple,
+    secondary: {
+      ...green,
+      A400: '#00e677',
+    },
+    error: red,
+  },
+});
+
+let theme = themeDark
+
+function setTheme(name) {
+  if (name === "dark") {
+    theme = themeDark
+  }
+  else {
+    theme = themeLight
+  }
+}
+
+
+ReactDOM.render(<App setTheme={setTheme} />, document.getElementById('root'));
 
