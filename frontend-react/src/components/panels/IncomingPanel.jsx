@@ -58,7 +58,7 @@ class IncomingPanel extends React.Component {
         return (
 
           <GridMaterial key={queue.ext} item xs><Card>
-            <CardHeader title={queue.ext} />
+            <CardHeader  />
             {this.GetStepper(queue)}</Card>
           </GridMaterial>)
       })}
