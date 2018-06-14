@@ -170,14 +170,6 @@ class TicketForm extends React.Component {
 }
 
 
-
-
-  
-    
-    
-  
- 
-
   
   handleTicketSubmit = (e) => {
     console.log(this.state.selectedClient)
@@ -197,8 +189,8 @@ class TicketForm extends React.Component {
 
       let ticket = {
         Title: this.state.title,
-        Description: this.state.description,
-        SolutionDescription: this.state.solution,
+        Description: this.state.description.replace(/\n/g,,'\\r\\n'),
+        SolutionDescription: this.state.solution.replace(/\n/g,'\\r\\n'),
         AssociatedCategory: this.state.category,
         Applicant: this.props.agent.otUserdisplayname,
         Responsible: this.props.agent.otUserdisplayname,
@@ -243,6 +235,7 @@ class TicketForm extends React.Component {
       [name]: event.target.value,
     }
     )
+    console.log(event.target.value)
   }
   
 
