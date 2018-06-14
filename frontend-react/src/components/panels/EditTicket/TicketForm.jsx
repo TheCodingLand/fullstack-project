@@ -140,27 +140,6 @@ class TicketForm extends React.Component {
     })
   }
 
-
-/*   makeTicketSolved(response) {
-  
-
-
-    let query = {
-      State: "Solved"
-    }
-
-    return fetch('http://148.110.107.15:5001/api/ot/ticket/' + response.ticket, {
-      method: 'PUT',
-      body: JSON.stringify(query),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => response.json()).then(() => this.linkEventToTicket(response.ticket, this.state.selectedEvent.otId))
-
-  } */
-
   
   saveClient(){
     
@@ -169,7 +148,7 @@ class TicketForm extends React.Component {
 
     return fetch('http://148.110.107.15:5001/api/ot/clients', {
       method: 'PUT',
-      body: JSON.stringify({FirstName:this.state.selectedClient.FirstName, LastName:this.state.selectedClient.LastName}),
+      body: JSON.stringify({FirstName:this.state.selectedClient.FirstName, LastName:this.state.selectedClient.LastName, Phone:this.state.origin}),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'

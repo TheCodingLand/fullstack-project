@@ -18,6 +18,7 @@ export default class AgentModel {
     //console.log"Agent Constructor")
     this.ds = rootstore.ds;
     
+    
     this.firstname = agent.firstname;
     this.lastname = agent.lastname;
     this.phoneLogin = agent.phoneLogin;

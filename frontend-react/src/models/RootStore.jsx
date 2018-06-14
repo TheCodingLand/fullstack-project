@@ -14,6 +14,7 @@ export default class RootStore {
     this.lastupdate = {}
     
     this.socket = io.connect(SOCKET_URL);
+    this.updatePendingTickets('553')
 
     this.socket.on('message',((data) =>  { this.handleRedisMessage(data)  }))  
         
@@ -56,27 +57,12 @@ export default class RootStore {
         
         if (this.alreadyUpdating(data) === false) {
             this.lastupdate=data
-            //console.log(data)
             this.pendingUpdates.push(data)
             this.agentStore.handleMessage(data).then(() => { this.pendingUpdates= this.pendingUpdates.filter((d) => { return d !== data })})
-            //console.log(this.pendingUpdates)
+            
         }}
 
-        //.then(() => { this.pendingUpdates= this.pendingUpdates.filter((d) => { return d != data })})
-        
-        //if (data.action === this.lastRedisUpdate.action && data.data === this.lastRedisUpdate.data) {
-         //   if (Date.now() - this.lastUpdate > 100) {
-          //      this.lastUpdate = Date.now()
-           //     this.lastRedisUpdate = data
-           //     this.pendingUpdates.push(data)
-                
-          //  }
-       // }
-        //else {
-        //    this.lastRedisUpdate = data
-         //   this.lastUpdate = Date.now()
-         //   this.agentStore.handleMessage(data)   
-       // }
+     
     }
 }
 
