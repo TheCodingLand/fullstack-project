@@ -12,7 +12,7 @@ import Version from './components/Version'
 //import Perf from 'react-addons-perf'; // ES6
 
 class App extends React.Component {
-  version = "1.0.1"
+  version = "1.1"
 
   constructor() {
     super();
