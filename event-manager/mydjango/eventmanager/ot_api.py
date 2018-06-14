@@ -452,6 +452,7 @@ class ot_api_event(object):
         data = req.json()
         ticket_id = data['data']['RelatedIncident']
         if ticket_id == "":
+            event=Event.objects.get(ot_id=id)
             event.ticket = None
             event.save()
             return False
