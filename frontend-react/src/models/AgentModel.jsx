@@ -1,4 +1,14 @@
 import { observable, action } from "mobx";
+import { defaultNormalizedCacheFactory } from "apollo-cache-inmemory";
+
+class Ticket {
+constructor(ticket){
+  this.title = ticket.title
+  this.eventmatch = true
+}}
+
+
+
 
 
 
@@ -13,17 +23,19 @@ export default class AgentModel {
   @observable totalcalls;
   @observable callsWithoutTickets;
   @observable otUserdisplayname;
+  @observable currentUser
   constructor(agent, rootstore) {
     console.log("Loading New Agent")
     //console.log"Agent Constructor")
     this.ds = rootstore.ds;
     
-    
+   
     this.firstname = agent.firstname;
     this.lastname = agent.lastname;
     this.phoneLogin = agent.phoneLogin;
     this.ext = agent.ext;
     this.phoneState = agent.phoneState;
+    
     this.totalcalls = "";
     this.currentCall = { }
     this.totalcalls = []
@@ -31,19 +43,32 @@ export default class AgentModel {
     this.callsWithoutTickets = []
     this.currentUser = false
     this.otUserdisplayname = agent.otUserdisplayname
-    if (rootstore.currentUser.ext === this.ext) {
-    this.getCallsWithoutTickets()
-    this.currentUser=true
-    this.socket={}
-  
-    }
+    this.tickets = []
+    this.getTickets()
+   
     
   }
 
   @action
+  getTickets(){
+    this.ds.getTickets(this.phoneLogin).then((data) => data.data.allAgents.edges.forEach((agent) =>  { 
+      console.log(agent.node.ticketsCreated.edges)
+      this.tickets= agent.node.ticketsCreated.edges.map((ticket) => {
+        console.log(ticket.node)
+         return ticket.node 
+        }
+    )
+    }))
+
+  }
+
+  
+  @action
   setCurrentUser() {
  
     this.currentUser = true
+   
+    
   }
 
   @action
@@ -97,12 +122,10 @@ export default class AgentModel {
         if (data.node.event.edges[0].node.otId)
         {
           this.socket.send("updatetickets:"+data.node.event.edges[0].node.otId)
-        }
-      
-    
-    }
-    
-  })
+        }   
+      }
+  }
+)
 
 }
 
@@ -111,6 +134,7 @@ export default class AgentModel {
     
     console.log(`updating events without tickets for phone number ${this.ext}`)
     this.ds.getEventsbyAgentExt(this.ext).then((data) => { this.onCallsWithoutTicketsRecieved(data) })
+    
   }
 
 
@@ -118,14 +142,9 @@ export default class AgentModel {
   setCall(call) {
     console.log("SetCall" + call.ucid + " " + call.destination + " " + call.origin )
     this.currentCall = call
-
     this.ds.getTicketbyPhone(call.origin).then((data) => this.onTicketsRecieved(data))
-    
-   
-    
     this.getCallsWithoutTickets()
     
-
   }
 
 

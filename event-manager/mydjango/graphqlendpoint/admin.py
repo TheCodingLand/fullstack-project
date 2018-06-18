@@ -10,8 +10,12 @@ class AgentAdmin(admin.ModelAdmin):
     list_display = ('ext', 'firstname', 'lastname', 'phone_login', 'phone_state', 'phone_active', 'active', 'current_call')
 
 class CallAdmin(admin.ModelAdmin):
-    list_display = ('ucid', 'state', 'isContactCenterCall', 'history', 'end', 'origin')
+    list_display = ('ucid', 'state', 'isContactCenterCall', 'history', 'end', 'origin', 'current_agent')
     list_filter = ('end', 'state','current_agent')
+    
+    def current_agent(self,obj):
+        for agent in Agent.objects.filter(current_call=obj):
+            return agent
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('ot_id', 'applicant', 'ticket', 'call')

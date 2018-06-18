@@ -9,6 +9,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 
 
+
 export default class DataProvider {
   constructor() {
 
@@ -76,7 +77,64 @@ export default class DataProvider {
     return data
   }
 
+  async getTickets(login){
+    let datestart = new Date(Date.now()).toISOString()
+    let start = datestart.slice(0, 10)
 
+    this.client.cache.reset()
+    let data = await this.client.query( {
+      query: gql`{
+        allAgents(phoneLogin:"${login}") {
+          edges {
+            node {
+              ticketsCreated(creationdate_Gte: "${start}") {
+                edges {
+                  node {
+                    otId
+                    title
+                    creationdate
+                    description
+                    solution
+                    tickets {
+                      edges {
+                        node {
+                          otId
+                          phone
+                          applicant {
+                            phoneLogin
+                            firstname
+                            otUserdisplayname
+      
+                          }
+             
+                        }
+           
+                      }
+          
+                    }
+        
+                  }
+        
+                }
+          
+              }
+       
+            }
+            
+          }
+          
+        }
+      }
+      `
+
+
+    }
+
+
+    )
+
+return data
+  }
 
   async GetAgent(login) {
     this.client.cache.reset();
@@ -120,41 +178,42 @@ export default class DataProvider {
             }
          ` })
     return data
-
   }
 
- /*  async getQueueLines(line) {
+  
+
+  /*  async getQueueLines(line) {
+     this.client.cache.reset();
+ 
+     let data = await this.client.query({
+       query: gql`{allAgents(isQueueLine:true){
+         edges {
+           node {
+             id
+             lastname
+             firstname
+             ext
+             phoneLogin
+             phoneState
+             currentCall{
+               ucid
+               origin
+               start
+               destination
+               callType 
+             }
+             }
+           }
+         }
+       }`})
+   return data
+ } */
+
+  async getQueueLines(line) {
     this.client.cache.reset();
 
     let data = await this.client.query({
       query: gql`{allAgents(isQueueLine:true){
-        edges {
-          node {
-            id
-            lastname
-            firstname
-            ext
-            phoneLogin
-            phoneState
-            currentCall{
-              ucid
-              origin
-              start
-              destination
-              callType 
-            }
-            }
-          }
-        }
-      }`})
-  return data
-} */
-
-async getQueueLines(line) {
-  this.client.cache.reset();
-
-  let data = await this.client.query({
-    query: gql`{allAgents(isQueueLine:true){
       edges {
         node {
           id
@@ -168,9 +227,9 @@ async getQueueLines(line) {
         }
       }
     }`})
-    
-return data
-}
+
+    return data
+  }
 
 
   async getIncomingCallByLine(line) {
@@ -191,34 +250,69 @@ node{
 
     return data
   }
+
+
+
+  // {    
+  //   allAgents(phoneLogin:"$(${login}) {
+  //     edges
+  //     {
+  //       node
+  //       {
+  //         ticketsCreated(creationdate_Gte:"${start}") {
+  //           edges {
+  //             node {
+  //               title
+  //               tickets
+  //               {
+  //               edges{
+  //               node{
+  //                 otId
+  //                 phone
+  //                 applicant {
+  //                   phoneLogin
+  //                 }
+  //               }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //       }
+  //     }
+  //   }
+  // }
+
+
   async getTicketbyPhone(phone) {
     this.client.cache.reset();
     let datestart = new Date(Date.now()).toISOString()
-    let start = datestart.slice(0,10)
+    let start = datestart.slice(0, 10)
     let data = await this.client.query({
 
-      query: gql`query {  
-              allEvents(phone:"${phone}", end_Gte:"${start}") {
-                edges {
-                  node {
-                    id
-                    phone
-                    ticket{
-                      otId
-                      title
-                      solution
-                      category {
-                        otId
-                        title
-                      }           
-                    }
-                  }
-                }
+      query: gql`query  
+      {  
+        allEvents(phone:"${phone}", end_Gte:"${start}") {
+          edges {
+            node {
+              id
+              phone
+              ticket{
+                otId
+                title
+                solution
+                category {
+                  otId
+                  title
+                }           
               }
             }
+          }
+        }
+      }
           `
     })
-  
+
     return data
   }
 
@@ -226,7 +320,7 @@ node{
     this.client.cache.reset();
     let datestart = new Date(Date.now()).toISOString()
 
-    let start = datestart.slice(0,10)
+    let start = datestart.slice(0, 10)
     let data = await this.client.query({
       query: gql`query {  
         allCalls (start_Gte:"${start}",destination:"${phone}"){
@@ -239,10 +333,10 @@ node{
       }
     }`
     })
-    
+
     return data
-    
-  } 
+
+  }
 
   async getActiveCalls(phone) {
     this.client.cache.reset();
@@ -261,31 +355,30 @@ node{
       }
     }
   }`
-})
-return data
+    })
+    return data
   }
 
-  
+
   async getEventsbyAgentExt(phone) {
     this.client.cache.reset();
     let datestart = new Date(Date.now()).toISOString()
 
-    let start = datestart.slice(0,10)
+    let start = datestart.slice(0, 10)
     let data = await this.client.query({
       query: gql`query {  
-          allCalls(start_Gte:"${start}",destination:"${phone}") {
-            edges {
-              node {
-                ucid
-                start
-                origin
-                event {
-                  edges {
-                    node {
+        allCalls(start_Gte:"${start}",destination:"${phone}") {
+          edges {
+            node {
+              ucid
+              start
+              origin
+              event {
+                edges {
+                  node {
+                    otId
+                    ticket {
                       otId
-                      ticket {
-                        otId
-                      }
                     }
                   }
                 }
@@ -293,9 +386,45 @@ return data
             }
           }
         }
+      }
+      
         `
     })
     return data
   }
 }
 
+/* {
+
+{
+  allTickets(creationdate_Gte: "2018-06-08 08:18:16") {
+    
+    edges {
+      node {
+        title
+        tickets{
+          edges{
+            node{
+              otId
+              phone
+              
+              applicant {
+                phoneLogin
+              }
+            }
+          }
+        }
+        responsible {
+          phoneLogin
+        }
+        
+        
+        
+            
+              
+            }
+          }
+        }
+      }
+    
+     */

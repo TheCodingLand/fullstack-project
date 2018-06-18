@@ -140,6 +140,7 @@ export default class AgentListModel {
     this.currentUser=agent
     agent.currentUser=true
     agent.updateTickets(this.socket)
+    agent.getTickets()
     
   }
 

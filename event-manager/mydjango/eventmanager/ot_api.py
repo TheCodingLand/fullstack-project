@@ -391,7 +391,7 @@ class ot_api_event(object):
         event.ticket = ticket
         event.save()
 
-        requiredfields= { 'requiredfields': ['CreationDate', 'Title', 'SolutionDescription', 'AssociatedCategory' , 'Applicant',  'Responsible', 'State'] }
+        requiredfields= { 'requiredfields': ['CreationDate', 'Title', 'SolutionDescription', 'AssociatedCategory' , 'Applicant',  'Responsible', 'State', 'Description'] }
 
         req = execute('post', 'http://ot-ws:5000/api/ot/object/%s' % ticket_id, requiredfields)
         
@@ -415,6 +415,7 @@ class ot_api_event(object):
         ticket.responsible = ticket.responsible
         ticket.state = data['data']['State']
         ticket.solution = data['data']['SolutionDescription']
+        ticket.description = data['data']['Description']
         ticket.save()
 
 
@@ -462,6 +463,8 @@ class ot_api_event(object):
         event.ticket = ticket
         
         event.save()
+        
+        self.getTicketFromEvent(event.call)
 
 
 

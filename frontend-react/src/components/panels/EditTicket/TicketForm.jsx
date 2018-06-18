@@ -189,24 +189,28 @@ class TicketForm extends React.Component {
 
       let ticket = {
         Title: this.state.title,
-        Description: this.state.description.replace(/\n/g,,'\\r\\n'),
+        Description: this.state.description.replace(/\n/g,'\\r\\n'),
         SolutionDescription: this.state.solution.replace(/\n/g,'\\r\\n'),
         AssociatedCategory: this.state.category,
         Applicant: this.props.agent.otUserdisplayname,
         Responsible: this.props.agent.otUserdisplayname,
       }
-
+    let ReportingPerson = ""
     if (this.state.savedClientID !== ""){
 
-      ticket.ReportingPerson = this.state.savedClientID 
-      console.log(ticket.ReportingPerson)
+      ReportingPerson = this.state.savedClientID 
+      
     
     }
     else if (this.state.client.otId !=="")
     {
 
-      ticket.ReportingPerson = this.state.selectedClient.otId
+      ReportingPerson = this.state.selectedClient.otId
     
+    }
+    if (ReportingPerson!=="") {
+      ticket.ReportingPerson = ReportingPerson
+
     }
   
     return fetch('http://148.110.107.15:5001/api/ot/tickets', {

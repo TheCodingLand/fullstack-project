@@ -10,7 +10,15 @@ from .models import Call, Agent, Event, Ticket, Category
 class TicketNode(DjangoObjectType):
     class Meta:
         model = Ticket
-        filter_fields = ['title', 'state','solution','responsible','ot_id']
+        
+        filter_fields = {'ot_id': ['exact'],
+                         'applicant': ['exact'],
+                         'title': ['exact'],
+                         'responsible': ['exact'],                         
+                         'creationdate': ['exact', 'contains', 'gte', 'lte'],
+                         }
+
+
         interfaces = (relay.Node,)
 
 class CategoryNode(DjangoObjectType):
@@ -80,7 +88,7 @@ class QueryEvents(object):
 
 class QueryTickets(object):
     agents = graphene.List(TicketNode)
-    all_agents = DjangoFilterConnectionField(TicketNode)
+    all_tickets = DjangoFilterConnectionField(TicketNode)
 
 
 

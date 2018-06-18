@@ -79,7 +79,7 @@ render() {
           
             <IconButton onClick={() => {this.handleDrawerClose()}}>
             <ExpandMoreIcon />
-            </IconButton> :
+            </IconButton> 
           </div>
  
    <div><TicketForm store={this.props.store} categories={this.props.categories} agent={this.state.agent} /></div>

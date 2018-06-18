@@ -30,7 +30,6 @@ export default class CallModel {
         this.possibleClients = []
         this.getPossibleClients()
 
-
     }
 
     update(call) {
@@ -55,16 +54,10 @@ export default class CallModel {
         this.ucid = call.ucid
         this.start = call.start
         this.callType = call.callType
-        
-
-
-
-
+    
     }
 
-    getClientTickets() {
-
-    }
+   
     @action
     getPossibleClients() {
 
@@ -83,8 +76,6 @@ export default class CallModel {
                 }
             ],
             requiredfields: [
-
-
             ]
         }
         //console.log(query)
@@ -111,11 +102,4 @@ export default class CallModel {
             }
         )
     }
-
-
-
-
-
-
-
 }

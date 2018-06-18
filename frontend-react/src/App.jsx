@@ -10,6 +10,7 @@ import response from './categories'
 import Version from './components/Version'
 import green from '@material-ui/core/colors/green';
 import purple from '@material-ui/core/colors/purple';
+import teal from '@material-ui/core/colors/teal';
 import red from '@material-ui/core/colors/red';
 import Button from '@material-ui/core/Button';
 //import Perf from 'react-addons-perf'; // ES6
@@ -47,7 +48,7 @@ const themeLight = createMuiTheme({
 
   palette: {
     type: 'light',
-    primary: purple,
+    primary: teal,
     secondary: {
       ...green,
       A400: '#00e677',

@@ -41,6 +41,7 @@ class Call(models.Model):
     def getTransfers(self):
         tf = Transfer.objects.filter(call=self).order_by('ttimestamp')
         return tf
+    
 
     def updatehistory(self):
         self.history = ""
@@ -74,7 +75,7 @@ class Agent(models.Model):
     current_call = models.ForeignKey(
         Call, null=True, on_delete=models.SET_NULL, related_name='current_agent', blank=True)
     isQueueLine = models.BooleanField(default=False)
-
+    
     def __str__(self):
         return "%s" % self.ext
 
