@@ -15,7 +15,7 @@ export default class DataProvider {
 
 
     this.client = new ApolloClient({
-      link: new HttpLink({ uri: 'http://148.110.107.15:8099/graphql' }),
+      link: new HttpLink({ uri: 'http://ticketsadmin.lbr.lu/graphql' }),
       cache: new InMemoryCache()
     });
 
