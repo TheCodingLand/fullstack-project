@@ -83,7 +83,7 @@ class TicketForm extends React.Component {
         State: "Solved"
       }
 
-      return fetch('http://148.110.107.15:5001/api/ot/ticket/' + response.ticket, {
+      return fetch('http://ticketsadmin.lbr.lu/api/ot/ticket/' + response.ticket, {
         method: 'PUT',
         body: JSON.stringify(query),
         headers: {
@@ -101,7 +101,7 @@ class TicketForm extends React.Component {
       RelatedIncident: ticketid
     }
 
-    return fetch('http://148.110.107.15:5001/api/ot/event/' + eventid, {
+    return fetch('http://ticketsadmin.lbr.lu/api/ot/event/' + eventid, {
       method: 'PUT',
       body: JSON.stringify(query),
       headers: {
@@ -146,7 +146,7 @@ class TicketForm extends React.Component {
     
 
 
-    return fetch('http://148.110.107.15:5001/api/ot/clients', {
+    return fetch('http://ticketsadmin.lbr.lu/api/ot/clients', {
       method: 'PUT',
       body: JSON.stringify({FirstName:this.state.selectedClient.FirstName, LastName:this.state.selectedClient.LastName, Phone:this.state.origin}),
       headers: {
@@ -213,7 +213,7 @@ class TicketForm extends React.Component {
 
     }
   
-    return fetch('http://148.110.107.15:5001/api/ot/tickets', {
+    return fetch('http://ticketsadmin.lbr.lu/api/ot/tickets', {
       method: 'PUT',
       body: JSON.stringify(ticket),
       headers: {
@@ -285,7 +285,7 @@ class TicketForm extends React.Component {
             ]
         }
         //console.log(query)
-        return fetch('http://148.110.107.15:5001/api/ot/objects', {
+        return fetch('http://ticketsadmin.lbr.lu/api/ot/objects', {
             method: 'POST',
             body: JSON.stringify(query),
             headers: {

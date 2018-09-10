@@ -216,7 +216,7 @@ services:
   ports:
    - '5100:8080' # expose ports - HOST:CONTAINER
   environment:
-   - API_URL=http://148.110.107.15:5001/api/ot/schema
+   - API_URL=http://ticketsadmin.lbr.lu/api/ot/schema
   depends_on:
    - ot-ws
   

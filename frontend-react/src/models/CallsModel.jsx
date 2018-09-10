@@ -79,7 +79,7 @@ export default class CallModel {
             ]
         }
         //console.log(query)
-        return fetch('http://148.110.107.15:5001/api/ot/objects', {
+        return fetch('http://ticketsadmin.lbr.lu/api/ot/objects', {
             method: 'POST',
             body: JSON.stringify(query),
             headers: {
