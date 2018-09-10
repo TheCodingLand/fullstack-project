@@ -85,6 +85,7 @@ export default class AgentModel {
     this.getCallsCount()
   }
 
+  @action
   getCallsCount(){
   this.ds.getCallsbyAgentExt(this.ext).then((data) => { this.totalcalls= data.data.allCalls.edges.length })
 }

@@ -20,7 +20,7 @@ services:
     - web
 
   working_dir : /usr/src/app
-  command: sh -c 'node ./src/redis.js'
+  command: sh -c 'node ./src/server.js'
 
  web:
   env_file:
@@ -78,6 +78,13 @@ services:
   working_dir: /data/event-manager/mydjango
   volumes:
     - ./event-manager:/data/event-manager
+  labels:
+      - "traefik.backend=ticketsadmin"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=8000"
+      - "traefik.frontend.rule=Host:ticketsadmin.lbr.lu"
+      - "traefik.frontend.entryPoints=http"
   #command: sh -c '/usr/bin/python3 manage.py makemigrations && /usr/bin/python3 manage.py migrate && /usr/bin/python3 eventmanager.py & /usr/bin/gunicorn mydjango.wsgi:application -w 2 -b :8000'
   command: sh -c 'gunicorn mydjango.wsgi:application -w 2 -b :8000'
   depends_on:
@@ -136,8 +143,6 @@ services:
   image: redis:latest
   expose:
     - "6379"
-  ports:
-    - "6379:6379"
   volumes:
    - ./redis:/data
   networks:
@@ -183,6 +188,13 @@ services:
   build: ./ot_ws
   volumes:
    - './ot_ws:/usr/src/app'
+  labels:
+      - "traefik.backend=otapi"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=5000"
+      - "traefik.frontend.rule=Host:otapi.lbr.lu"
+      - "traefik.frontend.entryPoints=http"
   ports:
    - 5001:5000 # expose ports - HOST:CONTAINER
    
@@ -194,6 +206,13 @@ services:
      - prod_env
   container_name: swagger
   build: ./swagger
+  labels:
+      - "traefik.backend=otswagger"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=Host:otswagger.lbr.lu"
+      - "traefik.frontend.entryPoints=http"  
   ports:
    - '5100:8080' # expose ports - HOST:CONTAINER
   environment:

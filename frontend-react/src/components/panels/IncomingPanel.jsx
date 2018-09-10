@@ -38,7 +38,7 @@ class IncomingPanel extends React.Component {
     }
     }
     else{
-      steps.push(<Step key='step0'><StepLabel>No Calls</StepLabel></Step>)
+      steps.push(<Step key='step0'><StepLabel>No Calls In This Queue</StepLabel></Step>)
       steps.push(<Step key='step1'><StepLabel>Free</StepLabel></Step>)
     }
   }
