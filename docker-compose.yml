@@ -100,9 +100,14 @@ services:
   env_file:
      - prod_env
   build: ./nginx/
-  ports:
-    - "8099:80"
-    - "8081:8001"
+    labels:
+      - "traefik.backend=static"
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.frontend.rule=Host:static.lbr.lu"
+      - "traefik.frontend.entryPoints=http"
+  
   links:
     - event-manager:event-manager
     - web:web
