@@ -100,7 +100,7 @@ services:
   env_file:
      - prod_env
   build: ./nginx/
-    labels:
+  labels:
       - "traefik.backend=static"
       - "traefik.docker.network=web"
       - "traefik.enable=true"
