@@ -184,21 +184,26 @@ class dispatch(object):
 
         return True
 
+    def changeUser(self,id, data):
+        #we take the new agent id  (from omnitracker) and overyrite current user found by phone login with this details: 
+
+        log.info("agent changed received,%s" % id)
+        agent = Agent.objects.get_or_create(phone_login=id)[0]
+        
+
+
+
     # agents
     def login(self, id, data):
         log.info("agent login received,%s" % id)
         redis = Redis().update('agent', 'login', id, data)
         agent = Agent.objects.get_or_create(phone_login=id)[0]
         agent.phone_active = True
-
         #
-
         if data != "False":
-
             if data != agent.ext:
                 # We need to remove the extention from the old login
                 agent_old = Agent.objects.filter(ext=data)
-
                 if len(agent_old) == 1:
                     if agent_old[0] != agent:
                         agent_old[0].ext = agent_old[0].phone_login
