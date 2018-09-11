@@ -120,7 +120,7 @@ class App extends React.Component {
           "State"
         ]
     }
-      return fetch('http://ticketsadmin.lbr.lu/api/ot/objects', {
+      return fetch('http://otapi.lbr.lu/api/ot/objects', {
           method: 'POST',
           body: JSON.stringify(query),
           headers: { 'Accept': 'application/json',

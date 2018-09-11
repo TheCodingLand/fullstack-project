@@ -15,7 +15,7 @@ class TicketsPanel extends React.Component {
     let query= {
       Responsible: 'Lebourg Julien',
     }
-    return fetch('http://ticketsadmin.lbr.lu/api/ot/ticket', {
+    return fetch('http://otapi.lbr.lu/api/ot/ticket', {
       method: 'PUT',
       body: JSON.stringify(query),
       headers: {
